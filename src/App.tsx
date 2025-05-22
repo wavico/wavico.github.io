@@ -1,10 +1,9 @@
-
+import { useEffect, useState } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useEffect } from "react";
 import Layout from "./components/Layout";
 import Home from "./pages/Index";
 import Company from "./pages/Company";
@@ -17,7 +16,18 @@ import NotFound from "./pages/NotFound";
 const queryClient = new QueryClient();
 
 const App = () => {
-  // Initialize cursor effect
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // 스플래시 화면을 2초 동안 보여줍니다
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  // 커서 효과 초기화
   useEffect(() => {
     const cursor = document.createElement("div");
     cursor.className = "custom-cursor";
@@ -37,26 +47,41 @@ const App = () => {
     };
 
     document.addEventListener("mousemove", moveCursor);
-    
-    // Add hover effect for interactive elements
+
+    // 인터랙티브 요소에 호버 효과 추가
     const interactiveElements = document.querySelectorAll(
       'a, button, [role="button"], input, textarea, select'
     );
-    
-    interactiveElements.forEach(el => {
+
+    interactiveElements.forEach((el) => {
       el.addEventListener("mouseenter", addHoverClass);
       el.addEventListener("mouseleave", removeHoverClass);
     });
 
     return () => {
       document.removeEventListener("mousemove", moveCursor);
-      interactiveElements.forEach(el => {
+      interactiveElements.forEach((el) => {
         el.removeEventListener("mouseenter", addHoverClass);
         el.removeEventListener("mouseleave", removeHoverClass);
       });
       document.body.removeChild(cursor);
     };
   }, []);
+
+  if (loading) {
+    return (
+      <div className="fixed inset-0 bg-wavico-blue flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-24 h-24 rounded-lg bg-white flex items-center justify-center mb-4 mx-auto animate-bounce">
+            <span className="text-wavico-blue text-4xl font-bold">W</span>
+          </div>
+          <h1 className="text-white text-2xl font-bold animate-pulse">
+            Wavico
+          </h1>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <QueryClientProvider client={queryClient}>

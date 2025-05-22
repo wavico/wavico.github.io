@@ -1,14 +1,18 @@
-
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { MessageSquare, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const ChatWidget = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState<{ text: string; isUser: boolean }[]>([
-    { text: "안녕하세요! Wavico 상담봇입니다. 무엇을 도와드릴까요?", isUser: false },
-  ]);
+  const [messages, setMessages] = useState<{ text: string; isUser: boolean }[]>(
+    [
+      {
+        text: "안녕하세요! Wavico 상담봇입니다. 무엇을 도와드릴까요?",
+        isUser: false,
+      },
+    ]
+  );
   const [isTyping, setIsTyping] = useState(false);
 
   const toggleChat = () => {
@@ -17,15 +21,15 @@ const ChatWidget = () => {
 
   const handleSendMessage = () => {
     if (message.trim() === "") return;
-    
+
     // Add user message
     const userMessage = { text: message, isUser: true };
     setMessages([...messages, userMessage]);
     setMessage("");
-    
+
     // Simulate bot typing
     setIsTyping(true);
-    
+
     // Simulate bot response after delay
     setTimeout(() => {
       setIsTyping(false);
@@ -35,8 +39,9 @@ const ChatWidget = () => {
         "AI 솔루션에 관심이 있으신가요? 상담 신청을 통해 자세한 상담이 가능합니다.",
         "Wavico는 음성, 이미지, 언어를 아우르는 인공지능 기술을 제공합니다.",
       ];
-      
-      const randomResponse = botResponses[Math.floor(Math.random() * botResponses.length)];
+
+      const randomResponse =
+        botResponses[Math.floor(Math.random() * botResponses.length)];
       setMessages((prev) => [...prev, { text: randomResponse, isUser: false }]);
     }, 1000);
   };
@@ -56,7 +61,7 @@ const ChatWidget = () => {
               <X size={18} />
             </Button>
           </div>
-          
+
           <div className="flex-1 p-4 overflow-y-auto">
             {messages.map((msg, index) => (
               <div
@@ -80,14 +85,24 @@ const ChatWidget = () => {
               <div className="mb-4 max-w-[80%] mr-auto">
                 <div className="p-3 rounded-lg bg-gray-100 text-gray-800 rounded-bl-none flex space-x-1">
                   <span className="animate-pulse">●</span>
-                  <span className="animate-pulse" style={{ animationDelay: "0.2s" }}>●</span>
-                  <span className="animate-pulse" style={{ animationDelay: "0.4s" }}>●</span>
+                  <span
+                    className="animate-pulse"
+                    style={{ animationDelay: "0.2s" }}
+                  >
+                    ●
+                  </span>
+                  <span
+                    className="animate-pulse"
+                    style={{ animationDelay: "0.4s" }}
+                  >
+                    ●
+                  </span>
                 </div>
               </div>
             )}
           </div>
-          
-          <div className="border-t p-3 flex">
+
+          <div className="p-4 border-t flex">
             <input
               type="text"
               value={message}
