@@ -1,0 +1,83 @@
+
+import React from "react";
+import { Link } from "react-router-dom";
+import { MapPin } from "lucide-react";
+import { Button } from "@/components/ui/button";
+
+interface LocationSectionProps {
+  isVisible: boolean;
+  addRef: (id: string) => (el: HTMLDivElement) => void;
+}
+
+const LocationSection = ({ isVisible, addRef }: LocationSectionProps) => {
+  return (
+    <section
+      id="location"
+      ref={addRef("location")}
+      className={`py-24 bg-gray-50 transition-opacity duration-1000 ${
+        isVisible ? "opacity-100" : "opacity-0"
+      }`}
+    >
+      <div className="max-w-7xl mx-auto px-6 md:px-12">
+        <div className="text-center mb-16">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+            회사 위치
+          </h2>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            Wavico를 방문하세요.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          <div className="bg-white p-6 rounded-lg shadow-md">
+            <div className="bg-gray-300 h-80 rounded-lg mb-6 flex items-center justify-center">
+              <MapPin className="w-12 h-12 text-gray-500" />
+              <p className="ml-2 text-gray-600">지도가 여기에 표시됩니다</p>
+            </div>
+          </div>
+
+          <div>
+            <div className="bg-white p-6 rounded-lg shadow-md">
+              <h3 className="text-2xl font-bold mb-6">
+                연락처 및 오시는 길
+              </h3>
+
+              <div className="space-y-6">
+                <div>
+                  <h4 className="text-lg font-semibold mb-2">주소</h4>
+                  <p className="text-gray-600">
+                    서울특별시 강남구 테헤란로 123, 웨이비코 빌딩 10층
+                  </p>
+                </div>
+
+                <div>
+                  <h4 className="text-lg font-semibold mb-2">연락처</h4>
+                  <p className="text-gray-600">전화: 02-123-4567</p>
+                  <p className="text-gray-600">이메일: contact@wavico.ai</p>
+                </div>
+
+                <div>
+                  <h4 className="text-lg font-semibold mb-2">영업시간</h4>
+                  <p className="text-gray-600">평일: 09:00 - 18:00</p>
+                  <p className="text-gray-600">토/일/공휴일: 휴무</p>
+                </div>
+
+                <div className="pt-4">
+                  <Button
+                    size="lg"
+                    asChild
+                    className="bg-wavico-blue hover:bg-wavico-darkblue w-full"
+                  >
+                    <Link to="/contact">문의하기</Link>
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default LocationSection;
