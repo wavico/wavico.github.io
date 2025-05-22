@@ -62,7 +62,7 @@ const TeamSection = ({ isVisible, addRef }: TeamSectionProps) => {
               >
                 <div className="w-24 h-24 rounded-full mx-auto mb-6 overflow-hidden">
                   <img 
-                    src="/lovable-uploads/58fad565-12f1-4423-86f6-11df4679344b.png"
+                    src="/lovable-uploads/63b95fde-f07e-4c94-bb2f-715f0dee6d3e.png"
                     alt={`${member.name} profile`}
                     className="w-full h-full object-cover filter grayscale"
                   />
