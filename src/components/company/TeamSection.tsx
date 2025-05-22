@@ -1,5 +1,7 @@
 
 import React from "react";
+import { Image } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
 
 interface TeamSectionProps {
   isVisible: boolean;
@@ -58,10 +60,12 @@ const TeamSection = ({ isVisible, addRef }: TeamSectionProps) => {
                 }`}
                 style={{ animationDelay: `${idx * 100}ms` }}
               >
-                <div className="w-24 h-24 bg-wavico-lightblue rounded-full mx-auto mb-6 flex items-center justify-center">
-                  <span className="text-wavico-blue text-3xl font-bold">
-                    {member.name.charAt(0)}
-                  </span>
+                <div className="w-24 h-24 rounded-full mx-auto mb-6 overflow-hidden">
+                  <img 
+                    src="/lovable-uploads/58fad565-12f1-4423-86f6-11df4679344b.png"
+                    alt={`${member.name} profile`}
+                    className="w-full h-full object-cover filter grayscale"
+                  />
                 </div>
                 <h3 className="text-xl font-bold text-center mb-1">
                   {member.name}
