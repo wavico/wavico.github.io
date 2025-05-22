@@ -238,33 +238,35 @@ const Company = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {team.map((member, idx) => (
-              <div
-                key={idx}
-                className={`bg-white p-6 rounded-lg shadow-md ${
-                  isVisible["team"]
-                    ? "animate-scale-in"
-                    : "opacity-0"
-                }`}
-                style={{ animationDelay: `${idx * 100}ms` }}
-              >
-                <div className="w-24 h-24 bg-wavico-lightblue rounded-full mx-auto mb-6 flex items-center justify-center">
-                  <span className="text-wavico-blue text-3xl font-bold">
-                    {member.name.charAt(0)}
-                  </span>
+          <div className="flex justify-center">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl">
+              {team.map((member, idx) => (
+                <div
+                  key={idx}
+                  className={`bg-white p-6 rounded-lg shadow-md ${
+                    isVisible["team"]
+                      ? "animate-scale-in"
+                      : "opacity-0"
+                  }`}
+                  style={{ animationDelay: `${idx * 100}ms` }}
+                >
+                  <div className="w-24 h-24 bg-wavico-lightblue rounded-full mx-auto mb-6 flex items-center justify-center">
+                    <span className="text-wavico-blue text-3xl font-bold">
+                      {member.name.charAt(0)}
+                    </span>
+                  </div>
+                  <h3 className="text-xl font-bold text-center mb-1">
+                    {member.name}
+                  </h3>
+                  <p className="text-wavico-blue text-center mb-4">
+                    {member.role}
+                  </p>
+                  <p className="text-gray-600 text-center">
+                    {member.description}
+                  </p>
                 </div>
-                <h3 className="text-xl font-bold text-center mb-1">
-                  {member.name}
-                </h3>
-                <p className="text-wavico-blue text-center mb-4">
-                  {member.role}
-                </p>
-                <p className="text-gray-600 text-center">
-                  {member.description}
-                </p>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </section>
