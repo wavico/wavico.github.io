@@ -15,21 +15,21 @@ const TeamSection = ({ isVisible, addRef }: TeamSectionProps) => {
       role: "PM/FrontEngineer",
       description:
         "6년간의 AI 프로젝트와 컨설팅 경험, 그리고 다수의 대외 수상 실적을 보유한 실전형 데이터 전문가",
-      image: "public/lovable-uploads/58fad565-12f1-4423-86f6-11df4679344b.png",
+      image: "/lovable-uploads/58fad565-12f1-4423-86f6-11df4679344b.png",
     },
     {
       name: "조용성",
       role: "Data Scientist",
       description:
         "AI·빅데이터 센터 연구원 출신으로, 수요예측부터 감성분석까지 다양한 분석 프로젝트와 데이터 마트 설계 경험을 보유한 데이터사이언스 전문가",
-      image: "public/lovable-uploads/63b95fde-f07e-4c94-bb2f-715f0dee6d3e.png",
+      image: "/lovable-uploads/63b95fde-f07e-4c94-bb2f-715f0dee6d3e.png",
     },
     {
       name: "김서령",
       role: "Data Engineer",
       description:
         "AI 모델 개발, 데이터 분석 모듈 설계, 시각화 대시보드 구축, 대기업 클라우드 인프라 구축 경험을 갖춘 데이터 엔지니어",
-      image: "public/lovable-uploads/사슴.jpg",
+      image: "/lovable-uploads/사슴.jpg",
     }
   ];
 
