@@ -65,29 +65,23 @@ const Company = () => {
 
   const team = [
     {
-      name: "김민수",
-      role: "CEO / 창업자",
+      name: "김선민",
+      role: "PM/FrontEngineer",
       description:
-        "AI 분야 10년 경력의 전문가로, 글로벌 기업에서의 경험을 바탕으로 Wavico를 설립했습니다.",
+        "6년간의 AI 프로젝트와 컨설팅 경험, 그리고 다수의 대외 수상 실적을 보유한 실전형 데이터 전문가",
     },
     {
-      name: "박지영",
-      role: "CTO",
+      name: "조용성",
+      role: "Data Scientist",
       description:
-        "백엔드 및 AI 아키텍처 전문가로, 대규모 AI 시스템 설계 및 개발을 담당하고 있습니다.",
+        "AI·빅데이터 센터 연구원 출신으로, 수요예측부터 감성분석까지 다양한 분석 프로젝트와 데이터 마트 설계 경험을 보유한 데이터사이언스 전문가",
     },
     {
-      name: "이준호",
-      role: "디자인 책임자",
+      name: "김서령",
+      role: "Data Engineer",
       description:
-        "사용자 경험과 인터페이스 디자인 전문가로, Wavico의 모든 제품 디자인을 주도합니다.",
-    },
-    {
-      name: "정다영",
-      role: "마케팅 책임자",
-      description:
-        "디지털 마케팅 전략 전문가로, Wavico의 브랜드 가치를 높이는 데 기여하고 있습니다.",
-    },
+        "AI 모델 개발, 데이터 분석 모듈 설계, 시각화 대시보드 구축, 대기업 클라우드 인프라 구축 경험을 갖춘 데이터 엔지니어",
+    }
   ];
 
   return (
