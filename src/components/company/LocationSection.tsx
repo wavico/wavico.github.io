@@ -46,14 +46,14 @@ const LocationSection = ({ isVisible, addRef }: LocationSectionProps) => {
                 <div>
                   <h4 className="text-lg font-semibold mb-2">주소</h4>
                   <p className="text-gray-600">
-                    서울특별시 강남구 테헤란로 123, 웨이비코 빌딩 10층
+                    서울시 동대문구 회기로 4길 16
                   </p>
                 </div>
 
                 <div>
                   <h4 className="text-lg font-semibold mb-2">연락처</h4>
-                  <p className="text-gray-600">전화: 02-123-4567</p>
-                  <p className="text-gray-600">이메일: contact@wavico.ai</p>
+                  <p className="text-gray-600">전화: 010-5549-9020</p>
+                  <p className="text-gray-600">이메일: seonmin8284@gmail.com</p>
                 </div>
 
                 <div>
