@@ -11,6 +11,9 @@ import {
   Plus,
   Send,
   Paperclip,
+  Clock,
+  Users,
+  CheckCircle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -36,6 +39,18 @@ interface Message {
     url: string;
     name: string;
   }[];
+  persona?: {
+    name: string;
+    role: string;
+    avatar: string;
+  };
+}
+
+interface MonitoringStats {
+  responseRate: number;
+  avgResponseTime: number;
+  dailyChats: number;
+  satisfaction: number;
 }
 
 const Home = () => {
@@ -44,9 +59,14 @@ const Home = () => {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 1,
-      text: "안녕하세요! Wavico 상담봇입니다. 어떤 도움이 필요하신가요?",
+      text: "안녕하세요! 저는 Wavico의 AI 연구원 김선민입니다. 무엇을 도와드릴까요?",
       isUser: false,
       timestamp: new Date(),
+      persona: {
+        name: "김선민",
+        role: "AI 연구원",
+        avatar: "/avatars/sunmin.png",
+      },
     },
   ]);
   const [message, setMessage] = useState("");
@@ -55,6 +75,12 @@ const Home = () => {
   const observerRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
   const fileInputRef = useRef<HTMLInputElement>(null);
   const imageInputRef = useRef<HTMLInputElement>(null);
+  const [monitoringStats] = useState<MonitoringStats>({
+    responseRate: 98.5,
+    avgResponseTime: 2.3,
+    dailyChats: 142,
+    satisfaction: 95,
+  });
 
   useEffect(() => {
     // Banner slider
@@ -113,24 +139,57 @@ const Home = () => {
     setTimeout(() => {
       setIsTyping(false);
 
-      const botResponses = [
-        "더 자세한 내용은 어떤 것이 궁금하신가요?",
-        "웹/앱 개발에 대해 더 알고싶으시면 서비스 소개 페이지를 확인해보세요!",
-        "AI 솔루션에 관심이 있으신가요? 상담 신청을 통해 자세한 상담이 가능합니다.",
-        "Wavico는 음성, 이미지, 언어를 아우르는 인공지능 기술을 제공합니다.",
+      const availablePersonas = [
+        {
+          name: "김선민",
+          role: "AI 연구원",
+          avatar: "/avatars/sunmin.png",
+          responses: [
+            "AI 기술에 대해 궁금하신 점이 있으시다면 자세히 설명해드릴 수 있습니다.",
+            "저희 연구팀이 개발한 최신 AI 모델에 대해 소개해드릴까요?",
+            "음성, 이미지, 자연어 처리 중 어떤 분야에 관심이 있으신가요?",
+          ],
+        },
+        {
+          name: "조용성",
+          role: "솔루션 아키텍트",
+          avatar: "/avatars/yongsung.png",
+          responses: [
+            "귀사의 비즈니스에 맞는 최적의 AI 솔루션을 제안해드릴 수 있습니다.",
+            "기존 시스템과의 통합 방안에 대해 논의해보시겠어요?",
+            "구체적인 요구사항을 말씀해 주시면 맞춤형 솔루션을 설계해드리겠습니다.",
+          ],
+        },
+        {
+          name: "김서령",
+          role: "프로젝트 매니저",
+          avatar: "/avatars/seoryeong.png",
+          responses: [
+            "프로젝트 일정과 범위에 대해 상담해드릴 수 있습니다.",
+            "유사 프로젝트 진행 사례를 공유해드릴까요?",
+            "예산과 일정에 맞는 최적의 프로젝트 계획을 수립해드리겠습니다.",
+          ],
+        },
       ];
 
-      const randomResponse =
-        botResponses[Math.floor(Math.random() * botResponses.length)];
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: prev.length + 2,
-          text: randomResponse,
-          isUser: false,
-          timestamp: new Date(),
+      const persona =
+        availablePersonas[Math.floor(Math.random() * availablePersonas.length)];
+      const response =
+        persona.responses[Math.floor(Math.random() * persona.responses.length)];
+
+      const botMessage = {
+        id: messages.length + 2,
+        text: response,
+        isUser: false,
+        timestamp: new Date(),
+        persona: {
+          name: persona.name,
+          role: persona.role,
+          avatar: persona.avatar,
         },
-      ]);
+      };
+
+      setMessages((prev) => [...prev, botMessage]);
     }, 1000);
   };
 
@@ -176,8 +235,69 @@ const Home = () => {
       // Clear the file input
       event.target.value = "";
 
-      // Trigger bot response
-      handleBotResponse();
+      // Simulate bot typing
+      setIsTyping(true);
+
+      // Simulate bot response after delay
+      setTimeout(() => {
+        setIsTyping(false);
+
+        const availablePersonas = [
+          {
+            name: "김선민",
+            role: "AI 연구원",
+            avatar: "/avatars/sunmin.png",
+            responses: [
+              "AI 기술에 대해 궁금하신 점이 있으시다면 자세히 설명해드릴 수 있습니다.",
+              "저희 연구팀이 개발한 최신 AI 모델에 대해 소개해드릴까요?",
+              "음성, 이미지, 자연어 처리 중 어떤 분야에 관심이 있으신가요?",
+            ],
+          },
+          {
+            name: "조용성",
+            role: "솔루션 아키텍트",
+            avatar: "/avatars/yongsung.png",
+            responses: [
+              "귀사의 비즈니스에 맞는 최적의 AI 솔루션을 제안해드릴 수 있습니다.",
+              "기존 시스템과의 통합 방안에 대해 논의해보시겠어요?",
+              "구체적인 요구사항을 말씀해 주시면 맞춤형 솔루션을 설계해드리겠습니다.",
+            ],
+          },
+          {
+            name: "김서령",
+            role: "프로젝트 매니저",
+            avatar: "/avatars/seoryeong.png",
+            responses: [
+              "프로젝트 일정과 범위에 대해 상담해드릴 수 있습니다.",
+              "유사 프로젝트 진행 사례를 공유해드릴까요?",
+              "예산과 일정에 맞는 최적의 프로젝트 계획을 수립해드리겠습니다.",
+            ],
+          },
+        ];
+
+        const persona =
+          availablePersonas[
+            Math.floor(Math.random() * availablePersonas.length)
+          ];
+        const response =
+          persona.responses[
+            Math.floor(Math.random() * persona.responses.length)
+          ];
+
+        const botMessage = {
+          id: messages.length + 2,
+          text: response,
+          isUser: false,
+          timestamp: new Date(),
+          persona: {
+            name: persona.name,
+            role: persona.role,
+            avatar: persona.avatar,
+          },
+        };
+
+        setMessages((prev) => [...prev, botMessage]);
+      }, 1000);
     } catch (error) {
       console.error("파일 업로드 중 오류가 발생했습니다:", error);
       toast({
@@ -337,69 +457,96 @@ const Home = () => {
                     >
                       <History size={20} />
                     </Button>
-                    <h2 className="text-lg font-semibold">실시간 상담</h2>
-                    <span className="ml-2 px-2 py-1 bg-purple-100 text-purple-600 text-sm rounded">
-                      기본 상담원
+                    <h2 className="text-lg font-semibold">
+                      AI 솔루션 데모 체험
+                    </h2>
+                    <span className="ml-2 px-2 py-1 bg-blue-100 text-blue-600 text-sm rounded">
+                      Wavico 팀
                     </span>
                   </div>
                 </div>
 
                 {/* Messages */}
-                <div className="flex-1 p-4 overflow-y-auto">
+                <div className="flex-1 overflow-y-auto p-4">
                   {messages.map((msg) => (
                     <div
                       key={msg.id}
-                      className={`mb-4 max-w-[85%] sm:max-w-[80%] ${
-                        msg.isUser ? "ml-auto" : "mr-auto"
+                      className={`mb-4 flex ${
+                        msg.isUser ? "justify-end" : "justify-start"
                       }`}
                     >
+                      {!msg.isUser && msg.persona && (
+                        <div className="flex items-start mr-2">
+                          <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-sm font-medium">
+                            {msg.persona.name[0]}
+                          </div>
+                        </div>
+                      )}
                       <div
-                        className={`p-3 rounded-lg ${
-                          msg.isUser
-                            ? "bg-purple-600 text-white rounded-br-none"
-                            : "bg-white text-gray-800 rounded-bl-none shadow-sm"
+                        className={`max-w-[80%] ${
+                          msg.isUser ? "ml-auto" : "mr-auto"
                         }`}
                       >
-                        {msg.text}
-                        {msg.attachments?.map((attachment, index) => (
-                          <div key={index} className="mt-2">
-                            {attachment.type === "image" ? (
-                              <img
-                                src={attachment.url}
-                                alt={attachment.name}
-                                className="max-w-full rounded"
-                              />
-                            ) : (
-                              <a
-                                href={attachment.url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-blue-100 underline hover:text-blue-200"
-                              >
-                                {attachment.name}
-                              </a>
-                            )}
+                        {!msg.isUser && msg.persona && (
+                          <div className="mb-1 text-sm text-gray-600">
+                            {msg.persona.name} · {msg.persona.role}
                           </div>
-                        ))}
+                        )}
+                        <div
+                          className={`p-3 rounded-lg ${
+                            msg.isUser
+                              ? "bg-blue-600 text-white rounded-br-none"
+                              : "bg-white text-gray-800 rounded-bl-none shadow-sm"
+                          }`}
+                        >
+                          {msg.text}
+                          {msg.attachments &&
+                            msg.attachments.map((attachment, index) => (
+                              <div key={index} className="mt-2">
+                                {attachment.type === "image" ? (
+                                  <img
+                                    src={attachment.url}
+                                    alt="Uploaded"
+                                    className="max-w-full rounded-lg"
+                                  />
+                                ) : (
+                                  <a
+                                    href={attachment.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex items-center space-x-2 text-sm text-blue-100 hover:text-blue-200"
+                                  >
+                                    <Paperclip size={16} />
+                                    <span>{attachment.name}</span>
+                                  </a>
+                                )}
+                              </div>
+                            ))}
+                        </div>
                       </div>
                     </div>
                   ))}
                   {isTyping && (
-                    <div className="mb-4 max-w-[85%] sm:max-w-[80%] mr-auto">
-                      <div className="p-3 rounded-lg bg-white text-gray-800 rounded-bl-none flex space-x-1">
-                        <span className="animate-pulse">●</span>
-                        <span
-                          className="animate-pulse"
-                          style={{ animationDelay: "0.2s" }}
-                        >
-                          ●
-                        </span>
-                        <span
-                          className="animate-pulse"
-                          style={{ animationDelay: "0.4s" }}
-                        >
-                          ●
-                        </span>
+                    <div className="flex mb-4">
+                      <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-sm font-medium mr-2">
+                        W
+                      </div>
+                      <div className="max-w-[80%] mr-auto">
+                        <div className="p-3 rounded-lg bg-white text-gray-800 rounded-bl-none shadow-sm flex space-x-1">
+                          <span className="animate-pulse">●</span>
+                          <span
+                            className="animate-pulse"
+                            style={{ animationDelay: "0.2s" }}
+                          >
+                            ●
+                          </span>
+                          <span
+                            className="animate-pulse"
+                            style={{ animationDelay: "0.4s" }}
+                          >
+                            ●
+                          </span>
+                        </div>
                       </div>
                     </div>
                   )}
@@ -408,108 +555,198 @@ const Home = () => {
 
                 {/* Input Area */}
                 <div className="p-4 border-t">
-                  <div className="flex space-x-2 mb-2">
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="text-gray-500 hover:text-purple-600"
-                      onClick={() => imageInputRef.current?.click()}
-                    >
-                      <Image size={20} />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="text-gray-500 hover:text-purple-600"
-                      onClick={() => fileInputRef.current?.click()}
-                    >
-                      <Paperclip size={20} />
-                    </Button>
-                  </div>
-                  <div className="flex">
+                  <div className="flex flex-col space-y-2">
+                    <div className="flex space-x-2">
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        onClick={() => imageInputRef.current?.click()}
+                        className="text-gray-500 hover:text-gray-700"
+                      >
+                        <Image size={18} />
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        onClick={() => fileInputRef.current?.click()}
+                        className="text-gray-500 hover:text-gray-700"
+                      >
+                        <Paperclip size={18} />
+                      </Button>
+                      <input
+                        type="text"
+                        value={message}
+                        onChange={(e) => setMessage(e.target.value)}
+                        onKeyPress={(e) => {
+                          if (e.key === "Enter") handleSendMessage();
+                        }}
+                        placeholder="메시지를 입력하세요..."
+                        className="flex-1 border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                      />
+                      <Button
+                        className="bg-blue-600 hover:bg-blue-700 text-white"
+                        onClick={handleSendMessage}
+                      >
+                        <Send size={18} />
+                      </Button>
+                    </div>
+                    {/* Hidden file inputs */}
                     <input
-                      type="text"
-                      value={message}
-                      onChange={(e) => setMessage(e.target.value)}
-                      onKeyPress={(e) => {
-                        if (e.key === "Enter") handleSendMessage();
-                      }}
-                      placeholder="메시지를 입력하세요..."
-                      className="flex-1 border border-gray-300 rounded-l-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-600"
+                      ref={imageInputRef}
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => handleFileUpload(e, "image")}
+                      className="hidden"
                     />
-                    <Button
-                      className="bg-purple-600 hover:bg-purple-700 text-white rounded-l-none"
-                      onClick={handleSendMessage}
-                    >
-                      <Send size={18} />
-                    </Button>
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      onChange={(e) => handleFileUpload(e, "file")}
+                      className="hidden"
+                    />
                   </div>
-                  <input
-                    type="file"
-                    ref={imageInputRef}
-                    accept="image/*"
-                    onChange={(e) => handleFileUpload(e, "image")}
-                    className="hidden"
-                  />
-                  <input
-                    type="file"
-                    ref={fileInputRef}
-                    onChange={(e) => handleFileUpload(e, "file")}
-                    className="hidden"
-                  />
                 </div>
               </div>
 
-              {/* Right Sidebar - Stats */}
+              {/* Right Sidebar - Team Info */}
               <div className="hidden lg:block w-72 bg-white/95 border-l">
                 <div className="p-4 border-b">
-                  <h3 className="text-lg font-semibold flex items-center">
-                    <svg
-                      className="w-5 h-5 mr-2"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M8 10L12 14L16 10"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                    상담 통계
-                  </h3>
+                  <h3 className="text-lg font-semibold">Wavico 팀 소개</h3>
                 </div>
                 <div className="p-4 space-y-4">
-                  <div className="bg-white/80 p-4 rounded-lg">
-                    <div className="text-sm text-gray-600 mb-1">총 상담 수</div>
-                    <div className="text-2xl font-semibold text-purple-600">
-                      0
+                  <div className="space-y-3">
+                    <div className="flex items-center space-x-3">
+                      <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-medium">
+                        김
+                      </div>
+                      <div>
+                        <div className="font-medium">김선민</div>
+                        <div className="text-sm text-gray-600">AI 연구원</div>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-medium">
+                        조
+                      </div>
+                      <div>
+                        <div className="font-medium">조용성</div>
+                        <div className="text-sm text-gray-600">
+                          솔루션 아키텍트
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-medium">
+                        김
+                      </div>
+                      <div>
+                        <div className="font-medium">김서령</div>
+                        <div className="text-sm text-gray-600">
+                          프로젝트 매니저
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  <div className="bg-white/80 p-4 rounded-lg">
-                    <div className="text-sm text-gray-600 mb-1">
-                      평균 만족도
-                    </div>
-                    <div className="text-2xl font-semibold text-purple-600">
-                      0.0%
+
+                  {/* Monitoring Stats */}
+                  <div className="pt-4 border-t">
+                    <h4 className="text-sm font-semibold text-gray-600 mb-3">
+                      실시간 모니터링
+                    </h4>
+                    <div className="grid grid-cols-2 gap-3">
+                      {/* Response Rate */}
+                      <div className="bg-blue-50 p-3 rounded-lg">
+                        <div className="flex items-center justify-between mb-2">
+                          <CheckCircle size={16} className="text-blue-600" />
+                          <span className="text-xs text-gray-500">응답률</span>
+                        </div>
+                        <div className="text-lg font-semibold text-blue-600">
+                          {monitoringStats.responseRate}%
+                        </div>
+                        <div className="w-full bg-blue-200 h-1.5 rounded-full mt-1">
+                          <div
+                            className="bg-blue-600 h-1.5 rounded-full"
+                            style={{
+                              width: `${monitoringStats.responseRate}%`,
+                            }}
+                          />
+                        </div>
+                      </div>
+
+                      {/* Average Response Time */}
+                      <div className="bg-green-50 p-3 rounded-lg">
+                        <div className="flex items-center justify-between mb-2">
+                          <Clock size={16} className="text-green-600" />
+                          <span className="text-xs text-gray-500">
+                            평균 응답
+                          </span>
+                        </div>
+                        <div className="text-lg font-semibold text-green-600">
+                          {monitoringStats.avgResponseTime}분
+                        </div>
+                        <div className="w-full bg-green-200 h-1.5 rounded-full mt-1">
+                          <div
+                            className="bg-green-600 h-1.5 rounded-full"
+                            style={{
+                              width: `${
+                                (monitoringStats.avgResponseTime / 5) * 100
+                              }%`,
+                            }}
+                          />
+                        </div>
+                      </div>
+
+                      {/* Daily Chats */}
+                      <div className="bg-purple-50 p-3 rounded-lg">
+                        <div className="flex items-center justify-between mb-2">
+                          <MessageCircle
+                            size={16}
+                            className="text-purple-600"
+                          />
+                          <span className="text-xs text-gray-500">
+                            일일 상담
+                          </span>
+                        </div>
+                        <div className="text-lg font-semibold text-purple-600">
+                          {monitoringStats.dailyChats}건
+                        </div>
+                        <div className="w-full bg-purple-200 h-1.5 rounded-full mt-1">
+                          <div
+                            className="bg-purple-600 h-1.5 rounded-full"
+                            style={{
+                              width: `${
+                                (monitoringStats.dailyChats / 200) * 100
+                              }%`,
+                            }}
+                          />
+                        </div>
+                      </div>
+
+                      {/* Satisfaction Rate */}
+                      <div className="bg-orange-50 p-3 rounded-lg">
+                        <div className="flex items-center justify-between mb-2">
+                          <Users size={16} className="text-orange-600" />
+                          <span className="text-xs text-gray-500">만족도</span>
+                        </div>
+                        <div className="text-lg font-semibold text-orange-600">
+                          {monitoringStats.satisfaction}%
+                        </div>
+                        <div className="w-full bg-orange-200 h-1.5 rounded-full mt-1">
+                          <div
+                            className="bg-orange-600 h-1.5 rounded-full"
+                            style={{
+                              width: `${monitoringStats.satisfaction}%`,
+                            }}
+                          />
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  <div className="bg-white/80 p-4 rounded-lg">
-                    <div className="text-sm text-gray-600 mb-1">
-                      긍정적 응답
-                    </div>
-                    <div className="text-2xl font-semibold text-purple-600">
-                      0
-                    </div>
-                  </div>
-                  <div className="bg-white/80 p-4 rounded-lg">
-                    <div className="text-sm text-gray-600 mb-1">
-                      부정적 응답
-                    </div>
-                    <div className="text-2xl font-semibold text-purple-600">
-                      0
+
+                  <div className="pt-4 border-t">
+                    <div className="text-sm text-gray-600">
+                      * 이 채팅은 데모용으로, 실제 상담을 원하시면 카카오톡
+                      채널을 이용해주세요.
                     </div>
                   </div>
                 </div>

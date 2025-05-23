@@ -145,21 +145,23 @@
 }
 
 /* Custom cursor styles */
-.custom-cursor {
-  position: fixed;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: rgba(0, 123, 255, 0.5);
-  transform: translate(-50%, -50%);
-  pointer-events: none;
-  z-index: 9999;
-  transition: transform 0.2s ease;
-}
+@media (hover: hover) and (pointer: fine) {
+  .custom-cursor {
+    position: fixed;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: rgba(0, 123, 255, 0.5);
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 9999;
+    transition: transform 0.2s ease;
+  }
 
-.custom-cursor.hover {
-  transform: translate(-50%, -50%) scale(1.5);
-  background: rgba(0, 123, 255, 0.3);
+  .custom-cursor.hover {
+    transform: translate(-50%, -50%) scale(1.5);
+    background: rgba(0, 123, 255, 0.3);
+  }
 }
 
 /* Portfolio item hover effect */

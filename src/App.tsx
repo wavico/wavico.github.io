@@ -29,6 +29,11 @@ const App = () => {
 
   // 커서 효과 초기화
   useEffect(() => {
+    // 터치 디바이스 체크
+    const isTouchDevice =
+      "ontouchstart" in window || navigator.maxTouchPoints > 0;
+    if (isTouchDevice) return;
+
     const cursor = document.createElement("div");
     cursor.className = "custom-cursor";
     document.body.appendChild(cursor);
@@ -64,7 +69,9 @@ const App = () => {
         el.removeEventListener("mouseenter", addHoverClass);
         el.removeEventListener("mouseleave", removeHoverClass);
       });
-      document.body.removeChild(cursor);
+      if (cursor.parentNode) {
+        document.body.removeChild(cursor);
+      }
     };
   }, []);
 
