@@ -1,6 +1,6 @@
 
 import { useEffect, useRef, useState } from "react";
-import { Send, History, Plus } from "lucide-react";
+import { Send, History, Plus, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
