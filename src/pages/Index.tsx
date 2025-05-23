@@ -10,6 +10,7 @@ import {
   History,
   Plus,
   Send,
+  Paperclip,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -22,12 +23,19 @@ import {
 } from "@/components/ui/card";
 import ServiceCard from "@/components/ServiceCard";
 import PortfolioPreview from "@/components/PortfolioPreview";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "@/components/ui/use-toast";
 
 interface Message {
   id: number;
   text: string;
   isUser: boolean;
   timestamp: Date;
+  attachments?: {
+    type: "image" | "file";
+    url: string;
+    name: string;
+  }[];
 }
 
 const Home = () => {
@@ -45,6 +53,8 @@ const Home = () => {
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const observerRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const imageInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     // Banner slider
@@ -122,6 +132,60 @@ const Home = () => {
         },
       ]);
     }, 1000);
+  };
+
+  const handleFileUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>,
+    type: "image" | "file"
+  ) => {
+    const files = event.target.files;
+    if (!files || files.length === 0) return;
+
+    const file = files[0];
+    try {
+      // Upload file to Supabase Storage
+      const fileName = `${Date.now()}-${file.name}`;
+      const { data, error } = await supabase.storage
+        .from("chat-attachments")
+        .upload(fileName, file);
+
+      if (error) throw error;
+
+      // Get public URL
+      const {
+        data: { publicUrl },
+      } = supabase.storage.from("chat-attachments").getPublicUrl(fileName);
+
+      // Add message with attachment
+      const userMessage: Message = {
+        id: messages.length + 1,
+        text: type === "image" ? "이미지를 보냈습니다." : "파일을 보냈습니다.",
+        isUser: true,
+        timestamp: new Date(),
+        attachments: [
+          {
+            type,
+            url: publicUrl,
+            name: file.name,
+          },
+        ],
+      };
+
+      setMessages([...messages, userMessage]);
+
+      // Clear the file input
+      event.target.value = "";
+
+      // Trigger bot response
+      handleBotResponse();
+    } catch (error) {
+      console.error("파일 업로드 중 오류가 발생했습니다:", error);
+      toast({
+        title: "오류",
+        description: "파일 업로드에 실패했습니다.",
+        variant: "destructive",
+      });
+    }
   };
 
   const bannerSlides = [
@@ -262,7 +326,7 @@ const Home = () => {
               </div>
 
               {/* Main Chat Area */}
-              <div className="flex-1 flex flex-col min-w-0">
+              <div className="flex-1 flex flex-col">
                 {/* Header */}
                 <div className="bg-white/95 p-4 border-b flex justify-between items-center">
                   <div className="flex items-center">
@@ -281,7 +345,7 @@ const Home = () => {
                 </div>
 
                 {/* Messages */}
-                <div className="flex-1 overflow-y-auto p-4 bg-white/80">
+                <div className="flex-1 p-4 overflow-y-auto">
                   {messages.map((msg) => (
                     <div
                       key={msg.id}
@@ -297,6 +361,26 @@ const Home = () => {
                         }`}
                       >
                         {msg.text}
+                        {msg.attachments?.map((attachment, index) => (
+                          <div key={index} className="mt-2">
+                            {attachment.type === "image" ? (
+                              <img
+                                src={attachment.url}
+                                alt={attachment.name}
+                                className="max-w-full rounded"
+                              />
+                            ) : (
+                              <a
+                                href={attachment.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-blue-100 underline hover:text-blue-200"
+                              >
+                                {attachment.name}
+                              </a>
+                            )}
+                          </div>
+                        ))}
                       </div>
                     </div>
                   ))}
@@ -323,9 +407,27 @@ const Home = () => {
                 </div>
 
                 {/* Input Area */}
-                <div className="bg-white/95 p-3 sm:p-4 border-t">
-                  <div className="flex items-center gap-2">
-                    <Input
+                <div className="p-4 border-t">
+                  <div className="flex space-x-2 mb-2">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="text-gray-500 hover:text-purple-600"
+                      onClick={() => imageInputRef.current?.click()}
+                    >
+                      <Image size={20} />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="text-gray-500 hover:text-purple-600"
+                      onClick={() => fileInputRef.current?.click()}
+                    >
+                      <Paperclip size={20} />
+                    </Button>
+                  </div>
+                  <div className="flex">
+                    <input
                       type="text"
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
@@ -333,15 +435,28 @@ const Home = () => {
                         if (e.key === "Enter") handleSendMessage();
                       }}
                       placeholder="메시지를 입력하세요..."
-                      className="flex-1 border border-gray-200 rounded-lg sm:rounded-l-lg sm:rounded-r-none focus-visible:ring-purple-400"
+                      className="flex-1 border border-gray-300 rounded-l-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-600"
                     />
                     <Button
-                      className="bg-purple-600 hover:bg-purple-700 rounded-lg sm:rounded-l-none"
+                      className="bg-purple-600 hover:bg-purple-700 text-white rounded-l-none"
                       onClick={handleSendMessage}
                     >
                       <Send size={18} />
                     </Button>
                   </div>
+                  <input
+                    type="file"
+                    ref={imageInputRef}
+                    accept="image/*"
+                    onChange={(e) => handleFileUpload(e, "image")}
+                    className="hidden"
+                  />
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={(e) => handleFileUpload(e, "file")}
+                    className="hidden"
+                  />
                 </div>
               </div>
 

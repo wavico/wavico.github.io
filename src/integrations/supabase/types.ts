@@ -83,6 +83,11 @@ export type Database = {
           timestamp: string
           user_id: string | null
           user_input: string | null
+          attachments: {
+            type: 'image' | 'file'
+            url: string
+            name: string
+          }[] | null
         }
         Insert: {
           bot_response?: string | null
@@ -92,6 +97,11 @@ export type Database = {
           timestamp?: string
           user_id?: string | null
           user_input?: string | null
+          attachments?: {
+            type: 'image' | 'file'
+            url: string
+            name: string
+          }[] | null
         }
         Update: {
           bot_response?: string | null
@@ -101,6 +111,11 @@ export type Database = {
           timestamp?: string
           user_id?: string | null
           user_input?: string | null
+          attachments?: {
+            type: 'image' | 'file'
+            url: string
+            name: string
+          }[] | null
         }
         Relationships: [
           {
