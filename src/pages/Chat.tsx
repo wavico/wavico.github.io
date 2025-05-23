@@ -1,55 +1,223 @@
+
 import { useEffect, useRef, useState } from "react";
 import { Send, History, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "@/components/ui/sonner";
 
 interface Message {
-  id: number;
+  id: number | string;
   text: string;
   isUser: boolean;
   timestamp: Date;
 }
 
 const Chat = () => {
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: 1,
-      text: "안녕하세요! Wavico 상담봇입니다. 어떤 도움이 필요하신가요?",
-      isUser: false,
-      timestamp: new Date(),
-    },
-  ]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [message, setMessage] = useState("");
   const [isTyping, setIsTyping] = useState(false);
+  const [conversations, setConversations] = useState<{id: string, title: string}[]>([]);
+  const [currentConversationId, setCurrentConversationId] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Scroll to bottom when messages change
+  // 페이지 로드 시 대화 목록 불러오기
+  useEffect(() => {
+    loadConversations();
+  }, []);
+
+  // 현재 대화가 변경될 때 메시지 불러오기
+  useEffect(() => {
+    if (currentConversationId) {
+      loadMessages(currentConversationId);
+    } else {
+      createNewConversation();
+    }
+  }, [currentConversationId]);
+
+  // 메시지가 변경될 때 스크롤 맨 아래로
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  // 대화 목록 불러오기
+  const loadConversations = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('chat_conversations')
+        .select('id, title, created_at')
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      
+      if (data && data.length > 0) {
+        setConversations(data.map(conv => ({
+          id: conv.id,
+          title: conv.title || '제목 없음'
+        })));
+        
+        // 가장 최근 대화 선택
+        setCurrentConversationId(data[0].id);
+      } else {
+        // 대화가 없으면 새 대화 생성
+        createNewConversation();
+      }
+    } catch (error) {
+      console.error('대화 목록을 불러오는 중 오류가 발생했습니다:', error);
+      toast("대화 목록을 불러오는 데 실패했습니다", {
+        description: "잠시 후 다시 시도해주세요",
+      });
+    }
+  };
+
+  // 메시지 불러오기
+  const loadMessages = async (conversationId: string) => {
+    try {
+      const { data, error } = await supabase
+        .from('chat_messages')
+        .select('*')
+        .eq('conversation_id', conversationId)
+        .order('timestamp', { ascending: true });
+
+      if (error) throw error;
+
+      if (data && data.length > 0) {
+        // DB에서 불러온 메시지를 화면에 표시할 형식으로 변환
+        const formattedMessages = data.map((msg, index) => ({
+          id: msg.id,
+          text: msg.user_input || msg.bot_response || '',
+          isUser: !!msg.user_input,
+          timestamp: new Date(msg.timestamp)
+        }));
+        setMessages(formattedMessages);
+      } else {
+        // 메시지가 없으면 초기 인사말 추가
+        const initialMessage = {
+          id: 'initial',
+          text: "안녕하세요! Wavico 상담봇입니다. 어떤 도움이 필요하신가요?",
+          isUser: false,
+          timestamp: new Date()
+        };
+        setMessages([initialMessage]);
+        
+        // 초기 메시지 저장
+        await saveMessage({
+          text: initialMessage.text,
+          isUser: false,
+          conversationId
+        });
+      }
+    } catch (error) {
+      console.error('메시지를 불러오는 중 오류가 발생했습니다:', error);
+      toast("메시지를 불러오는 데 실패했습니다", {
+        description: "잠시 후 다시 시도해주세요",
+      });
+    }
+  };
+
+  // 새 대화 생성
+  const createNewConversation = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('chat_conversations')
+        .insert([{ title: '새 상담' }])
+        .select();
+
+      if (error) throw error;
+      
+      if (data && data.length > 0) {
+        // 대화 목록에 새 대화 추가
+        setConversations(prev => [{
+          id: data[0].id,
+          title: data[0].title || '새 상담'
+        }, ...prev]);
+        
+        // 새 대화 선택
+        setCurrentConversationId(data[0].id);
+        
+        // 초기 메시지 설정
+        const initialMessage = {
+          id: 'initial',
+          text: "안녕하세요! Wavico 상담봇입니다. 어떤 도움이 필요하신가요?",
+          isUser: false,
+          timestamp: new Date()
+        };
+        setMessages([initialMessage]);
+        
+        // 초기 메시지 저장
+        await saveMessage({
+          text: initialMessage.text,
+          isUser: false,
+          conversationId: data[0].id
+        });
+      }
+    } catch (error) {
+      console.error('새 대화를 생성하는 중 오류가 발생했습니다:', error);
+      toast("새 대화를 생성하는 데 실패했습니다", {
+        description: "잠시 후 다시 시도해주세요",
+      });
+    }
+  };
+
+  // 메시지 저장
+  const saveMessage = async ({ 
+    text, 
+    isUser, 
+    conversationId = currentConversationId 
+  }: { 
+    text: string; 
+    isUser: boolean; 
+    conversationId?: string | null;
+  }) => {
+    if (!conversationId) return;
+
+    try {
+      const messageData = isUser
+        ? { conversation_id: conversationId, user_input: text }
+        : { conversation_id: conversationId, bot_response: text };
+
+      const { error } = await supabase
+        .from('chat_messages')
+        .insert([messageData]);
+
+      if (error) throw error;
+    } catch (error) {
+      console.error('메시지를 저장하는 중 오류가 발생했습니다:', error);
+      toast("메시지 저장에 실패했습니다", {
+        description: "잠시 후 다시 시도해주세요",
+      });
+    }
+  };
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (message.trim() === "") return;
 
-    // Add user message
+    // 사용자 메시지 추가
     const userMessage: Message = {
-      id: messages.length + 1,
+      id: `user-${Date.now()}`,
       text: message,
       isUser: true,
       timestamp: new Date(),
     };
     setMessages([...messages, userMessage]);
+    
+    // 메시지 저장
+    await saveMessage({
+      text: message,
+      isUser: true
+    });
+    
     setMessage("");
 
-    // Simulate bot typing
+    // 봇 타이핑 시뮬레이션
     setIsTyping(true);
 
-    // Simulate bot response after delay
-    setTimeout(() => {
+    // 봇 응답 시뮬레이션
+    setTimeout(async () => {
       setIsTyping(false);
 
       const botResponses = [
@@ -65,14 +233,30 @@ const Chat = () => {
         botResponses[Math.floor(Math.random() * botResponses.length)];
 
       const botMessage: Message = {
-        id: messages.length + 2,
+        id: `bot-${Date.now()}`,
         text: randomResponse,
         isUser: false,
         timestamp: new Date(),
       };
 
       setMessages((prev) => [...prev, botMessage]);
+      
+      // 봇 응답 저장
+      await saveMessage({
+        text: randomResponse,
+        isUser: false
+      });
     }, 1500);
+  };
+
+  // 새 대화 버튼 클릭 핸들러
+  const handleNewConversation = () => {
+    createNewConversation();
+  };
+
+  // 대화 선택 핸들러
+  const handleSelectConversation = (conversationId: string) => {
+    setCurrentConversationId(conversationId);
   };
 
   return (
@@ -84,11 +268,24 @@ const Chat = () => {
             <History size={20} className="mr-2" />
             대화 내역
           </div>
-          <Button variant="ghost" size="icon" className="text-gray-600">
+          <Button variant="ghost" size="icon" className="text-gray-600" onClick={handleNewConversation}>
             <Plus size={20} />
           </Button>
         </div>
-        <div className="p-2">{/* Chat history items would go here */}</div>
+        <div className="p-2">
+          {conversations.map((conv) => (
+            <div 
+              key={conv.id}
+              className={`p-2 rounded cursor-pointer hover:bg-gray-100 ${currentConversationId === conv.id ? 'bg-gray-100' : ''}`}
+              onClick={() => handleSelectConversation(conv.id)}
+            >
+              <div className="flex items-center">
+                <MessageSquare size={16} className="mr-2 text-wavico-blue" />
+                <span className="text-sm truncate">{conv.title}</span>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Main Chat Area */}
@@ -107,7 +304,7 @@ const Chat = () => {
         <div className="flex-1 overflow-y-auto p-4 bg-gray-50">
           {messages.map((msg) => (
             <div
-              key={msg.id}
+              key={typeof msg.id === 'number' ? msg.id : msg.id.toString()}
               className={`mb-4 max-w-[80%] ${
                 msg.isUser ? "ml-auto" : "mr-auto"
               }`}
@@ -192,7 +389,7 @@ const Chat = () => {
         <div className="p-4 space-y-4">
           <div className="bg-gray-50 p-4 rounded-lg">
             <div className="text-sm text-gray-600 mb-1">총 상담 수</div>
-            <div className="text-2xl font-semibold text-purple-600">0</div>
+            <div className="text-2xl font-semibold text-purple-600">{conversations.length}</div>
           </div>
           <div className="bg-gray-50 p-4 rounded-lg">
             <div className="text-sm text-gray-600 mb-1">평균 만족도</div>

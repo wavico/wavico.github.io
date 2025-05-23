@@ -1,37 +1,146 @@
-import { useState } from "react";
+
+import { useState, useEffect } from "react";
 import { MessageSquare, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "@/components/ui/use-toast";
+
+interface Message {
+  id: string;
+  text: string;
+  isUser: boolean;
+  timestamp: Date;
+}
 
 const ChatWidget = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState<{ text: string; isUser: boolean }[]>(
-    [
-      {
-        text: "안녕하세요! Wavico 상담봇입니다. 무엇을 도와드릴까요?",
-        isUser: false,
-      },
-    ]
-  );
+  const [messages, setMessages] = useState<Message[]>([
+    {
+      id: "initial",
+      text: "안녕하세요! Wavico 상담봇입니다. 무엇을 도와드릴까요?",
+      isUser: false,
+      timestamp: new Date(),
+    },
+  ]);
   const [isTyping, setIsTyping] = useState(false);
+  const [conversationId, setConversationId] = useState<string | null>(null);
+
+  // 위젯이 열릴 때 새 대화 생성 또는 최근 대화 불러오기
+  useEffect(() => {
+    if (isOpen) {
+      loadOrCreateConversation();
+    }
+  }, [isOpen]);
+
+  // 대화 생성 또는 불러오기
+  const loadOrCreateConversation = async () => {
+    try {
+      // 가장 최근 대화 가져오기 시도
+      const { data: recentConversation } = await supabase
+        .from("chat_conversations")
+        .select("id")
+        .order("created_at", { ascending: false })
+        .limit(1);
+
+      if (recentConversation && recentConversation.length > 0) {
+        // 최근 대화가 있으면 해당 대화 ID 설정
+        setConversationId(recentConversation[0].id);
+        
+        // 대화 메시지 불러오기
+        const { data: chatMessages } = await supabase
+          .from("chat_messages")
+          .select("*")
+          .eq("conversation_id", recentConversation[0].id)
+          .order("timestamp", { ascending: true });
+
+        if (chatMessages && chatMessages.length > 0) {
+          // 메시지가 있으면 형식 변환 후 상태 업데이트
+          const formattedMessages = chatMessages.map(msg => ({
+            id: msg.id,
+            text: msg.user_input || msg.bot_response || "",
+            isUser: !!msg.user_input,
+            timestamp: new Date(msg.timestamp)
+          }));
+          setMessages(formattedMessages);
+        }
+      } else {
+        // 대화가 없으면 새 대화 생성
+        createNewConversation();
+      }
+    } catch (error) {
+      console.error("대화를 불러오는 중 오류가 발생했습니다:", error);
+    }
+  };
+
+  // 새 대화 생성
+  const createNewConversation = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("chat_conversations")
+        .insert({ title: "새 상담" })
+        .select();
+
+      if (error) throw error;
+      if (data && data.length > 0) {
+        setConversationId(data[0].id);
+        // 초기 메시지 저장
+        saveMessage({
+          text: "안녕하세요! Wavico 상담봇입니다. 무엇을 도와드릴까요?",
+          isUser: false,
+        });
+      }
+    } catch (error) {
+      console.error("새 대화를 생성하는 중 오류가 발생했습니다:", error);
+    }
+  };
+
+  // 메시지 저장
+  const saveMessage = async (msg: { text: string; isUser: boolean }) => {
+    if (!conversationId) return;
+
+    try {
+      const messageData = msg.isUser
+        ? { conversation_id: conversationId, user_input: msg.text }
+        : { conversation_id: conversationId, bot_response: msg.text };
+
+      const { error } = await supabase.from("chat_messages").insert(messageData);
+
+      if (error) throw error;
+    } catch (error) {
+      console.error("메시지를 저장하는 중 오류가 발생했습니다:", error);
+    }
+  };
 
   const toggleChat = () => {
     setIsOpen(!isOpen);
   };
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (message.trim() === "") return;
 
-    // Add user message
-    const userMessage = { text: message, isUser: true };
+    // 사용자 메시지 추가
+    const userMessage = { 
+      id: `user-${Date.now()}`,
+      text: message, 
+      isUser: true, 
+      timestamp: new Date() 
+    };
     setMessages([...messages, userMessage]);
+    
+    // 메시지 저장
+    await saveMessage({
+      text: message,
+      isUser: true,
+    });
+    
     setMessage("");
 
-    // Simulate bot typing
+    // 봇 타이핑 시뮬레이션
     setIsTyping(true);
 
-    // Simulate bot response after delay
-    setTimeout(() => {
+    // 봇 응답 시뮬레이션
+    setTimeout(async () => {
       setIsTyping(false);
       const botResponses = [
         "더 자세한 내용은 어떤 것이 궁금하신가요?",
@@ -42,7 +151,21 @@ const ChatWidget = () => {
 
       const randomResponse =
         botResponses[Math.floor(Math.random() * botResponses.length)];
-      setMessages((prev) => [...prev, { text: randomResponse, isUser: false }]);
+      
+      const botMessage = {
+        id: `bot-${Date.now()}`,
+        text: randomResponse,
+        isUser: false,
+        timestamp: new Date()
+      };
+      
+      setMessages((prev) => [...prev, botMessage]);
+      
+      // 봇 응답 저장
+      await saveMessage({
+        text: randomResponse,
+        isUser: false,
+      });
     }, 1000);
   };
 
@@ -63,9 +186,9 @@ const ChatWidget = () => {
           </div>
 
           <div className="flex-1 p-4 overflow-y-auto">
-            {messages.map((msg, index) => (
+            {messages.map((msg) => (
               <div
-                key={index}
+                key={msg.id}
                 className={`mb-4 max-w-[80%] ${
                   msg.isUser ? "ml-auto" : "mr-auto"
                 }`}
