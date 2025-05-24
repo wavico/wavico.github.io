@@ -1189,26 +1189,6 @@ const Home = () => {
           </Button>
         </div>
       </section>
-      {/* Location Section */}
-      <section
-        id="location"
-        ref={addRef("location")}
-        className={`py-24 bg-gray-50 transition-opacity duration-1000 ease-in-out ${
-          isVisible["location"] ? "opacity-100" : "opacity-0"
-        }`}
-      >
-        <div className="max-w-7xl mx-auto px-6 md:px-12">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Wavico를 방문하세요
-            </h2>
-          </div>
-          <LocationSection
-            isVisible={!!isVisible["location"]}
-            addRef={addRef}
-          />
-        </div>
-      </section>
     </div>
   );
 };

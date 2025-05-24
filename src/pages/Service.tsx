@@ -8,6 +8,7 @@ import {
   Server,
   MessageSquare,
   ArrowRight,
+  Check,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -95,7 +96,7 @@ const Service = () => {
     },
     {
       title: "시스템 통합",
-      icon: <Server className="w-12 h-12 text-wavico-blue" />,
+      icon: <Server className="w-12 h-12 text-gray-400" />,
       description:
         "기존 시스템과 새로운 시스템을 효율적으로 통합하여 업무 효율을 극대화합니다.",
       features: [
@@ -106,6 +107,7 @@ const Service = () => {
         "시스템 최적화 및 성능 향상",
       ],
       image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31",
+      disabled: true,
     },
     {
       title: "모바일 앱",
@@ -250,23 +252,32 @@ const Service = () => {
             {services.map((service, idx) => (
               <div
                 key={idx}
-                className={`bg-white p-8 rounded-lg shadow-md hover:shadow-lg transition-all group ${
-                  isVisible["all-services"] ? "animate-fade-in" : "opacity-0"
+                className={`group relative bg-white rounded-lg shadow-lg p-8 hover:shadow-xl transition-all animate-fade-up ${
+                  service.disabled
+                    ? "opacity-50 cursor-not-allowed pointer-events-none"
+                    : ""
                 }`}
                 style={{ animationDelay: `${idx * 100}ms` }}
               >
+                {service.disabled && (
+                  <div className="absolute top-4 right-4 bg-gray-400/20 border text-gray-500 text-xs px-2 py-1 rounded-md">
+                    서비스 준비중
+                  </div>
+                )}
                 <div className="mb-6 text-wavico-blue">{service.icon}</div>
                 <h3 className="text-2xl font-bold mb-4 group-hover:text-wavico-blue transition-colors">
                   {service.title}
                 </h3>
                 <p className="text-gray-600 mb-6">{service.description}</p>
-                <Link
-                  to="/contact"
-                  className="text-wavico-blue font-medium flex items-center group-hover:text-wavico-darkblue"
-                >
-                  자세히 보기
-                  <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                </Link>
+                {!service.disabled && (
+                  <Link
+                    to="/contact"
+                    className="inline-flex items-center text-wavico-blue hover:text-wavico-darkblue transition-colors"
+                  >
+                    자세히 알아보기
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Link>
+                )}
               </div>
             ))}
           </div>

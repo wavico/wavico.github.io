@@ -36,7 +36,7 @@ const CompanyHistory = ({ isVisible, addRef }: CompanyHistoryProps) => {
     <section
       id="history"
       ref={addRef("history")}
-      className={`py-24 bg-gray-50 transition-opacity duration-1000 ${
+      className={`py-24 bg-gray-50 transition-opacity duration-1000 overflow-x-hidden ${
         isVisible ? "opacity-100" : "opacity-0"
       }`}
     >
@@ -66,7 +66,7 @@ const CompanyHistory = ({ isVisible, addRef }: CompanyHistoryProps) => {
                   isVisible
                     ? "opacity-100 translate-x-0"
                     : `opacity-0 ${
-                        isLeft ? "-translate-x-full" : "translate-x-full"
+                        isLeft ? "-translate-x-12" : "translate-x-12"
                       }`
                 } transition-all duration-1000 ease-out`}
               >
