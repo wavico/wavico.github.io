@@ -1,8 +1,13 @@
-
 import { ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 interface ServiceCardProps {
   service: {
@@ -17,7 +22,7 @@ interface ServiceCardProps {
 
 const ServiceCard = ({ service, delay, isVisible }: ServiceCardProps) => {
   return (
-    <Card 
+    <Card
       className={`service-card border border-gray-200 shadow-sm hover:shadow-md transition-all duration-500 ${
         isVisible ? "animate-slide-up opacity-100" : "opacity-0"
       }`}
@@ -25,17 +30,17 @@ const ServiceCard = ({ service, delay, isVisible }: ServiceCardProps) => {
     >
       <CardHeader>
         <div className="mb-4">{service.icon}</div>
-        <CardTitle className="text-xl">{service.title}</CardTitle>
+        <CardTitle className="text-xl break-keep">{service.title}</CardTitle>
       </CardHeader>
       <CardContent>
-        <p className="text-gray-600">{service.description}</p>
+        <p className="text-gray-600 break-keep">{service.description}</p>
       </CardContent>
       <CardFooter>
-        <Link 
-          to={service.link} 
+        <Link
+          to={service.link}
           className="text-wavico-blue hover:text-wavico-darkblue font-medium flex items-center group"
         >
-          자세히 보기 
+          자세히 보기
           <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
         </Link>
       </CardFooter>

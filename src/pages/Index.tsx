@@ -59,12 +59,12 @@ const Home = () => {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 1,
-      text: "안녕하세요! 저는 Wavico의 AI 연구원 김선민입니다. 무엇을 도와드릴까요?",
+      text: "안녕하세요! 저는 Wavico의 AI 비서 웨비코봇입니다. 무엇을 도와드릴까요?",
       isUser: false,
       timestamp: new Date(),
       persona: {
-        name: "김선민",
-        role: "AI 연구원",
+        name: "웨비코봇",
+        role: "AI 비서",
         avatar: "/avatars/sunmin.png",
       },
     },
@@ -142,7 +142,7 @@ const Home = () => {
       const availablePersonas = [
         {
           name: "김선민",
-          role: "AI 연구원",
+          role: "AI PM",
           avatar: "/avatars/sunmin.png",
           responses: [
             "AI 기술에 대해 궁금하신 점이 있으시다면 자세히 설명해드릴 수 있습니다.",
@@ -245,7 +245,7 @@ const Home = () => {
         const availablePersonas = [
           {
             name: "김선민",
-            role: "AI 연구원",
+            role: "AI PM",
             avatar: "/avatars/sunmin.png",
             responses: [
               "AI 기술에 대해 궁금하신 점이 있으시다면 자세히 설명해드릴 수 있습니다.",
@@ -375,14 +375,16 @@ const Home = () => {
               } ${slide.bgClass}`}
             >
               <div className="max-w-7xl mx-auto px-6 md:px-12 w-full">
-                <div className="max-w-3xl text-white animate-fade-in">
-                  <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-2">
+                <div className=" text-white animate-fade-in">
+                  <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-2 break-keep">
                     {slide.title}
                   </h1>
-                  <h2 className="text-4xl md:text-5xl lg:text-7xl font-bold mb-6">
+                  <h2 className="text-4xl md:text-5xl lg:text-7xl font-bold mb-6 break-keep">
                     {slide.subtitle}
                   </h2>
-                  <p className="text-xl mb-8 max-w-xl">{slide.description}</p>
+                  <p className="text-xl mb-8 max-w-xl break-keep whitespace-pre-line">
+                    {slide.description}
+                  </p>
                   <div className="flex flex-col sm:flex-row gap-4">
                     <Button
                       size="lg"
@@ -467,7 +469,7 @@ const Home = () => {
                 </div>
 
                 {/* Messages */}
-                <div className="flex-1 overflow-y-auto p-4">
+                <div className="flex-1 overflow-y-auto p-4 bg-white">
                   {messages.map((msg) => (
                     <div
                       key={msg.id}
@@ -560,14 +562,6 @@ const Home = () => {
                       <Button
                         variant="outline"
                         size="icon"
-                        onClick={() => imageInputRef.current?.click()}
-                        className="text-gray-500 hover:text-gray-700"
-                      >
-                        <Image size={18} />
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="icon"
                         onClick={() => fileInputRef.current?.click()}
                         className="text-gray-500 hover:text-gray-700"
                       >
@@ -608,145 +602,278 @@ const Home = () => {
                 </div>
               </div>
 
-              {/* Right Sidebar - Team Info */}
+              {/* Right Sidebar - Monitoring Stats */}
               <div className="hidden lg:block w-72 bg-white/95 border-l">
                 <div className="p-4 border-b">
-                  <h3 className="text-lg font-semibold">Wavico 팀 소개</h3>
+                  <h3 className="text-lg font-semibold">
+                    실시간 모니터링 지표
+                  </h3>
                 </div>
-                <div className="p-4 space-y-4">
-                  <div className="space-y-3">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-medium">
-                        김
-                      </div>
-                      <div>
-                        <div className="font-medium">김선민</div>
-                        <div className="text-sm text-gray-600">AI 연구원</div>
+                <div className="p-4">
+                  {/* 긍정적 지표 */}
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="relative">
+                      <svg className="w-full" viewBox="0 0 100 60">
+                        <path
+                          d="M10 50 A40 40 0 0 1 90 50"
+                          fill="none"
+                          stroke="#e5e7eb"
+                          strokeWidth="8"
+                          strokeLinecap="round"
+                        />
+                        <path
+                          d="M10 50 A40 40 0 0 1 90 50"
+                          fill="none"
+                          stroke="#3b82f6"
+                          strokeWidth="8"
+                          strokeLinecap="round"
+                          strokeDasharray="126"
+                          strokeDashoffset={126 - (126 * 98.5) / 100}
+                        />
+                        <text
+                          x="50"
+                          y="45"
+                          textAnchor="middle"
+                          className="text-lg font-bold"
+                          fill="#3b82f6"
+                        >
+                          98.5%
+                        </text>
+                      </svg>
+                      <div className="text-center mt-2 text-sm text-gray-600">
+                        관련성
                       </div>
                     </div>
-                    <div className="flex items-center space-x-3">
-                      <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-medium">
-                        조
-                      </div>
-                      <div>
-                        <div className="font-medium">조용성</div>
-                        <div className="text-sm text-gray-600">
-                          솔루션 아키텍트
-                        </div>
+                    <div className="relative">
+                      <svg className="w-full" viewBox="0 0 100 60">
+                        <path
+                          d="M10 50 A40 40 0 0 1 90 50"
+                          fill="none"
+                          stroke="#e5e7eb"
+                          strokeWidth="8"
+                          strokeLinecap="round"
+                        />
+                        <path
+                          d="M10 50 A40 40 0 0 1 90 50"
+                          fill="none"
+                          stroke="#3b82f6"
+                          strokeWidth="8"
+                          strokeLinecap="round"
+                          strokeDasharray="126"
+                          strokeDashoffset={126 - (126 * 97.2) / 100}
+                        />
+                        <text
+                          x="50"
+                          y="45"
+                          textAnchor="middle"
+                          className="text-lg font-bold"
+                          fill="#3b82f6"
+                        >
+                          97.2%
+                        </text>
+                      </svg>
+                      <div className="text-center mt-2 text-sm text-gray-600">
+                        사실성
                       </div>
                     </div>
-                    <div className="flex items-center space-x-3">
-                      <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-medium">
-                        김
+                    <div className="relative">
+                      <svg className="w-full" viewBox="0 0 100 60">
+                        <path
+                          d="M10 50 A40 40 0 0 1 90 50"
+                          fill="none"
+                          stroke="#e5e7eb"
+                          strokeWidth="8"
+                          strokeLinecap="round"
+                        />
+                        <path
+                          d="M10 50 A40 40 0 0 1 90 50"
+                          fill="none"
+                          stroke="#3b82f6"
+                          strokeWidth="8"
+                          strokeLinecap="round"
+                          strokeDasharray="126"
+                          strokeDashoffset={126 - (126 * 96.8) / 100}
+                        />
+                        <text
+                          x="50"
+                          y="45"
+                          textAnchor="middle"
+                          className="text-lg font-bold"
+                          fill="#3b82f6"
+                        >
+                          96.8%
+                        </text>
+                      </svg>
+                      <div className="text-center mt-2 text-sm text-gray-600">
+                        명확성
                       </div>
-                      <div>
-                        <div className="font-medium">김서령</div>
-                        <div className="text-sm text-gray-600">
-                          프로젝트 매니저
-                        </div>
+                    </div>
+                    <div className="relative">
+                      <svg className="w-full" viewBox="0 0 100 60">
+                        <path
+                          d="M10 50 A40 40 0 0 1 90 50"
+                          fill="none"
+                          stroke="#e5e7eb"
+                          strokeWidth="8"
+                          strokeLinecap="round"
+                        />
+                        <path
+                          d="M10 50 A40 40 0 0 1 90 50"
+                          fill="none"
+                          stroke="#3b82f6"
+                          strokeWidth="8"
+                          strokeLinecap="round"
+                          strokeDasharray="126"
+                          strokeDashoffset={126 - (126 * 95.8) / 100}
+                        />
+                        <text
+                          x="50"
+                          y="45"
+                          textAnchor="middle"
+                          className="text-lg font-bold"
+                          fill="#3b82f6"
+                        >
+                          95.8%
+                        </text>
+                      </svg>
+                      <div className="text-center mt-2 text-sm text-gray-600">
+                        응답 만족도
                       </div>
                     </div>
                   </div>
 
-                  {/* Monitoring Stats */}
-                  <div className="pt-4 border-t">
-                    <h4 className="text-sm font-semibold text-gray-600 mb-3">
-                      실시간 모니터링
-                    </h4>
-                    <div className="grid grid-cols-2 gap-3">
-                      {/* Response Rate */}
-                      <div className="bg-blue-50 p-3 rounded-lg">
-                        <div className="flex items-center justify-between mb-2">
-                          <CheckCircle size={16} className="text-blue-600" />
-                          <span className="text-xs text-gray-500">응답률</span>
-                        </div>
-                        <div className="text-lg font-semibold text-blue-600">
-                          {monitoringStats.responseRate}%
-                        </div>
-                        <div className="w-full bg-blue-200 h-1.5 rounded-full mt-1">
-                          <div
-                            className="bg-blue-600 h-1.5 rounded-full"
-                            style={{
-                              width: `${monitoringStats.responseRate}%`,
-                            }}
-                          />
-                        </div>
-                      </div>
+                  {/* 구분선 */}
+                  <div className="border-t border-gray-200 my-4"></div>
 
-                      {/* Average Response Time */}
-                      <div className="bg-green-50 p-3 rounded-lg">
-                        <div className="flex items-center justify-between mb-2">
-                          <Clock size={16} className="text-green-600" />
-                          <span className="text-xs text-gray-500">
-                            평균 응답
-                          </span>
-                        </div>
-                        <div className="text-lg font-semibold text-green-600">
-                          {monitoringStats.avgResponseTime}분
-                        </div>
-                        <div className="w-full bg-green-200 h-1.5 rounded-full mt-1">
-                          <div
-                            className="bg-green-600 h-1.5 rounded-full"
-                            style={{
-                              width: `${
-                                (monitoringStats.avgResponseTime / 5) * 100
-                              }%`,
-                            }}
-                          />
-                        </div>
-                      </div>
-
-                      {/* Daily Chats */}
-                      <div className="bg-purple-50 p-3 rounded-lg">
-                        <div className="flex items-center justify-between mb-2">
-                          <MessageCircle
-                            size={16}
-                            className="text-purple-600"
-                          />
-                          <span className="text-xs text-gray-500">
-                            일일 상담
-                          </span>
-                        </div>
-                        <div className="text-lg font-semibold text-purple-600">
-                          {monitoringStats.dailyChats}건
-                        </div>
-                        <div className="w-full bg-purple-200 h-1.5 rounded-full mt-1">
-                          <div
-                            className="bg-purple-600 h-1.5 rounded-full"
-                            style={{
-                              width: `${
-                                (monitoringStats.dailyChats / 200) * 100
-                              }%`,
-                            }}
-                          />
-                        </div>
-                      </div>
-
-                      {/* Satisfaction Rate */}
-                      <div className="bg-orange-50 p-3 rounded-lg">
-                        <div className="flex items-center justify-between mb-2">
-                          <Users size={16} className="text-orange-600" />
-                          <span className="text-xs text-gray-500">만족도</span>
-                        </div>
-                        <div className="text-lg font-semibold text-orange-600">
-                          {monitoringStats.satisfaction}%
-                        </div>
-                        <div className="w-full bg-orange-200 h-1.5 rounded-full mt-1">
-                          <div
-                            className="bg-orange-600 h-1.5 rounded-full"
-                            style={{
-                              width: `${monitoringStats.satisfaction}%`,
-                            }}
-                          />
-                        </div>
+                  {/* 부정적 지표 */}
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="relative">
+                      <svg className="w-full" viewBox="0 0 100 60">
+                        <path
+                          d="M10 50 A40 40 0 0 1 90 50"
+                          fill="none"
+                          stroke="#e5e7eb"
+                          strokeWidth="8"
+                          strokeLinecap="round"
+                        />
+                        <path
+                          d="M10 50 A40 40 0 0 1 90 50"
+                          fill="none"
+                          stroke="#ef4444"
+                          strokeWidth="8"
+                          strokeLinecap="round"
+                          strokeDasharray="126"
+                          strokeDashoffset={126 - (126 * 0.02) / 100}
+                        />
+                        <text
+                          x="50"
+                          y="45"
+                          textAnchor="middle"
+                          className="text-lg font-bold"
+                          fill="#ef4444"
+                        >
+                          0.02%
+                        </text>
+                      </svg>
+                      <div className="text-center mt-2 text-sm text-gray-600">
+                        해악성
                       </div>
                     </div>
-                  </div>
-
-                  <div className="pt-4 border-t">
-                    <div className="text-sm text-gray-600">
-                      * 이 채팅은 데모용으로, 실제 상담을 원하시면 카카오톡
-                      채널을 이용해주세요.
+                    <div className="relative">
+                      <svg className="w-full" viewBox="0 0 100 60">
+                        <path
+                          d="M10 50 A40 40 0 0 1 90 50"
+                          fill="none"
+                          stroke="#e5e7eb"
+                          strokeWidth="8"
+                          strokeLinecap="round"
+                        />
+                        <path
+                          d="M10 50 A40 40 0 0 1 90 50"
+                          fill="none"
+                          stroke="#ef4444"
+                          strokeWidth="8"
+                          strokeLinecap="round"
+                          strokeDasharray="126"
+                          strokeDashoffset={126 - (126 * 0.01) / 100}
+                        />
+                        <text
+                          x="50"
+                          y="45"
+                          textAnchor="middle"
+                          className="text-lg font-bold"
+                          fill="#ef4444"
+                        >
+                          0.01%
+                        </text>
+                      </svg>
+                      <div className="text-center mt-2 text-sm text-gray-600">
+                        차별성
+                      </div>
+                    </div>
+                    <div className="relative">
+                      <svg className="w-full" viewBox="0 0 100 60">
+                        <path
+                          d="M10 50 A40 40 0 0 1 90 50"
+                          fill="none"
+                          stroke="#e5e7eb"
+                          strokeWidth="8"
+                          strokeLinecap="round"
+                        />
+                        <path
+                          d="M10 50 A40 40 0 0 1 90 50"
+                          fill="none"
+                          stroke="#ef4444"
+                          strokeWidth="8"
+                          strokeLinecap="round"
+                          strokeDasharray="126"
+                          strokeDashoffset={126 - (126 * 0.01) / 100}
+                        />
+                        <text
+                          x="50"
+                          y="45"
+                          textAnchor="middle"
+                          className="text-lg font-bold"
+                          fill="#ef4444"
+                        >
+                          0.01%
+                        </text>
+                      </svg>
+                      <div className="text-center mt-2 text-sm text-gray-600">
+                        착취성
+                      </div>
+                    </div>
+                    <div className="relative">
+                      <svg className="w-full" viewBox="0 0 100 60">
+                        <path
+                          d="M10 50 A40 40 0 0 1 90 50"
+                          fill="none"
+                          stroke="#e5e7eb"
+                          strokeWidth="8"
+                          strokeLinecap="round"
+                        />
+                        <path
+                          d="M10 50 A40 40 0 0 1 90 50"
+                          fill="none"
+                          stroke="#ef4444"
+                          strokeWidth="8"
+                          strokeLinecap="round"
+                          strokeDasharray="126"
+                          strokeDashoffset="126"
+                        />
+                        <text
+                          x="50"
+                          y="45"
+                          textAnchor="middle"
+                          className="text-lg font-bold"
+                          fill="#ef4444"
+                        >
+                          0%
+                        </text>
+                      </svg>
+                      <div className="text-center mt-2 text-sm text-gray-600">
+                        위험 발언
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -767,7 +894,7 @@ const Home = () => {
         <div className="max-w-7xl mx-auto px-6 md:px-12">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">서비스 소개</h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="text-xl text-gray-600  mx-auto">
               Wavico는 음성, 이미지, 언어를 아우르는 인공지능 기술을 바탕으로
               다양한 서비스를 제공합니다.
             </p>
@@ -796,7 +923,7 @@ const Home = () => {
         <div className="max-w-7xl mx-auto px-6 md:px-12">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">포트폴리오</h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="text-xl text-gray-600  mx-auto">
               Wavico가 성공적으로 완료한 프로젝트들을 살펴보세요.
             </p>
           </div>
@@ -828,15 +955,18 @@ const Home = () => {
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
             지금 상담해보세요
           </h2>
-          <p className="text-xl max-w-3xl mx-auto mb-8">
+          <p className="text-xl  mx-auto mb-8">
             Wavico와 함께 귀사의 비즈니스를 혁신적으로 변화시키는 AI 솔루션을
             만나보세요.
           </p>
           <Button
             size="lg"
+            asChild
             className="bg-white text-wavico-blue hover:bg-gray-100 hover:text-wavico-darkblue text-lg"
           >
-            실시간 상담하기 <MessageCircle className="ml-2 h-5 w-5" />
+            <Link to="/contact" onClick={() => window.scrollTo(0, 0)}>
+              실시간 상담하기 <MessageCircle className="ml-2 h-5 w-5" />
+            </Link>
           </Button>
         </div>
       </section>

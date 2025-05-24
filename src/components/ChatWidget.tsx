@@ -1,8 +1,8 @@
-import { useState, useEffect, useRef } from "react";
-import { MessageSquare, X, Image, Paperclip, Send } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+import { Send, Paperclip, Image } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
-import { toast } from "@/components/ui/use-toast";
 
 interface Message {
   id: string;
@@ -15,8 +15,6 @@ interface Message {
     name: string;
   }[];
 }
-
-const KAKAO_CHANNEL_URL = "http://pf.kakao.com/_xbqZSn/chat";
 
 const ChatWidget = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -41,39 +39,37 @@ const ChatWidget = () => {
     }
   }, [isOpen]);
 
-  // 대화 생성 또는 불러오기
+  // 대화 불러오기 또는 생성
   const loadOrCreateConversation = async () => {
     try {
-      // 가장 최근 대화 가져오기 시도
-      const { data: recentConversation } = await supabase
+      // 최근 대화가 있는지 확인
+      const { data: conversations } = await supabase
         .from("chat_conversations")
-        .select("id")
+        .select("*")
         .order("created_at", { ascending: false })
         .limit(1);
 
-      if (recentConversation && recentConversation.length > 0) {
-        // 최근 대화가 있으면 해당 대화 ID 설정
-        setConversationId(recentConversation[0].id);
-
-        // 대화 메시지 불러오기
-        const { data: chatMessages } = await supabase
+      if (conversations && conversations.length > 0) {
+        // 최근 대화가 있으면 해당 대화 불러오기
+        setConversationId(conversations[0].id);
+        const { data: messages } = await supabase
           .from("chat_messages")
           .select("*")
-          .eq("conversation_id", recentConversation[0].id)
-          .order("timestamp", { ascending: true });
+          .eq("conversation_id", conversations[0].id)
+          .order("created_at", { ascending: true });
 
-        if (chatMessages && chatMessages.length > 0) {
-          // 메시지가 있으면 형식 변환 후 상태 업데이트
-          const formattedMessages = chatMessages.map((msg) => ({
-            id: msg.id,
-            text: msg.user_input || msg.bot_response || "",
-            isUser: !!msg.user_input,
-            timestamp: new Date(msg.timestamp),
-          }));
-          setMessages(formattedMessages);
+        if (messages) {
+          setMessages(
+            messages.map((msg) => ({
+              id: msg.id,
+              text: msg.text,
+              isUser: msg.is_user,
+              timestamp: new Date(msg.created_at),
+            }))
+          );
         }
       } else {
-        // 대화가 없으면 새 대화 생성
+        // 새 대화 생성
         createNewConversation();
       }
     } catch (error) {
@@ -81,49 +77,23 @@ const ChatWidget = () => {
     }
   };
 
-  // 새 대화 생성
-  const createNewConversation = async () => {
-    try {
-      const { data, error } = await supabase
-        .from("chat_conversations")
-        .insert({ title: "새 상담" })
-        .select();
-
-      if (error) throw error;
-      if (data && data.length > 0) {
-        setConversationId(data[0].id);
-        // 초기 메시지 저장
-        saveMessage({
-          text: "안녕하세요! Wavico 상담봇입니다. 무엇을 도와드릴까요?",
-          isUser: false,
-        });
-      }
-    } catch (error) {
-      console.error("새 대화를 생성하는 중 오류가 발생했습니다:", error);
-    }
-  };
-
   // 메시지 저장
-  const saveMessage = async (msg: { text: string; isUser: boolean }) => {
-    if (!conversationId) return;
-
+  const saveMessage = async (message: {
+    text: string;
+    isUser: boolean;
+    conversationId?: string;
+  }) => {
     try {
-      const messageData = msg.isUser
-        ? { conversation_id: conversationId, user_input: msg.text }
-        : { conversation_id: conversationId, bot_response: msg.text };
-
-      const { error } = await supabase
-        .from("chat_messages")
-        .insert(messageData);
-
-      if (error) throw error;
+      await supabase.from("chat_messages").insert([
+        {
+          conversation_id: message.conversationId || conversationId,
+          text: message.text,
+          is_user: message.isUser,
+        },
+      ]);
     } catch (error) {
-      console.error("메시지를 저장하는 중 오류가 발생했습니다:", error);
+      console.error("메시지 저장 중 오류가 발생했습니다:", error);
     }
-  };
-
-  const toggleChat = () => {
-    setIsOpen(!isOpen);
   };
 
   const handleSendMessage = async () => {
@@ -202,7 +172,7 @@ const ChatWidget = () => {
       } = supabase.storage.from("chat-attachments").getPublicUrl(fileName);
 
       // Add message with attachment
-      const userMessage: Message = {
+      const userMessage = {
         id: `user-${Date.now()}`,
         text: type === "image" ? "이미지를 보냈습니다." : "파일을 보냈습니다.",
         isUser: true,
@@ -217,20 +187,13 @@ const ChatWidget = () => {
       };
 
       setMessages([...messages, userMessage]);
-      await saveMessage(userMessage);
 
       // Clear the file input
       event.target.value = "";
 
-      // Trigger bot response
       handleBotResponse();
     } catch (error) {
       console.error("파일 업로드 중 오류가 발생했습니다:", error);
-      toast({
-        title: "오류",
-        description: "파일 업로드에 실패했습니다.",
-        variant: "destructive",
-      });
     }
   };
 
@@ -259,32 +222,7 @@ const ChatWidget = () => {
     }, 1000);
   };
 
-  const handleKakaoChat = () => {
-    window.open(KAKAO_CHANNEL_URL, "_blank");
-  };
-
-  return (
-    <div className="fixed bottom-6 right-6 z-50">
-      <Button
-        className="bg-[#FEE500] hover:bg-[#FEE500]/90 text-black rounded-full h-14 w-14 flex items-center justify-center shadow-lg"
-        onClick={handleKakaoChat}
-      >
-        <svg
-          width="24"
-          height="22"
-          viewBox="0 0 24 22"
-          fill="currentColor"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            fillRule="evenodd"
-            clipRule="evenodd"
-            d="M12 0C5.37 0 0 4.27 0 9.55C0 12.99 2.24 16.01 5.63 17.84L4.27 22L9.37 18.93C10.22 19.08 11.1 19.16 12 19.16C18.63 19.16 24 14.89 24 9.61C24 4.33 18.63 0 12 0Z"
-          />
-        </svg>
-      </Button>
-    </div>
-  );
+  return null; // 채팅 위젯 UI를 제거하고 null을 반환
 };
 
 export default ChatWidget;
