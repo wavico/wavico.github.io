@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Image } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
@@ -15,22 +14,22 @@ const TeamSection = ({ isVisible, addRef }: TeamSectionProps) => {
       role: "PM/FrontEngineer",
       description:
         "6년간의 AI 프로젝트와 컨설팅 경험, 그리고 다수의 대외 수상 실적을 보유한 실전형 데이터 전문가",
-      image: "/lovable-uploads/58fad565-12f1-4423-86f6-11df4679344b.png",
+      image: "/images/team/sunmin.png",
     },
     {
       name: "조용성",
       role: "Data Scientist",
       description:
         "AI·빅데이터 센터 연구원 출신으로, 수요예측부터 감성분석까지 다양한 분석 프로젝트와 데이터 마트 설계 경험을 보유한 데이터사이언스 전문가",
-      image: "/lovable-uploads/63b95fde-f07e-4c94-bb2f-715f0dee6d3e.png",
+      image: "/images/team/yongsung.png",
     },
     {
       name: "김서령",
       role: "Data Engineer",
       description:
         "AI 모델 개발, 데이터 분석 모듈 설계, 시각화 대시보드 구축, 대기업 클라우드 인프라 구축 경험을 갖춘 데이터 엔지니어",
-      image: "/lovable-uploads/사슴.jpg",
-    }
+      image: "/images/team/seoryung.jpg",
+    },
   ];
 
   return (
@@ -43,9 +42,7 @@ const TeamSection = ({ isVisible, addRef }: TeamSectionProps) => {
     >
       <div className="max-w-7xl mx-auto px-6 md:px-12">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            조직/팀 소개
-          </h2>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">조직/팀 소개</h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             Wavico를 이끌어가는 전문가들을 소개합니다.
           </p>
@@ -57,14 +54,12 @@ const TeamSection = ({ isVisible, addRef }: TeamSectionProps) => {
               <div
                 key={idx}
                 className={`bg-white p-6 rounded-lg shadow-md ${
-                  isVisible
-                    ? "animate-scale-in"
-                    : "opacity-0"
+                  isVisible ? "animate-scale-in" : "opacity-0"
                 }`}
                 style={{ animationDelay: `${idx * 100}ms` }}
               >
                 <div className="w-24 h-24 rounded-full mx-auto mb-6 overflow-hidden">
-                  <img 
+                  <img
                     src={member.image}
                     alt={`${member.name} profile`}
                     className="w-full h-full object-cover filter grayscale"

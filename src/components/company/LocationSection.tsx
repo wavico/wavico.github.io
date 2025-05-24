@@ -33,7 +33,11 @@ const LocationSection = ({ isVisible, addRef }: LocationSectionProps) => {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <img src="public\map.png" alt="Wavico 위치 지도 미리보기" />
+                <img
+                  src="/map.png"
+                  alt="Wavico 위치 지도 미리보기"
+                  className="w-full h-full object-cover"
+                />
               </a>
             </div>
           </div>
