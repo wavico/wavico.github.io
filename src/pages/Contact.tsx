@@ -1,13 +1,12 @@
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { MapPin, Phone, Mail, Send, Loader2 } from "lucide-react";
+import { MapPin, Phone, Mail, Send, Loader2, Upload, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useToast } from "@/components/ui/use-toast";
-import emailjs from "@emailjs/browser";
 import {
   Select,
   SelectContent,
@@ -15,11 +14,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import emailjs from "@emailjs/browser";
 
 // EmailJS 초기화
 emailjs.init("xDR1O9GFblv7LxOUl");
 
 const KAKAO_CHANNEL_URL = "http://pf.kakao.com/_xbqZSn/chat";
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 
 interface FormData {
   name: string;
@@ -29,6 +30,22 @@ interface FormData {
   service: string;
   message: string;
 }
+
+type EmailJSTemplateParams = Record<string, unknown> & {
+  to_email: string;
+  from_name: string;
+  from_email: string;
+  phone: string;
+  company: string;
+  service: string;
+  message: string;
+  attachment_count: number;
+  attachments?: Array<{
+    name: string;
+    data: string;
+    type: string;
+  }>;
+};
 
 const Contact = () => {
   const [formData, setFormData] = useState<FormData>({
@@ -42,6 +59,8 @@ const Contact = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
+  const [files, setFiles] = useState<File[]>([]);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
 
   const handleInputChange = (
@@ -59,6 +78,15 @@ const Contact = () => {
       ...prev,
       service: value,
     }));
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFiles = Array.from(e.target.files || []);
+    setFiles((prev) => [...prev, ...selectedFiles]);
+  };
+
+  const removeFile = (index: number) => {
+    setFiles((prev) => prev.filter((_, i) => i !== index));
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -88,6 +116,19 @@ const Contact = () => {
         return;
       }
 
+      // 파일 크기 검증
+      for (const file of files) {
+        if (file.size > MAX_FILE_SIZE) {
+          toast({
+            title: "파일 크기 초과",
+            description: `${file.name}의 크기가 5MB를 초과합니다.`,
+            variant: "destructive",
+          });
+          setIsSubmitting(false);
+          return;
+        }
+      }
+
       const response = await emailjs.sendForm(
         "service_g8o69xv",
         "template_cqdf8rk",
@@ -109,6 +150,8 @@ const Contact = () => {
           service: "",
           message: "",
         });
+        setFiles([]);
+        if (fileInputRef.current) fileInputRef.current.value = "";
       }
     } catch (error) {
       console.error("문의 접수 실패:", error);
@@ -144,7 +187,12 @@ const Contact = () => {
             {/* Contact Form */}
             <div className="animate-fade-in">
               <h2 className="text-3xl font-bold mb-8">문의하기</h2>
-              <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
+              <form
+                ref={formRef}
+                onSubmit={handleSubmit}
+                className="space-y-6"
+                encType="multipart/form-data"
+              >
                 <div className="space-y-2">
                   <Label htmlFor="name">이름 *</Label>
                   <Input
@@ -273,6 +321,52 @@ const Contact = () => {
                   />
                 </div>
 
+                <div>
+                  <Label>파일 첨부</Label>
+                  <div className="mt-2">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="w-full"
+                      onClick={() => fileInputRef.current?.click()}
+                    >
+                      <Upload className="w-4 h-4 mr-2" />
+                      파일 선택
+                    </Button>
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      name="attachment"
+                      multiple={false}
+                      onChange={handleFileChange}
+                      className="hidden"
+                    />
+                  </div>
+
+                  {files.length > 0 && (
+                    <div className="mt-4 space-y-2">
+                      {files.map((file, index) => (
+                        <div
+                          key={index}
+                          className="flex items-center justify-between bg-gray-50 p-2 rounded"
+                        >
+                          <span className="text-sm text-gray-600 truncate">
+                            {file.name}
+                          </span>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => removeFile(index)}
+                          >
+                            <X className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
                 <div className="pt-4">
                   <Button
                     type="submit"
@@ -371,7 +465,7 @@ const Contact = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    <img src="map.png" alt="Wavico 위치 지도 미리보기" />
+                    <img src="public\map.png" alt="Wavico 위치 지도 미리보기" />
                   </a>
                 </div>
               </div>

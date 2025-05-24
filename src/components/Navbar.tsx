@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
@@ -19,28 +18,28 @@ const Navbar = ({ isScrolled }: NavbarProps) => {
   return (
     <nav
       className={`fixed w-full z-50 transition-all duration-300 py-4 px-6 md:px-12 ${
-        isScrolled 
-          ? "navbar-solid" 
-          : "navbar-transparent"
+        isScrolled ? "navbar-solid" : "navbar-transparent"
       }`}
     >
       <div className="max-w-7xl mx-auto flex items-center justify-between">
-        <Link 
-          to="/" 
+        <Link
+          to="/"
           className={`text-2xl font-bold text-wavico-blue flex items-center transition-opacity duration-500 ${
             animationPlayed ? "opacity-100" : "opacity-0"
           }`}
           style={{ transitionDelay: "200ms" }}
         >
-          <div className="w-10 h-10 rounded-lg bg-wavico-blue text-white flex items-center justify-center mr-2 text-xl">W</div>
+          <div className="w-10 h-10 rounded-lg bg-wavico-blue text-white flex items-center justify-center mr-2 text-xl">
+            W
+          </div>
           Wavico
         </Link>
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center space-x-8">
           {[
-            { name: "서비스 소개", path: "/service" },
-            { name: "회사소개", path: "/company" },
+            { name: "린 개발", path: "/service" },
+            { name: "팀 소개", path: "/company" },
             { name: "포트폴리오", path: "/portfolio" },
             { name: "문의", path: "/contact" },
           ].map((item, index) => (
@@ -81,7 +80,7 @@ const Navbar = ({ isScrolled }: NavbarProps) => {
           <div className="flex flex-col space-y-4 px-6">
             {[
               { name: "서비스 소개", path: "/service" },
-              { name: "회사소개", path: "/company" },
+              { name: "팀 소개", path: "/company" },
               { name: "포트폴리오", path: "/portfolio" },
               { name: "문의", path: "/contact" },
             ].map((item) => (

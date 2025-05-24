@@ -466,21 +466,19 @@ const Home = () => {
       title: "누구나 쉽고 빠르게 이용하는",
       subtitle: "AI 음성·이미지·언어 서비스",
       description:
-        "Wavico는 기획부터 배포까지 한 번에 해결하는 End-to-End AI 서비스를 제공합니다.",
+        "Wavico는 기획부터 배포까지 End-to-End AI 서비스를 제공합니다.",
       bgClass: "bg-gradient-to-r from-blue-500 to-purple-600",
     },
     {
-      title: "언제 어디서든 접근 가능한",
+      title: "최소 기능 제품 기반 린 개발",
       subtitle: "웹/앱 개발 서비스",
-      description:
-        "최신 기술과 트렌드를 반영한 웹사이트와 모바일 앱을 개발합니다.",
+      description: "빠르게 소통하고 고객 피드백으로 개선하는 린 개발 팀입니다.",
       bgClass: "bg-gradient-to-r from-cyan-500 to-blue-600",
     },
     {
-      title: "데이터를 한눈에 파악하는",
+      title: "투명한 분석과 인사이트 전달을 위한",
       subtitle: "시각화 대시보드",
-      description:
-        "복잡한 데이터를 직관적으로 이해할 수 있는 시각화 솔루션을 제공합니다.",
+      description: "의미를 설명하고 해석할 수 있는 시각화 솔루션을 제공합니다.",
       bgClass: "bg-gradient-to-r from-indigo-500 to-purple-600",
     },
   ];

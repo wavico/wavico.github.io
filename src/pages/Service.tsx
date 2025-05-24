@@ -145,13 +145,158 @@ const Service = () => {
       <section className="pt-40 pb-20 bg-gradient-to-r from-blue-600 to-indigo-700 text-white">
         <div className="max-w-7xl mx-auto px-6 md:px-12">
           <h1 className="text-4xl md:text-5xl font-bold mb-6">
-            무엇을 제공하나요?
+            어떻게 제공하나요?
           </h1>
           <p className="text-xl max-w-2xl">
-            Wavico는 음성·이미지·언어를 아우르는 인공지능 기술을 바탕으로 다양한
-            서비스를 제공합니다. 여러분의 비즈니스에 필요한 맞춤형 솔루션을
-            찾아보세요.
+            Wavico는 린 개발 철학을 바탕으로, 최소 기능 제품(MVP)을 빠르게
+            구현하고, 투명한 프로세스와 합리적인 비용으로 실용적인 AI·웹·앱
+            솔루션을 제공합니다.
           </p>
+        </div>
+      </section>
+
+      {/* Process */}
+      <section
+        id="process"
+        ref={addRef("process")}
+        className={`py-24 transition-opacity duration-1000 ${
+          isVisible["process"] ? "opacity-100" : "opacity-0"
+        }`}
+      >
+        <div className="max-w-7xl mx-auto px-6 md:px-12">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              프로젝트 진행 과정
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Wavico는 작고 체계적인 단위로 프로젝트를 빠르게 진행합니다.
+            </p>
+          </div>
+
+          <div className="relative">
+            {/* Process timeline */}
+            <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-wavico-blue"></div>
+
+            {[
+              {
+                title: "문제 정의와 목표 설정",
+                description:
+                  "고객의 비즈니스 맥락과 핵심 문제를 함께 정의하고, 명확한 목표를 설정합니다.",
+              },
+              {
+                title: "최소 기능 제품(MVP) 기획",
+                description:
+                  "빠른 검증을 위한 최소 기능 제품을 설계하고, 사용자 중심의 경험을 기획합니다.",
+              },
+              {
+                title: "투명한 개발 및 반복 구현",
+                description:
+                  "개발 전 과정을 투명하게 공유하며, 최신 기술을 바탕으로 빠르게 구현합니다.",
+              },
+              {
+                title: "사용자 피드백 기반 검증",
+                description:
+                  "실제 사용자 피드백을 반영하여 테스트하고, 필요한 개선을 즉시 적용합니다.",
+              },
+              {
+                title: "안정적 배포 및 성장 지원",
+                description:
+                  "완성된 솔루션을 안정적으로 배포하고, 이후 기능 확장과 운영을 함께 고민합니다.",
+              },
+            ].map((step, idx) => (
+              <div
+                key={idx}
+                className={`relative md:flex items-center mb-8 ${
+                  idx % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
+                } ${isVisible["process"] ? "animate-fade-in" : "opacity-0"}`}
+                style={{ animationDelay: `${idx * 200}ms` }}
+              >
+                <div
+                  className={`md:w-5/12 ${
+                    idx % 2 === 0
+                      ? "md:text-right md:pr-8"
+                      : "md:text-left md:pl-8"
+                  }`}
+                >
+                  <h3 className="text-2xl font-bold mb-2">
+                    {idx + 1}. {step.title}
+                  </h3>
+                  <p className="text-gray-600">{step.description}</p>
+                </div>
+
+                {/* Timeline node */}
+                <div className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 items-center justify-center">
+                  <div className="w-10 h-10 bg-wavico-blue rounded-full text-white flex items-center justify-center font-bold z-10">
+                    {idx + 1}
+                  </div>
+                </div>
+
+                <div className="md:w-5/12"></div>
+              </div>
+            ))}
+          </div>
+          <div className="relative">
+            {/* Process timeline */}
+            <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-green-200"></div>
+
+            {[
+              {
+                title: "문제 정의와 목표 설정",
+                description:
+                  "고객의 비즈니스 맥락과 핵심 문제를 함께 정의하고, 명확한 목표를 설정합니다.",
+              },
+              {
+                title: "최소 기능 제품(MVP) 기획",
+                description:
+                  "빠른 검증을 위한 최소 기능 제품을 설계하고, 사용자 중심의 경험을 기획합니다.",
+              },
+              {
+                title: "투명한 개발 및 반복 구현",
+                description:
+                  "개발 전 과정을 투명하게 공유하며, 최신 기술을 바탕으로 빠르게 구현합니다.",
+              },
+              // {
+              //   title: "사용자 피드백 기반 검증",
+              //   description:
+              //     "실제 사용자 피드백을 반영하여 테스트하고, 필요한 개선을 즉시 적용합니다.",
+              // },
+              // {
+              //   title: "안정적 배포 및 성장 지원",
+              //   description:
+              //     "완성된 솔루션을 안정적으로 배포하고, 이후 기능 확장과 운영을 함께 고민합니다.",
+              // },
+            ].map((step, idx) => (
+              <div
+                key={idx}
+                className={`relative md:flex items-center mb-8 ${
+                  idx % 2 === 1 ? "md:flex-row" : "md:flex-row-reverse"
+                } ${isVisible["process"] ? "animate-fade-in" : "opacity-0"}`}
+                style={{ animationDelay: `${idx * 200}ms` }}
+              >
+                <div
+                  className={`md:w-5/12 ${
+                    idx % 2 === 1
+                      ? "md:text-right md:pr-8"
+                      : "md:text-left md:pl-8"
+                  }`}
+                >
+                  <h3 className="text-2xl font-bold mb-2 text-gray-300">
+                    {idx + 1}. {step.title}
+                  </h3>
+                  <p className="text-gray-300">{step.description}</p>
+                </div>
+
+                {/* Timeline node */}
+                <div className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 items-center justify-center">
+                  <div className="w-10 h-10 bg-green-200 rounded-full text-white flex items-center justify-center font-bold z-10">
+                    {idx + 1}
+                  </div>
+                </div>
+
+                <div className="md:w-5/12"></div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -159,7 +304,7 @@ const Service = () => {
       <section
         id="featured-service"
         ref={addRef("featured-service")}
-        className={`py-24 transition-opacity duration-1000 ${
+        className={`transition-opacity duration-1000 ${
           isVisible["featured-service"] ? "opacity-100" : "opacity-0"
         }`}
       >
@@ -278,89 +423,6 @@ const Service = () => {
                     <ArrowRight className="w-4 h-4 ml-2" />
                   </Link>
                 )}
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Process */}
-      <section
-        id="process"
-        ref={addRef("process")}
-        className={`py-24 transition-opacity duration-1000 ${
-          isVisible["process"] ? "opacity-100" : "opacity-0"
-        }`}
-      >
-        <div className="max-w-7xl mx-auto px-6 md:px-12">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              프로젝트 진행 과정
-            </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Wavico는 체계적인 프로세스로 프로젝트를 진행합니다.
-            </p>
-          </div>
-
-          <div className="relative">
-            {/* Process timeline */}
-            <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-wavico-blue"></div>
-
-            {[
-              {
-                title: "요구사항 분석",
-                description:
-                  "고객의 비즈니스 요구사항을 정확히 파악하고 분석합니다.",
-              },
-              {
-                title: "기획 및 설계",
-                description:
-                  "요구사항을 바탕으로 최적의 솔루션을 기획하고 설계합니다.",
-              },
-              {
-                title: "개발 및 구현",
-                description:
-                  "최신 기술과 방법론을 적용하여 솔루션을 개발합니다.",
-              },
-              {
-                title: "테스트 및 검증",
-                description:
-                  "품질 보증을 위한 철저한 테스트와 검증 과정을 거칩니다.",
-              },
-              {
-                title: "배포 및 운영",
-                description:
-                  "개발된 솔루션을 안정적으로 배포하고 운영 지원을 제공합니다.",
-              },
-            ].map((step, idx) => (
-              <div
-                key={idx}
-                className={`relative md:flex items-center mb-16 ${
-                  idx % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
-                } ${isVisible["process"] ? "animate-fade-in" : "opacity-0"}`}
-                style={{ animationDelay: `${idx * 200}ms` }}
-              >
-                <div
-                  className={`md:w-5/12 ${
-                    idx % 2 === 0
-                      ? "md:text-right md:pr-12"
-                      : "md:text-left md:pl-12"
-                  }`}
-                >
-                  <h3 className="text-2xl font-bold mb-2">
-                    {idx + 1}. {step.title}
-                  </h3>
-                  <p className="text-gray-600">{step.description}</p>
-                </div>
-
-                {/* Timeline node */}
-                <div className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 items-center justify-center">
-                  <div className="w-10 h-10 bg-wavico-blue rounded-full text-white flex items-center justify-center font-bold z-10">
-                    {idx + 1}
-                  </div>
-                </div>
-
-                <div className="md:w-5/12"></div>
               </div>
             ))}
           </div>
