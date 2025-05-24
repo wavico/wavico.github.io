@@ -100,7 +100,7 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-semibold mb-4">문의</h3>
             <ul className="space-y-2">
-              <li className="text-gray-400">서울시 동대문구 회기로 4길 16</li>
+              <li className="text-gray-400">서울시 동대문구 회기로 4길</li>
               <li className="text-gray-400">이메일: wavicomanager@gmail.com</li>
               <li className="text-gray-400">전화: 010-5549-9020</li>
               <li>

@@ -14,6 +14,7 @@ import {
   Clock,
   Users,
   CheckCircle,
+  Trash2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -26,6 +27,7 @@ import {
 } from "@/components/ui/card";
 import ServiceCard from "@/components/ServiceCard";
 import PortfolioPreview from "@/components/PortfolioPreview";
+import LocationSection from "@/components/company/LocationSection";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/components/ui/use-toast";
 
@@ -53,24 +55,26 @@ interface MonitoringStats {
   satisfaction: number;
 }
 
+interface ChatSession {
+  id: string;
+  name: string;
+  messages: Message[];
+  timestamp: Date;
+}
+
 const Home = () => {
   const [activeSlide, setActiveSlide] = useState(0);
   const [isVisible, setIsVisible] = useState({});
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: 1,
-      text: "안녕하세요! 저는 Wavico의 AI 비서 웨비코봇입니다. 무엇을 도와드릴까요?",
-      isUser: false,
-      timestamp: new Date(),
-      persona: {
-        name: "웨비코봇",
-        role: "AI 비서",
-        avatar: "/avatars/sunmin.png",
-      },
-    },
-  ]);
+  const [chatSessions, setChatSessions] = useState<ChatSession[]>([]);
+  const [activeChatId, setActiveChatId] = useState<string>("");
+  const [messages, setMessages] = useState<Message[]>([]);
   const [message, setMessage] = useState("");
   const [isTyping, setIsTyping] = useState(false);
+  const [usageInfo, setUsageInfo] = useState<{
+    remainingCount: number;
+    totalCount: number;
+  } | null>(null);
+  const [usageError, setUsageError] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const observerRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -83,6 +87,42 @@ const Home = () => {
   });
 
   useEffect(() => {
+    // Load chat sessions from localStorage
+    const loadChatSessions = () => {
+      const savedSessions = localStorage.getItem("chatSessions");
+      if (savedSessions) {
+        const sessions = JSON.parse(savedSessions);
+        setChatSessions(
+          sessions.map((session: ChatSession) => ({
+            ...session,
+            timestamp: new Date(session.timestamp),
+          }))
+        );
+
+        // Set active chat if exists
+        const lastActiveId = localStorage.getItem("activeChatId");
+        if (
+          lastActiveId &&
+          sessions.find((s: ChatSession) => s.id === lastActiveId)
+        ) {
+          setActiveChatId(lastActiveId);
+          const activeSession = sessions.find(
+            (s: ChatSession) => s.id === lastActiveId
+          );
+          setMessages(activeSession.messages);
+        } else if (sessions.length > 0) {
+          setActiveChatId(sessions[0].id);
+          setMessages(sessions[0].messages);
+        } else {
+          createNewChat();
+        }
+      } else {
+        createNewChat();
+      }
+    };
+
+    loadChatSessions();
+
     // Banner slider
     const interval = setInterval(() => {
       setActiveSlide((prev) => (prev === 2 ? 0 : prev + 1));
@@ -114,83 +154,173 @@ const Home = () => {
     };
   }, []);
 
+  // Save chat sessions to localStorage whenever they change
+  useEffect(() => {
+    if (chatSessions.length > 0) {
+      localStorage.setItem("chatSessions", JSON.stringify(chatSessions));
+      localStorage.setItem("activeChatId", activeChatId);
+    }
+  }, [chatSessions, activeChatId]);
+
+  const createNewChat = () => {
+    const newSession: ChatSession = {
+      id: Date.now().toString(),
+      name: `새 대화 ${chatSessions.length + 1}`,
+      messages: [
+        {
+          id: 1,
+          text: "안녕하세요! 저는 Wavico의 AI 비서 웨비코봇입니다. 무엇을 도와드릴까요?",
+          isUser: false,
+          timestamp: new Date(),
+          persona: {
+            name: "웨비코봇",
+            role: "AI 비서",
+            avatar: "/avatars/sunmin.png",
+          },
+        },
+      ],
+      timestamp: new Date(),
+    };
+
+    setChatSessions((prev) => [...prev, newSession]);
+    setActiveChatId(newSession.id);
+    setMessages(newSession.messages);
+  };
+
   // Add ref to the object
   const addRef = (id: string) => (el: HTMLDivElement) => {
     observerRefs.current[id] = el;
   };
 
-  const handleSendMessage = () => {
+  // 사용량 정보 조회
+  const checkUsage = async () => {
+    try {
+      const response = await fetch("http://localhost:3001/api/usage-info");
+      const data = await response.json();
+      setUsageInfo(data);
+      setUsageError(null);
+    } catch (error) {
+      console.error("사용량 조회 실패:", error);
+      setUsageError("사용량 정보를 조회할 수 없습니다.");
+    }
+  };
+
+  // 컴포넌트 마운트 시 사용량 정보 조회
+  useEffect(() => {
+    checkUsage();
+  }, []);
+
+  const handleSendMessage = async () => {
     if (message.trim() === "") return;
 
-    // Add user message
-    const userMessage: Message = {
-      id: messages.length + 1,
-      text: message,
-      isUser: true,
-      timestamp: new Date(),
-    };
-    setMessages([...messages, userMessage]);
-    setMessage("");
+    try {
+      // 메시지 전송 전 사용량 체크
+      const response = await fetch("http://localhost:3001/api/check-usage", {
+        method: "POST",
+      });
+      const data = await response.json();
 
-    // Simulate bot typing
-    setIsTyping(true);
+      if (!response.ok) {
+        setUsageError(data.error);
+        return;
+      }
 
-    // Simulate bot response after delay
-    setTimeout(() => {
-      setIsTyping(false);
+      setUsageInfo(data);
+      setUsageError(null);
 
-      const availablePersonas = [
-        {
-          name: "김선민",
-          role: "AI PM",
-          avatar: "/avatars/sunmin.png",
-          responses: [
-            "AI 기술에 대해 궁금하신 점이 있으시다면 자세히 설명해드릴 수 있습니다.",
-            "저희 연구팀이 개발한 최신 AI 모델에 대해 소개해드릴까요?",
-            "음성, 이미지, 자연어 처리 중 어떤 분야에 관심이 있으신가요?",
-          ],
-        },
-        {
-          name: "조용성",
-          role: "솔루션 아키텍트",
-          avatar: "/avatars/yongsung.png",
-          responses: [
-            "귀사의 비즈니스에 맞는 최적의 AI 솔루션을 제안해드릴 수 있습니다.",
-            "기존 시스템과의 통합 방안에 대해 논의해보시겠어요?",
-            "구체적인 요구사항을 말씀해 주시면 맞춤형 솔루션을 설계해드리겠습니다.",
-          ],
-        },
-        {
-          name: "김서령",
-          role: "프로젝트 매니저",
-          avatar: "/avatars/seoryeong.png",
-          responses: [
-            "프로젝트 일정과 범위에 대해 상담해드릴 수 있습니다.",
-            "유사 프로젝트 진행 사례를 공유해드릴까요?",
-            "예산과 일정에 맞는 최적의 프로젝트 계획을 수립해드리겠습니다.",
-          ],
-        },
-      ];
-
-      const persona =
-        availablePersonas[Math.floor(Math.random() * availablePersonas.length)];
-      const response =
-        persona.responses[Math.floor(Math.random() * persona.responses.length)];
-
-      const botMessage = {
-        id: messages.length + 2,
-        text: response,
-        isUser: false,
+      // 기존 메시지 전송 로직
+      const userMessage: Message = {
+        id: messages.length + 1,
+        text: message,
+        isUser: true,
         timestamp: new Date(),
-        persona: {
-          name: persona.name,
-          role: persona.role,
-          avatar: persona.avatar,
-        },
       };
 
-      setMessages((prev) => [...prev, botMessage]);
-    }, 1000);
+      const updatedMessages = [...messages, userMessage];
+      setMessages(updatedMessages);
+
+      setChatSessions((prev) =>
+        prev.map((session) =>
+          session.id === activeChatId
+            ? { ...session, messages: updatedMessages, timestamp: new Date() }
+            : session
+        )
+      );
+
+      setMessage("");
+      setIsTyping(true);
+
+      setTimeout(() => {
+        setIsTyping(false);
+        const availablePersonas = [
+          {
+            name: "웨비코봇",
+            role: "AI 비서",
+            avatar: "/avatars/sunmin.png",
+            responses: [
+              "AI 기술에 대해 궁금하신 점이 있으시다면 자세히 설명해드릴 수 있습니다.",
+              "저희 연구팀이 개발한 최신 AI 모델에 대해 소개해드릴까요?",
+              "음성, 이미지, 자연어 처리 중 어떤 분야에 관심이 있으신가요?",
+            ],
+          },
+          {
+            name: "웨비코봇",
+            role: "AI 비서",
+            avatar: "/avatars/yongsung.png",
+            responses: [
+              "귀사의 비즈니스에 맞는 최적의 AI 솔루션을 제안해드릴 수 있습니다.",
+              "기존 시스템과의 통합 방안에 대해 논의해보시겠어요?",
+              "구체적인 요구사항을 말씀해 주시면 맞춤형 솔루션을 설계해드리겠습니다.",
+            ],
+          },
+          {
+            name: "웨비코봇",
+            role: "AI 비서",
+            avatar: "/avatars/seoryeong.png",
+            responses: [
+              "프로젝트 일정과 범위에 대해 상담해드릴 수 있습니다.",
+              "유사 프로젝트 진행 사례를 공유해드릴까요?",
+              "예산과 일정에 맞는 최적의 프로젝트 계획을 수립해드리겠습니다.",
+            ],
+          },
+        ];
+
+        const persona =
+          availablePersonas[
+            Math.floor(Math.random() * availablePersonas.length)
+          ];
+        const response =
+          persona.responses[
+            Math.floor(Math.random() * persona.responses.length)
+          ];
+
+        const botMessage = {
+          id: updatedMessages.length + 1,
+          text: response,
+          isUser: false,
+          timestamp: new Date(),
+          persona: {
+            name: persona.name,
+            role: persona.role,
+            avatar: persona.avatar,
+          },
+        };
+
+        const finalMessages = [...updatedMessages, botMessage];
+        setMessages(finalMessages);
+
+        setChatSessions((prev) =>
+          prev.map((session) =>
+            session.id === activeChatId
+              ? { ...session, messages: finalMessages, timestamp: new Date() }
+              : session
+          )
+        );
+      }, 1000);
+    } catch (error) {
+      console.error("메시지 전송 실패:", error);
+      setUsageError("메시지를 전송할 수 없습니다.");
+    }
   };
 
   const handleFileUpload = async (
@@ -306,6 +436,29 @@ const Home = () => {
         variant: "destructive",
       });
     }
+  };
+
+  const handleDeleteSession = (sessionId: string, e: React.MouseEvent) => {
+    e.stopPropagation(); // 부모 요소의 클릭 이벤트 전파 방지
+
+    // 현재 활성화된 세션을 삭제하는 경우
+    if (sessionId === activeChatId) {
+      const remainingSessions = chatSessions.filter((s) => s.id !== sessionId);
+      if (remainingSessions.length > 0) {
+        // 다른 세션이 있으면 가장 최근 세션을 활성화
+        const nextSession = remainingSessions[0];
+        setActiveChatId(nextSession.id);
+        setMessages(nextSession.messages);
+      } else {
+        // 다른 세션이 없으면 새 세션 생성
+        createNewChat();
+      }
+    }
+
+    // 세션 목록에서 삭제
+    setChatSessions((prev) =>
+      prev.filter((session) => session.id !== sessionId)
+    );
   };
 
   const bannerSlides = [
@@ -438,12 +591,65 @@ const Home = () => {
                     <History size={20} className="mr-2" />
                     대화 내역
                   </div>
-                  <Button variant="ghost" size="icon" className="text-gray-600">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="text-gray-600"
+                    onClick={createNewChat}
+                  >
                     <Plus size={20} />
                   </Button>
                 </div>
                 <div className="p-2">
-                  {/* Chat history items would go here */}
+                  {chatSessions
+                    .sort(
+                      (a, b) => b.timestamp.getTime() - a.timestamp.getTime()
+                    )
+                    .map((session) => (
+                      <div
+                        key={session.id}
+                        className={`p-3 rounded-lg cursor-pointer mb-2 group ${
+                          session.id === activeChatId
+                            ? "bg-blue-50 text-blue-600"
+                            : "hover:bg-gray-50"
+                        }`}
+                        onClick={() => {
+                          setActiveChatId(session.id);
+                          setMessages(session.messages);
+                        }}
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center flex-1 min-w-0">
+                            <MessageCircle
+                              size={16}
+                              className="mr-2 flex-shrink-0"
+                            />
+                            <span className="text-sm font-medium truncate">
+                              {session.name}
+                            </span>
+                          </div>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="w-6 h-6 p-0.5 opacity-0 group-hover:opacity-100 transition-opacity text-gray-400 hover:text-red-500"
+                            onClick={(e) => handleDeleteSession(session.id, e)}
+                          >
+                            <Trash2 size={14} />
+                          </Button>
+                        </div>
+                        <div className="text-xs text-gray-500 mt-1">
+                          {new Date(session.timestamp).toLocaleDateString(
+                            "ko-KR",
+                            {
+                              month: "short",
+                              day: "numeric",
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            }
+                          )}
+                        </div>
+                      </div>
+                    ))}
                 </div>
               </div>
 
@@ -466,10 +672,20 @@ const Home = () => {
                       Wavico 팀
                     </span>
                   </div>
+                  {usageInfo && (
+                    <div className="text-sm text-gray-600">
+                      남은 횟수: {usageInfo.remainingCount}/10
+                    </div>
+                  )}
                 </div>
 
                 {/* Messages */}
                 <div className="flex-1 overflow-y-auto p-4 bg-white">
+                  {usageError && (
+                    <div className="mb-4 p-3 bg-red-50 text-red-600 rounded-lg">
+                      {usageError}
+                    </div>
+                  )}
                   {messages.map((msg) => (
                     <div
                       key={msg.id}
@@ -564,6 +780,7 @@ const Home = () => {
                         size="icon"
                         onClick={() => fileInputRef.current?.click()}
                         className="text-gray-500 hover:text-gray-700"
+                        disabled={!!usageError}
                       >
                         <Paperclip size={18} />
                       </Button>
@@ -574,12 +791,14 @@ const Home = () => {
                         onKeyPress={(e) => {
                           if (e.key === "Enter") handleSendMessage();
                         }}
-                        placeholder="메시지를 입력하세요..."
+                        placeholder={usageError || "메시지를 입력하세요..."}
                         className="flex-1 border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                        disabled={!!usageError}
                       />
                       <Button
                         className="bg-blue-600 hover:bg-blue-700 text-white"
                         onClick={handleSendMessage}
+                        disabled={!!usageError}
                       >
                         <Send size={18} />
                       </Button>
@@ -968,6 +1187,26 @@ const Home = () => {
               실시간 상담하기 <MessageCircle className="ml-2 h-5 w-5" />
             </Link>
           </Button>
+        </div>
+      </section>
+      {/* Location Section */}
+      <section
+        id="location"
+        ref={addRef("location")}
+        className={`py-24 bg-gray-50 transition-opacity duration-1000 ease-in-out ${
+          isVisible["location"] ? "opacity-100" : "opacity-0"
+        }`}
+      >
+        <div className="max-w-7xl mx-auto px-6 md:px-12">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              Wavico를 방문하세요
+            </h2>
+          </div>
+          <LocationSection
+            isVisible={!!isVisible["location"]}
+            addRef={addRef}
+          />
         </div>
       </section>
     </div>

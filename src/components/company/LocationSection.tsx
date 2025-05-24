@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Link } from "react-router-dom";
 import { MapPin } from "lucide-react";
@@ -20,9 +19,7 @@ const LocationSection = ({ isVisible, addRef }: LocationSectionProps) => {
     >
       <div className="max-w-7xl mx-auto px-6 md:px-12">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            회사 위치
-          </h2>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">회사 위치</h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             Wavico를 방문하세요.
           </p>
@@ -30,24 +27,25 @@ const LocationSection = ({ isVisible, addRef }: LocationSectionProps) => {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           <div className="bg-white p-6 rounded-lg shadow-md">
-            <div className="bg-gray-300 h-80 rounded-lg mb-6 flex items-center justify-center">
-              <MapPin className="w-12 h-12 text-gray-500" />
-              <p className="ml-2 text-gray-600">지도가 여기에 표시됩니다</p>
+            <div className="rounded-lg overflow-hidden">
+              <a
+                href="https://map.naver.com/v5/place/11591483"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img src="public\map.png" alt="Wavico 위치 지도 미리보기" />
+              </a>
             </div>
           </div>
 
           <div>
             <div className="bg-white p-6 rounded-lg shadow-md">
-              <h3 className="text-2xl font-bold mb-6">
-                연락처 및 오시는 길
-              </h3>
+              <h3 className="text-2xl font-bold mb-6">연락처 및 오시는 길</h3>
 
               <div className="space-y-6">
                 <div>
                   <h4 className="text-lg font-semibold mb-2">주소</h4>
-                  <p className="text-gray-600">
-                    서울시 동대문구 회기로 4길 16
-                  </p>
+                  <p className="text-gray-600">서울시 동대문구 회기로 4길</p>
                 </div>
 
                 <div>

@@ -209,9 +209,7 @@ const Contact = () => {
                   </div>
                   <div>
                     <h3 className="text-lg font-bold mb-1">주소</h3>
-                    <p className="text-gray-600">
-                      서울시 동대문구 회기로 4길 16
-                    </p>
+                    <p className="text-gray-600">서울시 동대문구 회기로 4길</p>
                   </div>
                 </div>
 
@@ -268,10 +266,15 @@ const Contact = () => {
 
               {/* Map Placeholder */}
               <div className="mt-12 h-64 bg-gray-200 rounded-lg flex items-center justify-center">
-                <MapPin className="w-10 h-10 text-gray-400" />
-                <span className="ml-2 text-gray-500">
-                  지도가 여기에 표시됩니다
-                </span>
+                <div className="rounded-lg overflow-hidden">
+                  <a
+                    href="https://map.naver.com/v5/place/11591483"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <img src="public\map.png" alt="Wavico 위치 지도 미리보기" />
+                  </a>
+                </div>
               </div>
 
               {/* Social Media Links */}

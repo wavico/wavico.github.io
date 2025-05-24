@@ -26,13 +26,6 @@ const CompanyHistory = ({ isVisible, addRef }: CompanyHistoryProps) => {
         "Outlook 메일 LLM 챗봇 개발",
         "NAWA 종이컵 AI 쓰레기통 웹 사이트 개발",
         "LOCAT 영화 제작 협업용 모바일 APP 개발",
-      ],
-    },
-    {
-      year: 2023,
-      title: "서비스 시작의 해",
-      description: "웹/앱 개발 서비스 시작",
-      achievements: [
         "TJtexcode 쇼핑몰 웹 사이트 제작",
         "테니스 동호회 모바일 APP 개발",
       ],
