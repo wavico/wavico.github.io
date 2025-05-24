@@ -58,11 +58,15 @@ const TeamSection = ({ isVisible, addRef }: TeamSectionProps) => {
                 }`}
                 style={{ animationDelay: `${idx * 100}ms` }}
               >
-                <div className="w-24 h-24 rounded-full mx-auto mb-6 overflow-hidden">
+                <div className="w-24 h-24 rounded-full mx-auto mb-6 overflow-hidden bg-gray-100">
                   <img
                     src={member.image}
                     alt={`${member.name} profile`}
                     className="w-full h-full object-cover filter grayscale"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.src = "/images/team/default-avatar.png";
+                    }}
                   />
                 </div>
                 <h3 className="text-xl font-bold text-center mb-1">
