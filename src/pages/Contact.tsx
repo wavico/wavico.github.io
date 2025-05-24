@@ -1,12 +1,13 @@
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { MapPin, Phone, Mail, Send, Loader2, Upload, X } from "lucide-react";
+import { MapPin, Phone, Mail, Send, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useToast } from "@/components/ui/use-toast";
+import emailjs from "@emailjs/browser";
 import {
   Select,
   SelectContent,
@@ -14,6 +15,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+
+// EmailJS 초기화
+emailjs.init("xDR1O9GFblv7LxOUl");
 
 const KAKAO_CHANNEL_URL = "http://pf.kakao.com/_xbqZSn/chat";
 
@@ -38,8 +42,7 @@ const Contact = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
-  const [files, setFiles] = useState<File[]>([]);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const formRef = useRef<HTMLFormElement>(null);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -58,18 +61,11 @@ const Contact = () => {
     }));
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFiles = Array.from(e.target.files || []);
-    setFiles((prev) => [...prev, ...selectedFiles]);
-  };
-
-  const removeFile = (index: number) => {
-    setFiles((prev) => prev.filter((_, i) => i !== index));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
+
+    if (!formRef.current) return;
 
     try {
       // 필수 필드 검증
@@ -88,58 +84,37 @@ const Contact = () => {
           description: "필수 항목을 모두 입력해주세요.",
           variant: "destructive",
         });
+        setIsSubmitting(false);
         return;
       }
 
-      // FormData 객체 생성
-      const formDataToSend = new FormData();
+      const response = await emailjs.sendForm(
+        "service_g8o69xv",
+        "template_cqdf8rk",
+        formRef.current,
+        "xDR1O9GFblv7LxOUl"
+      );
 
-      // 폼 데이터 추가
-      Object.entries(formData).forEach(([key, value]) => {
-        formDataToSend.append(key, value);
-      });
+      if (response.status === 200) {
+        toast({
+          title: "문의가 접수되었습니다",
+          description: "빠른 시일 내에 답변 드리도록 하겠습니다.",
+        });
 
-      // 파일 추가
-      files.forEach((file) => {
-        formDataToSend.append("files", file);
-      });
-
-      // API 호출
-      const response = await fetch("http://localhost:3001/api/contact", {
-        method: "POST",
-        body: formDataToSend,
-      });
-
-      const result = await response.json();
-
-      if (!response.ok) {
-        throw new Error(result.message || "문의 접수 중 오류가 발생했습니다.");
+        setFormData({
+          name: "",
+          email: "",
+          phone: "",
+          company: "",
+          service: "",
+          message: "",
+        });
       }
-
-      // 성공 메시지 표시
-      toast({
-        title: "문의가 접수되었습니다",
-        description: "빠른 시일 내에 답변 드리도록 하겠습니다.",
-      });
-
-      // 폼 초기화
-      setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        company: "",
-        service: "",
-        message: "",
-      });
-      setFiles([]);
     } catch (error) {
       console.error("문의 접수 실패:", error);
       toast({
         title: "오류 발생",
-        description:
-          error instanceof Error
-            ? error.message
-            : "문의 접수 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.",
+        description: "이메일 전송 중 오류가 발생했습니다.",
         variant: "destructive",
       });
     } finally {
@@ -169,7 +144,7 @@ const Contact = () => {
             {/* Contact Form */}
             <div className="animate-fade-in">
               <h2 className="text-3xl font-bold mb-8">문의하기</h2>
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
                 <div className="space-y-2">
                   <Label htmlFor="name">이름 *</Label>
                   <Input
@@ -224,6 +199,11 @@ const Contact = () => {
 
                 <div className="space-y-2">
                   <Label htmlFor="service">서비스 항목 *</Label>
+                  <input
+                    type="hidden"
+                    name="service"
+                    value={formData.service}
+                  />
                   <RadioGroup
                     value={formData.service}
                     onValueChange={(value) => {
@@ -291,51 +271,6 @@ const Contact = () => {
                     required
                     className="min-h-[150px] bg-gray-50 border-gray-300"
                   />
-                </div>
-
-                <div>
-                  <Label>파일 첨부</Label>
-                  <div className="mt-2">
-                    <Button
-                      type="button"
-                      variant="outline"
-                      className="w-full"
-                      onClick={() => fileInputRef.current?.click()}
-                    >
-                      <Upload className="w-4 h-4 mr-2" />
-                      파일 선택
-                    </Button>
-                    <input
-                      ref={fileInputRef}
-                      type="file"
-                      multiple
-                      onChange={handleFileChange}
-                      className="hidden"
-                    />
-                  </div>
-
-                  {files.length > 0 && (
-                    <div className="mt-4 space-y-2">
-                      {files.map((file, index) => (
-                        <div
-                          key={index}
-                          className="flex items-center justify-between bg-gray-50 p-2 rounded"
-                        >
-                          <span className="text-sm text-gray-600 truncate">
-                            {file.name}
-                          </span>
-                          <Button
-                            type="button"
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => removeFile(index)}
-                          >
-                            <X className="w-4 h-4" />
-                          </Button>
-                        </div>
-                      ))}
-                    </div>
-                  )}
                 </div>
 
                 <div className="pt-4">
