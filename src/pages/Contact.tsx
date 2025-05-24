@@ -1,66 +1,150 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { MapPin, Phone, Mail, Send, Loader2 } from "lucide-react";
+import { MapPin, Phone, Mail, Send, Loader2, Upload, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useToast } from "@/components/ui/use-toast";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const KAKAO_CHANNEL_URL = "http://pf.kakao.com/_xbqZSn/chat";
 
+interface FormData {
+  name: string;
+  email: string;
+  phone: string;
+  company: string;
+  service: string;
+  message: string;
+}
+
 const Contact = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     name: "",
     email: "",
     phone: "",
     company: "",
+    service: "",
     message: "",
-    serviceType: "웹/앱 개발",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
+  const [files, setFiles] = useState<File[]>([]);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleChange = (
+  const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
-  const handleRadioChange = (value: string) => {
-    setFormData((prev) => ({ ...prev, serviceType: value }));
+  const handleServiceChange = (value: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      service: value,
+    }));
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFiles = Array.from(e.target.files || []);
+    setFiles((prev) => [...prev, ...selectedFiles]);
+  };
+
+  const removeFile = (index: number) => {
+    setFiles((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate form submission
-    setTimeout(() => {
-      setIsSubmitting(false);
-      toast({
-        title: "문의가 성공적으로 전송되었습니다!",
-        description: "빠른 시일 내에 연락드리겠습니다.",
+    try {
+      // 필수 필드 검증
+      const requiredFields: (keyof FormData)[] = [
+        "name",
+        "email",
+        "phone",
+        "service",
+        "message",
+      ];
+      const emptyFields = requiredFields.filter((field) => !formData[field]);
+
+      if (emptyFields.length > 0) {
+        toast({
+          title: "입력 오류",
+          description: "필수 항목을 모두 입력해주세요.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      // FormData 객체 생성
+      const formDataToSend = new FormData();
+
+      // 폼 데이터 추가
+      Object.entries(formData).forEach(([key, value]) => {
+        formDataToSend.append(key, value);
       });
 
-      // Reset form
+      // 파일 추가
+      files.forEach((file) => {
+        formDataToSend.append("files", file);
+      });
+
+      // API 호출
+      const response = await fetch("http://localhost:3001/api/contact", {
+        method: "POST",
+        body: formDataToSend,
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.message || "문의 접수 중 오류가 발생했습니다.");
+      }
+
+      // 성공 메시지 표시
+      toast({
+        title: "문의가 접수되었습니다",
+        description: "빠른 시일 내에 답변 드리도록 하겠습니다.",
+      });
+
+      // 폼 초기화
       setFormData({
         name: "",
         email: "",
         phone: "",
         company: "",
+        service: "",
         message: "",
-        serviceType: "웹/앱 개발",
       });
-
-      // Redirect after successful submission
-      setTimeout(() => {
-        navigate("/");
-      }, 3000);
-    }, 1500);
+      setFiles([]);
+    } catch (error) {
+      console.error("문의 접수 실패:", error);
+      toast({
+        title: "오류 발생",
+        description:
+          error instanceof Error
+            ? error.message
+            : "문의 접수 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -92,7 +176,7 @@ const Contact = () => {
                     id="name"
                     name="name"
                     value={formData.name}
-                    onChange={handleChange}
+                    onChange={handleInputChange}
                     placeholder="이름을 입력하세요"
                     required
                     className="bg-gray-50 border-gray-300"
@@ -106,7 +190,7 @@ const Contact = () => {
                     name="email"
                     type="email"
                     value={formData.email}
-                    onChange={handleChange}
+                    onChange={handleInputChange}
                     placeholder="이메일을 입력하세요"
                     required
                     className="bg-gray-50 border-gray-300"
@@ -119,7 +203,7 @@ const Contact = () => {
                     id="phone"
                     name="phone"
                     value={formData.phone}
-                    onChange={handleChange}
+                    onChange={handleInputChange}
                     placeholder="연락처를 입력하세요"
                     required
                     className="bg-gray-50 border-gray-300"
@@ -132,32 +216,67 @@ const Contact = () => {
                     id="company"
                     name="company"
                     value={formData.company}
-                    onChange={handleChange}
+                    onChange={handleInputChange}
                     placeholder="회사명을 입력하세요"
                     className="bg-gray-50 border-gray-300"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label>서비스 항목 *</Label>
+                  <Label htmlFor="service">서비스 항목 *</Label>
                   <RadioGroup
-                    value={formData.serviceType}
-                    onValueChange={handleRadioChange}
-                    className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2"
+                    value={formData.service}
+                    onValueChange={(value) => {
+                      setFormData((prev) => ({
+                        ...prev,
+                        service: value,
+                      }));
+                    }}
+                    className="grid grid-cols-2 gap-4"
                   >
-                    {[
-                      "웹/앱 개발",
-                      "AI 솔루션",
-                      "시각화 대시보드",
-                      "시스템 통합",
-                      "모바일 앱",
-                      "기타",
-                    ].map((type) => (
-                      <div key={type} className="flex items-center space-x-2">
-                        <RadioGroupItem value={type} id={`service-${type}`} />
-                        <Label htmlFor={`service-${type}`}>{type}</Label>
-                      </div>
-                    ))}
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="web" id="web" />
+                      <Label htmlFor="web" className="font-normal">
+                        웹/앱 개발
+                      </Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="ai" id="ai" />
+                      <Label htmlFor="ai" className="font-normal">
+                        AI 솔루션
+                      </Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="dashboard" id="dashboard" />
+                      <Label htmlFor="dashboard" className="font-normal">
+                        시각화 대시보드
+                      </Label>
+                    </div>
+                    <div className="flex items-center space-x-2 opacity-50 cursor-not-allowed">
+                      <RadioGroupItem
+                        value="integration"
+                        id="integration"
+                        disabled
+                      />
+                      <Label htmlFor="integration" className="font-normal">
+                        시스템 통합
+                        <span className="ml-2 text-xs text-gray-500">
+                          (서비스 준비중)
+                        </span>
+                      </Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="mobile" id="mobile" />
+                      <Label htmlFor="mobile" className="font-normal">
+                        모바일 앱
+                      </Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="other" id="other" />
+                      <Label htmlFor="other" className="font-normal">
+                        기타
+                      </Label>
+                    </div>
                   </RadioGroup>
                 </div>
 
@@ -167,11 +286,56 @@ const Contact = () => {
                     id="message"
                     name="message"
                     value={formData.message}
-                    onChange={handleChange}
+                    onChange={handleInputChange}
                     placeholder="문의 내용을 입력하세요"
                     required
                     className="min-h-[150px] bg-gray-50 border-gray-300"
                   />
+                </div>
+
+                <div>
+                  <Label>파일 첨부</Label>
+                  <div className="mt-2">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="w-full"
+                      onClick={() => fileInputRef.current?.click()}
+                    >
+                      <Upload className="w-4 h-4 mr-2" />
+                      파일 선택
+                    </Button>
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      multiple
+                      onChange={handleFileChange}
+                      className="hidden"
+                    />
+                  </div>
+
+                  {files.length > 0 && (
+                    <div className="mt-4 space-y-2">
+                      {files.map((file, index) => (
+                        <div
+                          key={index}
+                          className="flex items-center justify-between bg-gray-50 p-2 rounded"
+                        >
+                          <span className="text-sm text-gray-600 truncate">
+                            {file.name}
+                          </span>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => removeFile(index)}
+                          >
+                            <X className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
 
                 <div className="pt-4">
@@ -278,7 +442,7 @@ const Contact = () => {
               </div>
 
               {/* Social Media Links */}
-              <div className="mt-12">
+              {/* <div className="mt-12">
                 <h3 className="text-lg font-bold mb-4">소셜 미디어</h3>
                 <div className="flex space-x-4">
                   {["Facebook", "Twitter", "LinkedIn", "Instagram"].map(
@@ -293,7 +457,7 @@ const Contact = () => {
                     )
                   )}
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
@@ -334,7 +498,7 @@ const Contact = () => {
               {
                 question: "개발 후 지원 서비스는 어떻게 되나요?",
                 answer:
-                  "모든 프로젝트에는 기본적으로 1개월의 무상 유지보수 기간이 포함되어 있으며, 이후에는 유지보수 계약을 통해 지속적인 지원을 제공해 드립니다.",
+                  "모든 프로젝트에는 기본적으로 3개월의 무상 유지보수 기간이 포함되어 있으며, 이후에는 유지보수 계약을 통해 지속적인 지원을 제공해 드립니다.",
               },
               {
                 question: "AI 솔루션은 어떤 산업에 적용 가능한가요?",
