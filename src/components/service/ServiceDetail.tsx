@@ -6,7 +6,7 @@ const ServiceDetail = () => {
     {
       category: "앱 개발 서비스",
       items: [
-        "React Native 기반의 크로스 플랫폼 앱 개발",
+        "Flutter 기반의 크로스 플랫폼 앱 개발",
         "회원 관리 시스템 (회원가입, 로그인, 마이페이지)",
         "결제 시스템 연동 (Stripe, PayPal)",
         "실시간 채팅 및 음성 통화 기능",

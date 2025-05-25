@@ -94,7 +94,7 @@ const Portfolio = () => {
       image: "https://images.unsplash.com/photo-1534723452862-4c874018d66d",
       description: "사용자 경험을 극대화한 모바일 뱅킹 애플리케이션",
       client: "디지털 은행",
-      technology: ["React Native", "Node.js", "Firebase", "Biometrics API"],
+      technology: ["Flutter", "Node.js", "Firebase", "Biometrics API"],
       challenge: "보안성을 유지하면서도 사용자 경험을 최적화하는 뱅킹 앱 개발",
       solution:
         "생체인식 기술과 AI 기반 개인화 서비스를 결합한 직관적인 UX 설계",

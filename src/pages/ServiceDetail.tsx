@@ -12,6 +12,7 @@ import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
+import ServiceCard from "@/components/ServiceCard";
 
 const ServiceDetail = () => {
   const [activeService, setActiveService] = useState(0);
@@ -32,6 +33,7 @@ const ServiceDetail = () => {
         "지속적 유지보수 및 업데이트",
       ],
       image: "https://images.unsplash.com/photo-1481487196290-c152efe083f5",
+      link: "#웹-모바일-앱-개발",
     },
     {
       title: "AI 솔루션",
@@ -46,6 +48,7 @@ const ServiceDetail = () => {
         "AI 기반 추천 시스템",
       ],
       image: "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2",
+      link: "#ai-솔루션",
     },
     {
       title: "시각화 대시보드",
@@ -60,6 +63,7 @@ const ServiceDetail = () => {
         "다양한 디바이스 지원",
       ],
       image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71",
+      link: "#시각화-대시보드",
     },
     {
       title: "시스템 통합",
@@ -75,6 +79,7 @@ const ServiceDetail = () => {
       ],
       image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31",
       disabled: true,
+      link: "#시스템-통합",
     },
     {
       title: "모바일 앱",
@@ -83,12 +88,13 @@ const ServiceDetail = () => {
         "iOS와 Android에서 모두 사용 가능한 네이티브 및 크로스 플랫폼 앱을 개발합니다.",
       features: [
         "iOS 및 Android 네이티브 앱",
-        "React Native, Flutter 등 크로스 플랫폼 개발",
+        "Flutter, Flutter 등 크로스 플랫폼 개발",
         "푸시 알림 시스템 구현",
         "오프라인 기능 지원",
         "앱스토어 최적화 및 출시 지원",
       ],
       image: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c",
+      link: "#모바일-앱",
     },
     {
       title: "AI 챗봇",
@@ -103,6 +109,7 @@ const ServiceDetail = () => {
         "지속적인 학습 및 개선",
       ],
       image: "https://images.unsplash.com/photo-1531482615713-2afd69097998",
+      link: "#ai-챗봇",
     },
   ];
   const addRef = (id: string) => (el: HTMLDivElement) => {
@@ -245,6 +252,34 @@ const ServiceDetail = () => {
           </div>
         </div>
       </section>
+      {/* Services Section */}
+      <section
+        id="services"
+        ref={addRef("services")}
+        className={`py-24 bg-gray-50 transition-opacity duration-1000 ease-in-out ${
+          isVisible["services"] ? "opacity-100" : "opacity-0"
+        }`}
+      >
+        <div className="max-w-7xl mx-auto px-6 md:px-12">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">모든 서비스</h2>
+            <p className="text-xl text-gray-600  mx-auto">
+              귀사의 비즈니스에 필요한 서비스를 찾아보세요.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {services.map((service, idx) => (
+              <ServiceCard
+                key={idx}
+                service={service}
+                delay={idx * 100}
+                isVisible={isVisible["services"]}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* Tech Stack */}
       <section className="py-24 bg-gradient-to-b from-white to-gray-50">
@@ -279,7 +314,7 @@ const ServiceDetail = () => {
                 프론트엔드 & 웹
               </h4>
               <p className="text-gray-600">
-                React, Next.js, WebRTC, TypeScript, TailwindCSS
+                Flutter, React, Next.js, WebRTC, TypeScript, TailwindCSS
               </p>
             </div>
           </div>
@@ -295,13 +330,13 @@ const ServiceDetail = () => {
                 <div className="space-y-4">
                   <p className="text-gray-600">
                     최신 기술을 활용한 웹과 모바일 앱 개발 서비스를 제공합니다.
-                    React Native를 기반으로 한 크로스 플랫폼 앱 개발부터 회원
-                    관리, 결제 시스템까지 통합적인 솔루션을 구축합니다.
+                    Flutter를 기반으로 한 크로스 플랫폼 앱 개발부터 회원 관리,
+                    결제 시스템까지 통합적인 솔루션을 구축합니다.
                   </p>
                   <ul className="space-y-3">
                     <li className="flex items-start">
                       <Check className="w-5 h-5 text-green-500 mt-0.5 mr-2 flex-shrink-0" />
-                      <span>React Native 기반 크로스 플랫폼 앱 개발</span>
+                      <span>Flutter 기반 크로스 플랫폼 앱 개발</span>
                     </li>
                     <li className="flex items-start">
                       <Check className="w-5 h-5 text-green-500 mt-0.5 mr-2 flex-shrink-0" />
@@ -461,7 +496,7 @@ const ServiceDetail = () => {
         </div>
       </section>
 
-      {services.map((service, idx) => (
+      {/* {services.map((service, idx) => (
         <section
           key={idx}
           id={service.title
@@ -509,7 +544,7 @@ const ServiceDetail = () => {
             </div>
           </div>
         </section>
-      ))}
+      ))} */}
     </div>
   );
 };
