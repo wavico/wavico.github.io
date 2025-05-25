@@ -9,15 +9,43 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { Helmet } from "react-helmet-async";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import ServiceCard from "@/components/ServiceCard";
 
 const ServiceDetail = () => {
+  const location = useLocation();
   const [activeService, setActiveService] = useState(0);
   const [isVisible, setIsVisible] = useState<{ [key: string]: boolean }>({});
   const observerRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    setIsLoaded(true);
+  }, []);
+
+  useEffect(() => {
+    if (!isLoaded) return;
+
+    const scrollTarget = location.state?.scrollTo;
+    if (scrollTarget) {
+      const element = document.querySelector(scrollTarget);
+      if (element) {
+        setTimeout(() => {
+          const headerOffset = 80;
+          const elementPosition = element.getBoundingClientRect().top;
+          const offsetPosition =
+            elementPosition + window.pageYOffset - headerOffset;
+
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: "smooth",
+          });
+        }, 100); // 페이지 로드 후 더 짧은 대기 시간
+      }
+    }
+  }, [location, isLoaded]);
 
   const services = [
     {
@@ -33,7 +61,7 @@ const ServiceDetail = () => {
         "지속적 유지보수 및 업데이트",
       ],
       image: "https://images.unsplash.com/photo-1481487196290-c152efe083f5",
-      link: "#웹-모바일-앱-개발",
+      link: "#web-mobile-detail",
     },
     {
       title: "AI 솔루션",
@@ -48,7 +76,7 @@ const ServiceDetail = () => {
         "AI 기반 추천 시스템",
       ],
       image: "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2",
-      link: "#ai-솔루션",
+      link: "#ai-solution-detail",
     },
     {
       title: "시각화 대시보드",
@@ -63,7 +91,7 @@ const ServiceDetail = () => {
         "다양한 디바이스 지원",
       ],
       image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71",
-      link: "#시각화-대시보드",
+      link: "#dashboard-detail",
     },
     {
       title: "시스템 통합",
@@ -79,7 +107,7 @@ const ServiceDetail = () => {
       ],
       image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31",
       disabled: true,
-      link: "#시스템-통합",
+      link: "#system-integration-detail",
     },
     {
       title: "모바일 앱",
@@ -94,7 +122,7 @@ const ServiceDetail = () => {
         "앱스토어 최적화 및 출시 지원",
       ],
       image: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c",
-      link: "#모바일-앱",
+      link: "#mobile-detail",
     },
     {
       title: "AI 챗봇",
@@ -109,7 +137,7 @@ const ServiceDetail = () => {
         "지속적인 학습 및 개선",
       ],
       image: "https://images.unsplash.com/photo-1531482615713-2afd69097998",
-      link: "#ai-챗봇",
+      link: "#chatbot-detail",
     },
   ];
   const addRef = (id: string) => (el: HTMLDivElement) => {
@@ -275,6 +303,7 @@ const ServiceDetail = () => {
                 service={service}
                 delay={idx * 100}
                 isVisible={isVisible["services"]}
+                isServiceDetailPage={true}
               />
             ))}
           </div>
@@ -322,7 +351,10 @@ const ServiceDetail = () => {
         <div className="py-24 max-w-7xl mx-auto px-6 md:px-12">
           <div className="flex flex-col gap-24">
             {/* 웹/모바일 앱 개발 */}
-            <div className="flex flex-col md:flex-row items-center gap-12">
+            <div
+              id="web-mobile-detail"
+              className="flex flex-col md:flex-row items-center gap-12"
+            >
               <div className="w-full">
                 <h3 className="text-2xl font-bold mb-6 text-wavico-blue">
                   웹/모바일 앱 개발
@@ -354,11 +386,25 @@ const ServiceDetail = () => {
                     </li>
                   </ul>
                 </div>
+                <div className="mt-8">
+                  <Button
+                    asChild
+                    variant="outline"
+                    className="bg-white hover:bg-gray-50 border-wavico-blue text-wavico-blue hover:text-wavico-darkblue"
+                  >
+                    <Link to="/portfolio?category=web-mobile">
+                      포트폴리오 보기 <ArrowRight className="ml-2 h-5 w-5" />
+                    </Link>
+                  </Button>
+                </div>
               </div>
             </div>
 
             {/* AI 솔루션 */}
-            <div className="flex flex-col md:flex-row items-center gap-12">
+            <div
+              id="ai-solution-detail"
+              className="flex flex-col md:flex-row items-center gap-12"
+            >
               <div className="w-full">
                 <h3 className="text-2xl font-bold mb-6 text-wavico-blue">
                   AI 솔루션
@@ -388,11 +434,25 @@ const ServiceDetail = () => {
                     </li>
                   </ul>
                 </div>
+                <div className="mt-8">
+                  <Button
+                    asChild
+                    variant="outline"
+                    className="bg-white hover:bg-gray-50 border-wavico-blue text-wavico-blue hover:text-wavico-darkblue"
+                  >
+                    <Link to="/portfolio?category=ai-solution">
+                      포트폴리오 보기 <ArrowRight className="ml-2 h-5 w-5" />
+                    </Link>
+                  </Button>
+                </div>
               </div>
             </div>
 
             {/* 시각화 대시보드 */}
-            <div className="flex flex-col md:flex-row items-center gap-12">
+            <div
+              id="dashboard-detail"
+              className="flex flex-col md:flex-row items-center gap-12"
+            >
               <div className="w-full">
                 <h3 className="text-2xl font-bold mb-6 text-wavico-blue">
                   시각화 대시보드
@@ -422,11 +482,25 @@ const ServiceDetail = () => {
                     </li>
                   </ul>
                 </div>
+                <div className="mt-8">
+                  <Button
+                    asChild
+                    variant="outline"
+                    className="bg-white hover:bg-gray-50 border-wavico-blue text-wavico-blue hover:text-wavico-darkblue"
+                  >
+                    <Link to="/portfolio?category=dashboard">
+                      포트폴리오 보기 <ArrowRight className="ml-2 h-5 w-5" />
+                    </Link>
+                  </Button>
+                </div>
               </div>
             </div>
 
             {/* 모바일 앱 */}
-            <div className="flex flex-col md:flex-row items-center gap-12">
+            <div
+              id="mobile-detail"
+              className="flex flex-col md:flex-row items-center gap-12"
+            >
               <div className="w-full">
                 <h3 className="text-2xl font-bold mb-6 text-wavico-blue">
                   모바일 앱
@@ -456,11 +530,25 @@ const ServiceDetail = () => {
                     </li>
                   </ul>
                 </div>
+                <div className="mt-8">
+                  <Button
+                    asChild
+                    variant="outline"
+                    className="bg-white hover:bg-gray-50 border-wavico-blue text-wavico-blue hover:text-wavico-darkblue"
+                  >
+                    <Link to="/portfolio?category=mobile">
+                      포트폴리오 보기 <ArrowRight className="ml-2 h-5 w-5" />
+                    </Link>
+                  </Button>
+                </div>
               </div>
             </div>
 
             {/* AI 챗봇 */}
-            <div className="flex flex-col md:flex-row items-center gap-12">
+            <div
+              id="chatbot-detail"
+              className="flex flex-col md:flex-row items-center gap-12"
+            >
               <div className="w-full">
                 <h3 className="text-2xl font-bold mb-6 text-wavico-blue">
                   AI 챗봇
@@ -489,6 +577,17 @@ const ServiceDetail = () => {
                       <span>24/7 자동 응답 및 고객 지원</span>
                     </li>
                   </ul>
+                </div>
+                <div className="mt-8">
+                  <Button
+                    asChild
+                    variant="outline"
+                    className="bg-white hover:bg-gray-50 border-wavico-blue text-wavico-blue hover:text-wavico-darkblue"
+                  >
+                    <Link to="/portfolio?category=chatbot">
+                      포트폴리오 보기 <ArrowRight className="ml-2 h-5 w-5" />
+                    </Link>
+                  </Button>
                 </div>
               </div>
             </div>

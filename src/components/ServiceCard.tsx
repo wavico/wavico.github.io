@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
-import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import {
   Card,
   CardContent,
@@ -18,9 +18,40 @@ interface ServiceCardProps {
   };
   delay: number;
   isVisible: boolean;
+  isServiceDetailPage?: boolean;
 }
 
-const ServiceCard = ({ service, delay, isVisible }: ServiceCardProps) => {
+const ServiceCard = ({
+  service,
+  delay,
+  isVisible,
+  isServiceDetailPage = false,
+}: ServiceCardProps) => {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    if (isServiceDetailPage) {
+      const element = document.querySelector(service.link);
+      if (element) {
+        const headerOffset = 80;
+        const elementPosition = element.getBoundingClientRect().top;
+        const offsetPosition =
+          elementPosition + window.pageYOffset - headerOffset;
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: "smooth",
+        });
+      }
+    } else {
+      navigate("/service-detail", {
+        state: {
+          scrollTo: service.link,
+        },
+      });
+    }
+  };
+
   return (
     <Card
       className={`service-card border border-gray-200 shadow-sm hover:shadow-md transition-all duration-500 ${
@@ -36,13 +67,13 @@ const ServiceCard = ({ service, delay, isVisible }: ServiceCardProps) => {
         <p className="text-gray-600 break-keep">{service.description}</p>
       </CardContent>
       <CardFooter>
-        <Link
-          to={service.link}
+        <button
+          onClick={handleClick}
           className="text-wavico-blue hover:text-wavico-darkblue font-medium flex items-center group"
         >
           자세히 보기
           <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-        </Link>
+        </button>
       </CardFooter>
     </Card>
   );
