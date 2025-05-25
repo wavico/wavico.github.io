@@ -79,7 +79,7 @@ const Navbar = ({ isScrolled }: NavbarProps) => {
         <div className="md:hidden absolute top-full left-0 right-0 bg-white shadow-lg py-4 animate-fade-in">
           <div className="flex flex-col space-y-4 px-6">
             {[
-              { name: "서비스 소개", path: "/service" },
+              { name: "린 개발", path: "/service" },
               { name: "팀 소개", path: "/company" },
               { name: "포트폴리오", path: "/portfolio" },
               { name: "문의", path: "/contact" },

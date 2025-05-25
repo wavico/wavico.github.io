@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import {
   Code,
   Image,
@@ -141,6 +142,30 @@ const Service = () => {
 
   return (
     <div>
+      <Helmet>
+        <title>서비스 소개 | Wavico - AI·웹·앱 개발 전문 기업</title>
+        <meta
+          name="description"
+          content="Wavico는 린 개발 철학을 바탕으로, 최소 기능 제품(MVP)을 빠르게 구현하고, 투명한 프로세스와 합리적인 비용으로 실용적인 AI·웹·앱 솔루션을 제공합니다."
+        />
+        <meta
+          name="keywords"
+          content="웹개발,앱개발,AI솔루션,시각화대시보드,시스템통합,모바일앱,AI챗봇,MVP,린개발"
+        />
+        <meta
+          property="og:title"
+          content="서비스 소개 | Wavico - AI·웹·앱 개발 전문 기업"
+        />
+        <meta
+          property="og:description"
+          content="Wavico는 린 개발 철학을 바탕으로, 최소 기능 제품(MVP)을 빠르게 구현하고, 투명한 프로세스와 합리적인 비용으로 실용적인 AI·웹·앱 솔루션을 제공합니다."
+        />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://wavico.co.kr/service" />
+        <meta property="og:image" content="https://wavico.co.kr/og-image.jpg" />
+        <link rel="canonical" href="https://wavico.co.kr/service" />
+      </Helmet>
+
       {/* Page Header */}
       <section className="pt-40 pb-20 bg-gradient-to-r from-blue-600 to-indigo-700 text-white">
         <div className="max-w-7xl mx-auto px-6 md:px-12">
