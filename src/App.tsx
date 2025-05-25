@@ -6,14 +6,6 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import Layout from "./components/Layout";
-import Home from "./pages/Index";
-import Company from "./pages/Company";
-import Service from "./pages/Service";
-import ServiceDetail from "@/pages/ServiceDetail";
-import Portfolio from "./pages/Portfolio";
-import Contact from "./pages/Contact";
-import Chat from "./pages/Chat";
-import NotFound from "./pages/NotFound";
 
 // Lazy load pages
 const HomePage = lazy(() => import("./pages/Index"));
@@ -110,28 +102,28 @@ const App = () => {
   }
 
   return (
-    <HelmetProvider>
-      <QueryClientProvider client={queryClient}>
-        <TooltipProvider>
-          <Helmet defaultTitle="Wavico - 음성·이미지·언어를 아우르는 인공지능 기술 전문 기업">
-            <html lang="ko" />
-            <meta
-              name="description"
-              content="Wavico는 음성·이미지·언어를 아우르는 인공지능 기술을 바탕으로, 기획부터 배포까지 한 번에 해결하는 End-to-End AI 서비스를 제공합니다."
-            />
-            <meta
-              name="viewport"
-              content="width=device-width, initial-scale=1.0"
-            />
-          </Helmet>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
+    <BrowserRouter>
+      <HelmetProvider>
+        <QueryClientProvider client={queryClient}>
+          <TooltipProvider>
+            <Helmet defaultTitle="Wavico - 음성·이미지·언어를 아우르는 인공지능 기술 전문 기업">
+              <html lang="ko" />
+              <meta
+                name="description"
+                content="Wavico는 음성·이미지·언어를 아우르는 인공지능 기술을 바탕으로, 기획부터 배포까지 한 번에 해결하는 End-to-End AI 서비스를 제공합니다."
+              />
+              <meta
+                name="viewport"
+                content="width=device-width, initial-scale=1.0"
+              />
+            </Helmet>
+            <Toaster />
+            <Sonner />
             <Layout>
               <Suspense
                 fallback={
                   <div className="flex items-center justify-center min-h-screen">
-                    <div className="w-16 h-16 rounded-lg bg-wavico-blue flex items-center justify-center animate-bounce">
+                    <div className="w-16 h-16 rounded-lg bg-wavico-blue flex items-center justify-center">
                       <span className="text-white text-2xl font-bold">W</span>
                     </div>
                   </div>
@@ -152,10 +144,10 @@ const App = () => {
                 </Routes>
               </Suspense>
             </Layout>
-          </BrowserRouter>
-        </TooltipProvider>
-      </QueryClientProvider>
-    </HelmetProvider>
+          </TooltipProvider>
+        </QueryClientProvider>
+      </HelmetProvider>
+    </BrowserRouter>
   );
 };
 
