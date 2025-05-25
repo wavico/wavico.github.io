@@ -32,6 +32,21 @@ const ChatWidget = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const imageInputRef = useRef<HTMLInputElement>(null);
 
+  const createNewConversation = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("chat_conversations")
+        .insert([{ created_at: new Date().toISOString() }])
+        .select()
+        .single();
+
+      if (error) throw error;
+      setConversationId(data.id);
+    } catch (error) {
+      console.error("새 대화 생성 중 오류가 발생했습니다:", error);
+    }
+  };
+
   // 위젯이 열릴 때 새 대화 생성 또는 최근 대화 불러오기
   useEffect(() => {
     if (isOpen) {
@@ -62,9 +77,9 @@ const ChatWidget = () => {
           setMessages(
             messages.map((msg) => ({
               id: msg.id,
-              text: msg.text,
-              isUser: msg.is_user,
-              timestamp: new Date(msg.created_at),
+              text: msg.user_input || msg.bot_response,
+              isUser: msg.user_input ? true : false,
+              timestamp: new Date(msg.timestamp),
             }))
           );
         }

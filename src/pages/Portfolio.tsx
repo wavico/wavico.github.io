@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { ArrowRight, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Helmet } from "react-helmet-async";
@@ -19,10 +19,22 @@ interface PortfolioItem {
 }
 
 const Portfolio = () => {
+  const location = useLocation();
   const [activeCategory, setActiveCategory] = useState<string>("All");
   const [selectedItem, setSelectedItem] = useState<PortfolioItem | null>(null);
   const [isVisible, setIsVisible] = useState<{ [key: string]: boolean }>({});
   const observerRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
+
+  useEffect(() => {
+    if (location.state?.selectedItemId) {
+      const item = portfolioItems.find(
+        (item) => item.id === location.state.selectedItemId
+      );
+      if (item) {
+        setSelectedItem(item);
+      }
+    }
+  }, [location]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -64,117 +76,70 @@ const Portfolio = () => {
   const portfolioItems: PortfolioItem[] = [
     {
       id: 1,
-      title: "AI 기반 자동 번역 시스템",
-      category: "AI 솔루션",
-      image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158",
-      description: "다양한 언어를 실시간으로 번역하는 인공지능 시스템",
-      client: "글로벌 교육 기업",
-      technology: ["Python", "PyTorch", "React", "AWS"],
-      challenge: "여러 언어 간 실시간 번역 시 높은 정확도 유지 및 대용량 처리",
-      solution: "최신 딥러닝 모델과 자연어 처리 기술을 활용한 번역 엔진 개발",
-      result: "99% 이상의 번역 정확도 달성 및 초당 500건 이상의 처리 속도 구현",
+      title: "이상거래탐지 모니터링 시스템",
+      category: "시각화 대시보드",
+      image: "portfolio/이상.png",
+      description:
+        "Rule 기반과 ML 기반을 결합한 실시간 FDS 시스템. 거래 로그를 분석하여 이상 패턴을 탐지하고, 시각화 대시보드로 대응 지원.",
+      client: "국내 금융 보안팀",
+      technology: ["Python", "PyTorch", "LightGBM", "Azure", "Power BI"],
+      challenge: "정상 거래와 유사한 이상 거래 탐지 및 실시간 대응 체계 구축",
+      solution:
+        "Isolation Forest 및 Rule 기반 로직을 통합한 하이브리드 탐지 시스템 구현",
+      result: "탐지 정확도 92% 이상 달성, 운영 리스크 사전 대응율 30% 개선",
     },
     {
       id: 2,
-      title: "시각 데이터 대시보드",
-      category: "시각화 대시보드",
-      image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f",
-      description: "기업 데이터를 직관적으로 시각화한 대시보드",
-      client: "국내 대기업 금융사",
-      technology: ["React", "D3.js", "TypeScript", "GraphQL"],
-      challenge:
-        "대량의 금융 데이터를 실시간으로 처리하고 직관적으로 시각화하는 문제",
-      solution: "최적화된 데이터 파이프라인과 맞춤형 시각화 컴포넌트 개발",
-      result: "의사결정 시간 60% 단축 및 데이터 기반 인사이트 도출 능력 향상",
+      title: "AI 음성 뉴스 및 맞춤형 콘텐츠 서비스",
+      category: "AI 솔루션",
+      image: "portfolio/음성뉴스.jpg",
+      description:
+        "GPT와 TTS를 통합한 음성 뉴스 요약 챗봇. 사용자 맞춤형 뉴스 추천 및 스트리밍 제공.",
+      client: "모바일 콘텐츠 플랫폼 스타트업",
+      technology: ["Python", "GPT", "Whisper", "AWS Polly", "React Native"],
+      challenge: "사용자 관심 기반 뉴스 요약과 음성 스트리밍을 자연스럽게 연결",
+      solution:
+        "멀티모달 구조로 GPT 요약 결과를 TTS로 전환하고, 개인화 키워드 필터링 도입",
+      result: "일평균 청취율 60% 이상, 사용자 피드백 기반 추천 정확도 25% 향상",
     },
     {
       id: 3,
-      title: "모바일 뱅킹 앱",
+      title: "LOCAT: 위치 기반 로컬 플랫폼",
       category: "모바일 앱",
-      image: "https://images.unsplash.com/photo-1534723452862-4c874018d66d",
-      description: "사용자 경험을 극대화한 모바일 뱅킹 애플리케이션",
-      client: "디지털 은행",
-      technology: ["Flutter", "Node.js", "Firebase", "Biometrics API"],
-      challenge: "보안성을 유지하면서도 사용자 경험을 최적화하는 뱅킹 앱 개발",
-      solution:
-        "생체인식 기술과 AI 기반 개인화 서비스를 결합한 직관적인 UX 설계",
-      result: "출시 3개월 만에 100만 다운로드 달성 및 사용자 만족도 92% 기록",
+      image: "portfolio/locat.png",
+      description:
+        "Flutter 기반 지도 연동 앱. 소셜 로그인, 실시간 위치 기반 탐색 및 사용자 인증 기능 구현.",
+      client: "지역 상권 기반 플랫폼 기업",
+      technology: ["Flutter", "Firebase", "Kakao Login", "Naver Maps API"],
+      challenge: "안드로이드와 iOS 간 UI 통일성과 지도 기능 최적화",
+      solution: "Flutter 기반 통합 개발 및 Naver Maps 커스텀 마커 기능 구현",
+      result: "플랫폼 누적 사용자 1만 명 확보, 월간 사용자 재방문율 40% 기록",
     },
     {
       id: 4,
-      title: "기업용 웹 포털",
-      category: "웹 개발",
-      image: "https://images.unsplash.com/photo-1547658719-da2b51169166",
-      description: "기업 내부 시스템을 통합한 웹 포털 서비스",
-      client: "글로벌 제조업체",
-      technology: ["Angular", "Java Spring Boot", "MySQL", "Docker"],
-      challenge: "여러 레거시 시스템을 하나의 플랫폼으로 통합하는 과제",
-      solution:
-        "마이크로서비스 아키텍처와 API 게이트웨이를 활용한 통합 플랫폼 구축",
-      result: "업무 효율성 40% 향상 및 시스템 관리 비용 30% 절감",
+      title: "테니스장 예약 플랫폼 '테니버스'",
+      category: "모바일 앱",
+      image: "portfolio/테니스.png",
+      description:
+        "소규모 테니스 동호인을 위한 위치 기반 모바일 예약 플랫폼. 직관적인 UI/UX와 실시간 예약 기능 제공.",
+      client: "스포츠 소모임 운영사",
+      technology: ["Flutter", "Firebase", "Kakao Login", "예약 관리 API"],
+      challenge: "비 IT 사용자도 쉽게 접근할 수 있는 UX와 예약 시스템 구성",
+      solution: "최소 클릭 구조의 UX 설계 및 시간대 기반 실시간 예약 로직 구현",
+      result: "출시 1개월 내 사용자 3천 명 유입, 예약 성공률 95% 이상 유지",
     },
     {
       id: 5,
-      title: "음성 인식 비서 시스템",
+      title: "책 감성 분석 대시보드",
       category: "AI 솔루션",
-      image: "https://images.unsplash.com/photo-1520333789090-1afc82db536a",
-      description: "자연어 처리 기술을 활용한 음성 인식 비서",
-      client: "국내 전자기기 제조사",
-      technology: ["TensorFlow", "Python", "WebSockets", "C++"],
-      challenge: "다양한 악센트와 환경 소음에서도 정확한 음성 인식 구현",
-      solution: "노이즈 캔슬링 알고리즘과 맥락 기반 음성 이해 모델 개발",
-      result: "95% 이상의 인식 정확도 달성 및 대화 지속성 향상",
-    },
-    {
-      id: 6,
-      title: "이미지 분석 시스템",
-      category: "AI 솔루션",
-      image: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b",
-      description: "이미지 분석을 통한 객체 인식 및 분류 시스템",
-      client: "보안 솔루션 기업",
-      technology: ["PyTorch", "OpenCV", "CUDA", "AWS"],
-      challenge:
-        "실시간 영상에서 높은 정확도로 객체를 인식하고 분류하는 시스템 개발",
-      solution:
-        "최신 CNN 모델과 커스텀 알고리즘을 결합한 하이브리드 아키텍처 구현",
-      result: "실시간 처리 속도 2배 향상 및 인식 정확도 98% 달성",
-    },
-    {
-      id: 7,
-      title: "스마트팩토리 통합 시스템",
-      category: "시스템 통합",
-      image: "https://images.unsplash.com/photo-1507146153580-69a1fe6d8aa1",
-      description: "제조 공정을 최적화하는 스마트팩토리 솔루션",
-      client: "자동차 부품 제조사",
-      technology: ["IoT", "MQTT", "Node-RED", "Python", "PostgreSQL"],
-      challenge:
-        "여러 생산 라인의 설비를 통합 모니터링하고 제어하는 시스템 구축",
-      solution: "IoT 기기 연동 및 실시간 데이터 분석 플랫폼 개발",
-      result: "생산성 35% 향상 및 불량률 20% 감소",
-    },
-    {
-      id: 8,
-      title: "실시간 협업 플랫폼",
-      category: "웹 개발",
-      image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c",
-      description: "팀 협업을 위한 실시간 커뮤니케이션 플랫폼",
-      client: "글로벌 IT 서비스 기업",
-      technology: ["Vue.js", "WebRTC", "Socket.io", "MongoDB"],
-      challenge: "지연 없는 실시간 협업과 대용량 파일 공유 기능 구현",
-      solution: "P2P 기반 파일 전송 및 최적화된 실시간 통신 아키텍처 설계",
-      result: "프로젝트 완료 시간 25% 단축 및 사용자 만족도 90% 이상 기록",
-    },
-    {
-      id: 9,
-      title: "헬스케어 모니터링 앱",
-      category: "모바일 앱",
-      image: "https://images.unsplash.com/photo-1505236858219-8359eb29e329",
-      description: "개인 건강 데이터를 관리하는 모바일 앱",
-      client: "디지털 헬스케어 스타트업",
-      technology: ["Flutter", "Firebase", "HealthKit", "Google Fit API"],
-      challenge: "다양한 웨어러블 기기와의 연동 및 개인 건강 데이터 보안 확보",
-      solution: "표준 건강 데이터 프로토콜 지원 및 앤드투앤드 암호화 구현",
-      result: "출시 6개월 만에 50만 다운로드 달성 및 사용자 참여도 30% 증가",
+      image: "portfolio/책감성분석.png",
+      description:
+        "책 문장 단위 감성 분류 모델과 대시보드를 통해 작품 감정 흐름을 시각화하고 인사이트 제공.",
+      client: "콘텐츠 기획 및 출판 기업",
+      technology: ["PyTorch", "Transformers", "React", "Chart.js"],
+      challenge: "긴 문단의 감정을 문장 단위로 정확히 분해 및 시각화하는 문제",
+      solution: "sLLM 기반 감정 분류기 개발 및 페이지 단위 감정 흐름 분석 구현",
+      result: "콘텐츠 감정 곡선 분석 활용으로 기획 회의 활용도 3배 증가",
     },
   ];
 
