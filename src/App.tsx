@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense, lazy } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { HelmetProvider } from "react-helmet-async";
@@ -6,13 +6,15 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import Layout from "./components/Layout";
-import Home from "./pages/Index";
-import Company from "./pages/Company";
-import Service from "./pages/Service";
-import Portfolio from "./pages/Portfolio";
-import Contact from "./pages/Contact";
-import Chat from "./pages/Chat";
-import NotFound from "./pages/NotFound";
+
+// Lazy load pages
+const Home = lazy(() => import("./pages/Index"));
+const Company = lazy(() => import("./pages/Company"));
+const Service = lazy(() => import("./pages/Service"));
+const Portfolio = lazy(() => import("./pages/Portfolio"));
+const Contact = lazy(() => import("./pages/Contact"));
+const Chat = lazy(() => import("./pages/Chat"));
+const NotFound = lazy(() => import("./pages/NotFound"));
 
 const queryClient = new QueryClient();
 
@@ -99,15 +101,25 @@ const App = () => {
           <Sonner />
           <BrowserRouter>
             <Layout>
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/company" element={<Company />} />
-                <Route path="/service" element={<Service />} />
-                <Route path="/portfolio" element={<Portfolio />} />
-                <Route path="/contact" element={<Contact />} />
-                <Route path="/chat" element={<Chat />} />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
+              <Suspense
+                fallback={
+                  <div className="flex items-center justify-center min-h-screen">
+                    <div className="w-16 h-16 rounded-lg bg-wavico-blue flex items-center justify-center animate-bounce">
+                      <span className="text-white text-2xl font-bold">W</span>
+                    </div>
+                  </div>
+                }
+              >
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/company" element={<Company />} />
+                  <Route path="/service" element={<Service />} />
+                  <Route path="/portfolio" element={<Portfolio />} />
+                  <Route path="/contact" element={<Contact />} />
+                  <Route path="/chat" element={<Chat />} />
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </Suspense>
             </Layout>
           </BrowserRouter>
         </TooltipProvider>

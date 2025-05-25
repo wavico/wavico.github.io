@@ -342,14 +342,15 @@ const Service = () => {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div
-              className="relative h-[400px] overflow-hidden rounded-lg shadow-xl"
-              style={{
-                backgroundImage: `url(${services[activeService].image})`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-              }}
-            >
+            <div className="relative h-[400px] overflow-hidden rounded-lg shadow-xl">
+              <img
+                src={services[activeService].image}
+                alt={services[activeService].title}
+                className="object-cover w-full h-full"
+                loading="lazy"
+                width={600}
+                height={400}
+              />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex flex-col justify-end p-8">
                 <h3 className="text-2xl font-bold text-white mb-2">
                   {services[activeService].title}
