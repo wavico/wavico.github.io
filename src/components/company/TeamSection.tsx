@@ -1,6 +1,7 @@
 import React from "react";
 import { Image } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import { OptimizedImage } from "@/components/ui/optimized-image";
 
 interface TeamSectionProps {
   isVisible: boolean;
@@ -59,10 +60,12 @@ const TeamSection = ({ isVisible, addRef }: TeamSectionProps) => {
                 style={{ animationDelay: `${idx * 100}ms` }}
               >
                 <div className="w-24 h-24 rounded-full mx-auto mb-6 overflow-hidden bg-gray-100">
-                  <img
+                  <OptimizedImage
                     src={member.image}
                     alt={`${member.name} profile`}
                     className="w-full h-full object-cover filter grayscale"
+                    width={96}
+                    height={96}
                     onError={(e) => {
                       const target = e.target as HTMLImageElement;
                       target.src = "/images/team/default-avatar.png";

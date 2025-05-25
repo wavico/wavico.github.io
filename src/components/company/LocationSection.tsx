@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { OptimizedImage } from "@/components/ui/optimized-image";
 
 interface LocationSectionProps {
   isVisible: boolean;
@@ -33,10 +34,13 @@ const LocationSection = ({ isVisible, addRef }: LocationSectionProps) => {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <img
+                <OptimizedImage
                   src="/map.png"
                   alt="Wavico 위치 지도 미리보기"
                   className="w-full h-full object-cover"
+                  width={600}
+                  height={400}
+                  priority
                 />
               </a>
             </div>

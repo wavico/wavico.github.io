@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/select";
 import emailjs from "@emailjs/browser";
 import { Helmet } from "react-helmet-async";
+import { OptimizedImage } from "@/components/ui/optimized-image";
 
 // EmailJS 초기화
 emailjs.init("xDR1O9GFblv7LxOUl");
@@ -478,7 +479,13 @@ const Contact = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    <img src="/map.png" alt="Wavico 위치 지도 미리보기" />
+                    <OptimizedImage
+                      src="/map.png"
+                      alt="Wavico 위치 지도 미리보기"
+                      width={600}
+                      height={300}
+                      priority
+                    />
                   </a>
                 </div>
               </div>

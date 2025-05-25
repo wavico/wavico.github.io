@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { ArrowRight, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Helmet } from "react-helmet-async";
+import { OptimizedImage } from "@/components/ui/optimized-image";
 
 interface PortfolioItem {
   id: number;
@@ -243,10 +244,12 @@ const Portfolio = () => {
                 onClick={() => setSelectedItem(item)}
               >
                 <div className="relative h-64">
-                  <img
+                  <OptimizedImage
                     src={item.image}
                     alt={item.title}
                     className="w-full h-full object-cover"
+                    width={400}
+                    height={300}
                   />
                   <div className="portfolio-overlay p-6">
                     <h3 className="text-white text-xl font-bold mb-2">
@@ -304,10 +307,13 @@ const Portfolio = () => {
           <div className="bg-white rounded-lg shadow-lg overflow-hidden">
             <div className="grid grid-cols-1 lg:grid-cols-2">
               <div className="h-96 lg:h-auto">
-                <img
+                <OptimizedImage
                   src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158"
                   alt="Case Study"
                   className="w-full h-full object-cover"
+                  width={600}
+                  height={400}
+                  priority
                 />
               </div>
               <div className="p-8 lg:p-12">
@@ -351,10 +357,12 @@ const Portfolio = () => {
         <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4 overflow-y-auto">
           <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto animate-scale-in">
             <div className="relative">
-              <img
+              <OptimizedImage
                 src={selectedItem.image}
                 alt={selectedItem.title}
                 className="w-full h-64 md:h-80 object-cover"
+                width={800}
+                height={400}
               />
               <button
                 className="absolute top-4 right-4 bg-black/50 text-white w-10 h-10 rounded-full flex items-center justify-center"
