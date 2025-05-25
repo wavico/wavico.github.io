@@ -465,7 +465,7 @@ const Contact = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    <img src="public\map.png" alt="Wavico 위치 지도 미리보기" />
+                    <img src="/map.png" alt="Wavico 위치 지도 미리보기" />
                   </a>
                 </div>
               </div>
