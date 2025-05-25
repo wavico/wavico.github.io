@@ -6,15 +6,22 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import Layout from "./components/Layout";
+import Home from "./pages/Index";
+import Company from "./pages/Company";
+import Service from "./pages/Service";
+import Portfolio from "./pages/Portfolio";
+import Contact from "./pages/Contact";
+import Chat from "./pages/Chat";
+import NotFound from "./pages/NotFound";
 
 // Lazy load pages
-const Home = lazy(() => import("./pages/Index"));
-const Company = lazy(() => import("./pages/Company"));
-const Service = lazy(() => import("./pages/Service"));
-const Portfolio = lazy(() => import("./pages/Portfolio"));
-const Contact = lazy(() => import("./pages/Contact"));
-const Chat = lazy(() => import("./pages/Chat"));
-const NotFound = lazy(() => import("./pages/NotFound"));
+const HomePage = lazy(() => import("./pages/Index"));
+const CompanyPage = lazy(() => import("./pages/Company"));
+const ServicePage = lazy(() => import("./pages/Service"));
+const PortfolioPage = lazy(() => import("./pages/Portfolio"));
+const ContactPage = lazy(() => import("./pages/Contact"));
+const ChatPage = lazy(() => import("./pages/Chat"));
+const NotFoundPage = lazy(() => import("./pages/NotFound"));
 
 const queryClient = new QueryClient();
 
@@ -22,12 +29,19 @@ const App = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // 스플래시 화면을 2초 동안 보여줍니다
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 2000);
+    // sessionStorage를 사용하여 스플래시 화면이 이미 표시되었는지 확인
+    const hasShownSplash = sessionStorage.getItem("hasShownSplash");
 
-    return () => clearTimeout(timer);
+    if (!hasShownSplash) {
+      const timer = setTimeout(() => {
+        setLoading(false);
+        sessionStorage.setItem("hasShownSplash", "true");
+      }, 2000);
+
+      return () => clearTimeout(timer);
+    } else {
+      setLoading(false);
+    }
   }, []);
 
   // 커서 효과 초기화
