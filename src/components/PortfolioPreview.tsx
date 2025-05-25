@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, ExternalLink } from "lucide-react";
+import { ArrowRight } from "lucide-react";
+import { OptimizedImage } from "@/components/ui/optimized-image";
 
 interface PortfolioItem {
   id: number;
@@ -91,32 +92,37 @@ const PortfolioPreview = () => {
         {filteredItems.slice(0, 6).map((item) => (
           <div
             key={item.id}
-            className="portfolio-item group rounded-lg overflow-hidden"
+            className="portfolio-item group rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300"
           >
-            <img
-              src={item.image}
-              alt={item.title}
-              className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110"
-              onError={(e) => {
-                const target = e.target as HTMLImageElement;
-                target.src = "/images/portfolio/default-portfolio.jpg";
-              }}
-            />
-            <div className="portfolio-overlay p-6">
-              <h3 className="text-white text-xl font-bold mb-2">
-                {item.title}
-              </h3>
-              <p className="text-white mb-4">{item.description}</p>
-              <span className="bg-white/20 text-white text-sm py-1 px-3 rounded-full">
-                {item.category}
-              </span>
-              <Link
-                to="/portfolio"
-                state={{ selectedItemId: item.id }}
-                className="mt-4 inline-flex items-center text-white hover:underline"
-              >
-                자세히 보기 <ArrowRight className="ml-1 w-4 h-4" />
-              </Link>
+            <div className="relative aspect-[4/3] overflow-hidden">
+              <OptimizedImage
+                src={item.image}
+                alt={item.title}
+                width={400}
+                height={300}
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  target.src = "/images/portfolio/default-portfolio.jpg";
+                }}
+                priority={item.id <= 3} // 첫 3개 이미지는 우선 로딩
+              />
+              <div className="portfolio-overlay p-6">
+                <h3 className="text-white text-xl font-bold mb-2">
+                  {item.title}
+                </h3>
+                <p className="text-white mb-4">{item.description}</p>
+                <span className="bg-white/20 text-white text-sm py-1 px-3 rounded-full">
+                  {item.category}
+                </span>
+                <Link
+                  to="/portfolio"
+                  state={{ selectedItemId: item.id }}
+                  className="mt-4 inline-flex items-center text-white hover:underline"
+                >
+                  자세히 보기 <ArrowRight className="ml-1 w-4 h-4" />
+                </Link>
+              </div>
             </div>
           </div>
         ))}

@@ -202,19 +202,20 @@ const Portfolio = () => {
             {filteredItems.map((item) => (
               <div
                 key={item.id}
-                className={`portfolio-item rounded-lg overflow-hidden cursor-pointer shadow-md transition-all hover:shadow-lg ${
+                className={`portfolio-item rounded-lg overflow-hidden cursor-pointer shadow-md hover:shadow-xl transition-all ${
                   isVisible["portfolio-grid"] ? "animate-fade-in" : "opacity-0"
                 }`}
                 style={{ animationDelay: `${item.id * 100}ms` }}
                 onClick={() => setSelectedItem(item)}
               >
-                <div className="relative h-64">
+                <div className="relative aspect-[4/3] overflow-hidden">
                   <OptimizedImage
                     src={item.image}
                     alt={item.title}
-                    className="w-full h-full object-cover"
                     width={400}
                     height={300}
+                    className="w-full h-full object-cover"
+                    priority={item.id <= 6}
                     onError={(e) => {
                       const target = e.target as HTMLImageElement;
                       target.src = "/images/portfolio/default-portfolio.jpg";
@@ -275,41 +276,47 @@ const Portfolio = () => {
 
           <div className="bg-white rounded-lg shadow-lg overflow-hidden">
             <div className="grid grid-cols-1 lg:grid-cols-2">
-              <div className="h-96 lg:h-auto">
-                <OptimizedImage
-                  src="/images/portfolio/case-study.jpg"
-                  alt="Case Study"
+              <div className="h-96 lg:h-auto relative">
+                <video
                   className="w-full h-full object-cover"
-                  width={600}
-                  height={400}
-                  priority
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.src = "/images/portfolio/default-portfolio.jpg";
-                  }}
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  preload="auto"
+                  poster="/images/portfolio/fraud-web.png"
+                >
+                  <source src="/video/fraud.mp4" type="video/mp4" />
+                  <source src="/video/fraud.webm" type="video/webm" />이
+                  브라우저는 비디오 태그를 지원하지 않습니다.
+                </video>
+                <div
+                  className="absolute inset-0 bg-wavico-blue/10 backdrop-blur-[1px]"
+                  aria-hidden="true"
                 />
               </div>
               <div className="p-8 lg:p-12">
                 <span className="inline-block bg-wavico-lightblue text-wavico-blue px-3 py-1 text-sm rounded-full mb-4">
-                  AI 솔루션
+                  시각화 대시보드
                 </span>
                 <h3 className="text-2xl font-bold mb-4">
-                  글로벌 교육 기업을 위한 AI 번역 시스템
+                  실시간 이상거래 탐지를 위한 AI 기반 FDS 시스템
                 </h3>
                 <p className="text-gray-600 mb-6">
-                  여러 국가의 교육 콘텐츠를 실시간으로 번역해야 하는 글로벌 교육
-                  기업을 위해 Wavico는 고성능 AI 번역 엔진을 개발했습니다. 이를
-                  통해 99% 이상의 번역 정확도와 초당 500건 이상의 처리 속도를
-                  구현했습니다.
+                  금융 보안 강화를 위해 Wavico는 Rule 기반과 머신러닝 기반을
+                  결합한 이상거래탐지(FDS) 시스템을 구축했습니다. 거래 로그,
+                  디바이스 정보, 인증 기록 등을 종합 분석하여 실시간 탐지와
+                  시각화를 가능하게 했습니다.
                 </p>
                 <div className="space-y-2 mb-6">
                   <p className="font-medium">도입 효과:</p>
                   <ul className="list-disc pl-5 space-y-1 text-gray-600">
-                    <li>교육 컨텐츠 현지화 시간 80% 단축</li>
-                    <li>15개국 언어 지원으로 시장 확대</li>
-                    <li>학습자 만족도 25% 향상</li>
+                    <li>이상거래 탐지 정확도 92% 이상 달성</li>
+                    <li>리스크 대응 시간 30% 단축</li>
+                    <li>복합 탐지 룰 기반 보안 정책 강화</li>
                   </ul>
                 </div>
+
                 <Button
                   asChild
                   className="bg-wavico-blue hover:bg-wavico-darkblue flex items-center"
@@ -333,9 +340,14 @@ const Portfolio = () => {
               <OptimizedImage
                 src={selectedItem.image}
                 alt={selectedItem.title}
-                className="w-full h-64 md:h-80 object-cover"
                 width={800}
-                height={400}
+                height={500}
+                className="w-full h-64 md:h-80 object-cover"
+                priority={true}
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  target.src = "/images/portfolio/default-portfolio.jpg";
+                }}
               />
               <button
                 className="absolute top-4 right-4 bg-black/50 text-white w-10 h-10 rounded-full flex items-center justify-center"
