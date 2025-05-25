@@ -1,7 +1,7 @@
 import { useEffect, useState, Suspense, lazy } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { HelmetProvider } from "react-helmet-async";
+import { HelmetProvider, Helmet } from "react-helmet-async";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -111,6 +111,17 @@ const App = () => {
     <HelmetProvider>
       <QueryClientProvider client={queryClient}>
         <TooltipProvider>
+          <Helmet defaultTitle="Wavico - 음성·이미지·언어를 아우르는 인공지능 기술 전문 기업">
+            <html lang="ko" />
+            <meta
+              name="description"
+              content="Wavico는 음성·이미지·언어를 아우르는 인공지능 기술을 바탕으로, 기획부터 배포까지 한 번에 해결하는 End-to-End AI 서비스를 제공합니다."
+            />
+            <meta
+              name="viewport"
+              content="width=device-width, initial-scale=1.0"
+            />
+          </Helmet>
           <Toaster />
           <Sonner />
           <BrowserRouter>

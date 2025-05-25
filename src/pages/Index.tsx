@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import {
   ArrowRight,
   BarChart2,
@@ -515,6 +516,20 @@ const Home = () => {
 
   return (
     <div className="overflow-hidden">
+      <Helmet>
+        <title>
+          Wavico - 음성·이미지·언어를 아우르는 인공지능 기술 전문 기업
+        </title>
+        <meta
+          name="description"
+          content="Wavico는 음성·이미지·언어를 아우르는 인공지능 기술을 바탕으로, 기획부터 배포까지 한 번에 해결하는 End-to-End AI 서비스를 제공합니다."
+        />
+        <meta
+          name="keywords"
+          content="AI,인공지능,웹개발,앱개발,음성인식,이미지처리,자연어처리,MVP"
+        />
+      </Helmet>
+
       {/* Hero Banner with Chat Section */}
       <div className="relative">
         <section className="relative h-[120vh]">

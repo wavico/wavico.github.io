@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { MapPin, Phone, Mail, Send, Loader2, Upload, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -15,6 +15,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import emailjs from "@emailjs/browser";
+import { Helmet } from "react-helmet-async";
 
 // EmailJS 초기화
 emailjs.init("xDR1O9GFblv7LxOUl");
@@ -167,6 +168,18 @@ const Contact = () => {
 
   return (
     <div>
+      <Helmet>
+        <title>상담 신청 | Wavico - AI·웹·앱 개발 전문 기업</title>
+        <meta
+          name="description"
+          content="Wavico의 전문가와 상담하세요. AI, 웹, 앱 개발에 대한 무료 상담을 제공합니다. 귀사의 비즈니스에 맞는 최적의 솔루션을 제안해드립니다."
+        />
+        <meta
+          name="keywords"
+          content="상담신청,무료상담,AI상담,웹개발상담,앱개발상담,견적문의"
+        />
+      </Helmet>
+
       {/* Page Header */}
       <section className="pt-40 pb-20 bg-gradient-to-r from-blue-600 to-indigo-700 text-white">
         <div className="max-w-7xl mx-auto px-6 md:px-12">
