@@ -15,7 +15,7 @@ const portfolioItems: PortfolioItem[] = [
     id: 1,
     title: "이상거래탐지 모니터링 시스템",
     category: "시각화 대시보드",
-    image: "portfolio/이상거래탐지.png", // 교체 가능
+    image: "/images/portfolio/이상거래탐지.png",
     description:
       "Rule 기반과 ML 기반을 결합한 실시간 FDS 시스템. 거래 로그를 분석하여 이상 패턴을 탐지하고, 시각화 대시보드로 대응 지원.",
   },
@@ -23,7 +23,7 @@ const portfolioItems: PortfolioItem[] = [
     id: 2,
     title: "AI 음성 뉴스 및 맞춤형 콘텐츠 서비스",
     category: "AI 솔루션",
-    image: "portfolio/음성뉴스.jpg", // 교체 가능
+    image: "/images/portfolio/음성뉴스.jpg",
     description:
       "GPT와 TTS를 통합한 음성 뉴스 요약 챗봇. 사용자 맞춤형 뉴스 추천 및 스트리밍 제공.",
   },
@@ -31,7 +31,7 @@ const portfolioItems: PortfolioItem[] = [
     id: 3,
     title: "LOCAT: 위치 기반 로컬 플랫폼",
     category: "모바일 앱",
-    image: "portfolio/locat.png", // 교체 가능
+    image: "/images/portfolio/locat.png",
     description:
       "Flutter 기반 지도 연동 앱. 소셜 로그인, 실시간 위치 기반 탐색 및 사용자 인증 기능 구현.",
   },
@@ -39,7 +39,7 @@ const portfolioItems: PortfolioItem[] = [
     id: 4,
     title: "테니스장 예약 플랫폼 '테니버스'",
     category: "모바일 앱",
-    image: "portfolio/테니스.png", // 교체 가능
+    image: "/images/portfolio/테니스.png",
     description:
       "소규모 테니스 동호인을 위한 위치 기반 모바일 예약 플랫폼. 직관적인 UI/UX와 실시간 예약 기능 제공.",
   },
@@ -47,7 +47,7 @@ const portfolioItems: PortfolioItem[] = [
     id: 5,
     title: "책 감성 분석 대시보드",
     category: "AI 솔루션",
-    image: "portfolio/책감성분석.png", // 교체 가능
+    image: "/images/portfolio/책감성분석.png",
     description:
       "책 문장 단위 감성 분류 모델과 대시보드를 통해 작품 감정 흐름을 시각화하고 인사이트 제공.",
   },
@@ -97,6 +97,10 @@ const PortfolioPreview = () => {
               src={item.image}
               alt={item.title}
               className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110"
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                target.src = "/images/portfolio/default-portfolio.jpg";
+              }}
             />
             <div className="portfolio-overlay p-6">
               <h3 className="text-white text-xl font-bold mb-2">
