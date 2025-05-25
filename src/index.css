@@ -99,6 +99,20 @@
   }
 }
 
+/* 회전하는 로딩 애니메이션 */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin 1.5s linear infinite;
+}
+
 .reveal-animation {
   opacity: 0;
   transform: translateY(20px);

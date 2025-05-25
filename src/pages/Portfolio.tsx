@@ -78,7 +78,7 @@ const Portfolio = () => {
       id: 1,
       title: "이상거래탐지 모니터링 시스템",
       category: "시각화 대시보드",
-      image: "/images/portfolio/fraud-detection.png",
+      image: "/images/portfolio/fraud-web.png",
       description:
         "Rule 기반과 ML 기반을 결합한 실시간 FDS 시스템. 거래 로그를 분석하여 이상 패턴을 탐지하고, 시각화 대시보드로 대응 지원.",
       client: "국내 금융 보안팀",

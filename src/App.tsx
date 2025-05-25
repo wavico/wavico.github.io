@@ -123,7 +123,7 @@ const App = () => {
               <Suspense
                 fallback={
                   <div className="flex items-center justify-center min-h-screen">
-                    <div className="w-16 h-16 rounded-lg bg-wavico-blue flex items-center justify-center">
+                    <div className="w-16 h-16 rounded-lg bg-wavico-blue flex items-center justify-center animate-spin-slow">
                       <span className="text-white text-2xl font-bold">W</span>
                     </div>
                   </div>
