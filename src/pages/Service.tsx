@@ -110,6 +110,58 @@ const Service = () => {
             </p>
           </div>
 
+          {/* 개발 방식 비교 표 */}
+          <div className="mb-16 overflow-x-auto">
+            <div className="max-w-3xl mx-auto bg-white rounded-lg shadow-md">
+              <table className="w-full">
+                <thead>
+                  <tr>
+                    <th className="py-4 px-6 text-left bg-gray-400 text-white rounded-tl-lg">
+                      전통 개발 (Waterfall)
+                    </th>
+                    <th className="py-4 px-6 text-left bg-wavico-blue text-white rounded-tr-lg">
+                      린 개발 (Lean)
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200">
+                  <tr>
+                    <td className="py-4 px-6 text-gray-600">
+                      분석 → 설계 → 개발 → 테스트
+                    </td>
+                    <td className="py-4 px-6 text-wavico-blue font-medium">
+                      MVP → 피드백 → 개선 → 반복
+                    </td>
+                  </tr>
+                  <tr className="bg-gray-50">
+                    <td className="py-4 px-6 text-gray-600">
+                      한 번에 크게 만들고 출시
+                    </td>
+                    <td className="py-4 px-6 text-wavico-blue font-medium">
+                      작게 만들고 빠르게 개선
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="py-4 px-6 text-gray-600">
+                      실패 시 리스크 큼
+                    </td>
+                    <td className="py-4 px-6 text-wavico-blue font-medium">
+                      실패를 학습 기회로 활용
+                    </td>
+                  </tr>
+                  <tr className="bg-gray-50">
+                    <td className="py-4 px-6 text-gray-600">
+                      고객 피드백 반영 어려움
+                    </td>
+                    <td className="py-4 px-6 text-wavico-blue font-medium">
+                      피드백이 핵심
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
           <div className="relative">
             {/* Process timeline */}
             <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-wavico-blue"></div>

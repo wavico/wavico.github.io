@@ -16,6 +16,8 @@ import {
   Users,
   CheckCircle,
   Trash2,
+  Server,
+  MessageSquare,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -486,32 +488,47 @@ const Home = () => {
 
   const services = [
     {
-      title: "웹/앱 개발",
+      title: "웹/모바일 앱 개발",
       description:
-        "최신 기술과 트렌드를 반영한 웹사이트와 모바일 앱을 개발합니다.",
-      icon: <Code className="w-10 h-10 text-wavico-blue" />,
-      link: "/service",
+        "사용자 경험을 최우선으로 고려한 최신 기술 기반의 웹사이트와 모바일 앱을 개발합니다.",
+      icon: <Code className="w-12 h-12 text-wavico-blue" />,
+      link: "/service-detail#웹-모바일-앱-개발",
     },
     {
       title: "AI 솔루션",
-      description: "음성, 이미지, 언어를 아우르는 인공지능 기술을 제공합니다.",
-      icon: <Image className="w-10 h-10 text-wavico-blue" />,
-      link: "/service",
+      description:
+        "음성, 이미지, 언어를 아우르는 인공지능 기술을 활용한 맞춤형 AI 솔루션을 제공합니다.",
+      icon: <Image className="w-12 h-12 text-wavico-blue" />,
+      link: "/service-detail#ai-솔루션",
     },
     {
       title: "시각화 대시보드",
       description:
-        "복잡한 데이터를 직관적으로 이해할 수 있는 시각화 솔루션을 제공합니다.",
-      icon: <BarChart2 className="w-10 h-10 text-wavico-blue" />,
-      link: "/service",
+        "복잡한 데이터를 직관적으로 이해할 수 있는 대시보드와 시각화 솔루션을 제공합니다.",
+      icon: <BarChart2 className="w-12 h-12 text-wavico-blue" />,
+      link: "/service-detail#시각화-대시보드",
     },
+    // {
+    //   title: "시스템 통합",
+    //   description:
+    //     "기존 시스템과 새로운 시스템을 효율적으로 통합하여 업무 효율을 극대화합니다.",
+    //   icon: <Server className="w-12 h-12 text-gray-400" />,
+    //   link: "/service-detail#시스템-통합",
+    // },
     {
       title: "모바일 앱",
       description:
         "iOS와 Android에서 모두 사용 가능한 네이티브 및 크로스 플랫폼 앱을 개발합니다.",
-      icon: <Smartphone className="w-10 h-10 text-wavico-blue" />,
-      link: "/service",
+      icon: <Smartphone className="w-12 h-12 text-wavico-blue" />,
+      link: "/service-detail#모바일-앱",
     },
+    // {
+    //   title: "AI 챗봇",
+    //   description:
+    //     "자연어 처리 기술을 활용한 지능형 챗봇으로 고객 서비스를 혁신합니다.",
+    //   icon: <MessageSquare className="w-12 h-12 text-wavico-blue" />,
+    //   link: "/service-detail#ai-챗봇",
+    // },
   ];
 
   return (

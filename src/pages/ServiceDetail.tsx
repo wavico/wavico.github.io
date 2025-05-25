@@ -460,6 +460,56 @@ const ServiceDetail = () => {
           </div>
         </div>
       </section>
+
+      {services.map((service, idx) => (
+        <section
+          key={idx}
+          id={service.title
+            .toLowerCase()
+            .replace(/\s+/g, "-")
+            .replace(/\//g, "-")}
+          ref={addRef(service.title)}
+          className={`py-24 ${
+            idx % 2 === 0 ? "bg-white" : "bg-gray-50"
+          } transition-opacity duration-1000 ${
+            isVisible[service.title] ? "opacity-100" : "opacity-0"
+          }`}
+        >
+          <div className="max-w-7xl mx-auto px-6 md:px-12">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              <div className={`${idx % 2 === 0 ? "lg:order-1" : "lg:order-2"}`}>
+                <div className="flex items-center mb-6">
+                  {service.icon}
+                  <h2 className="text-3xl font-bold ml-4">{service.title}</h2>
+                </div>
+                <p className="text-xl text-gray-600 mb-8">
+                  {service.description}
+                </p>
+                <ul className="space-y-4">
+                  {service.features.map((feature, featureIdx) => (
+                    <li key={featureIdx} className="flex items-start">
+                      <Check className="w-6 h-6 text-wavico-blue mt-1 mr-3 flex-shrink-0" />
+                      <span>{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className={`${idx % 2 === 0 ? "lg:order-2" : "lg:order-1"}`}>
+                <div className="relative h-[400px] overflow-hidden rounded-lg shadow-xl">
+                  <img
+                    src={service.image}
+                    alt={service.title}
+                    className="object-cover w-full h-full"
+                    loading="lazy"
+                    width={600}
+                    height={400}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      ))}
     </div>
   );
 };
