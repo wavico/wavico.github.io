@@ -78,7 +78,7 @@ const Portfolio = () => {
       id: 1,
       title: "이상거래탐지 모니터링 시스템",
       category: "시각화 대시보드",
-      image: "/images/portfolio/fraud-web.png",
+      image: "/images/portfolio/fraud-detection.png",
       description:
         "Rule 기반과 ML 기반을 결합한 실시간 FDS 시스템. 거래 로그를 분석하여 이상 패턴을 탐지하고, 시각화 대시보드로 대응 지원.",
       client: "국내 금융 보안팀",
@@ -336,13 +336,13 @@ const Portfolio = () => {
       {selectedItem && (
         <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4 overflow-y-auto">
           <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto animate-scale-in">
-            <div className="relative">
+            <div className="relative aspect-video">
               <OptimizedImage
                 src={selectedItem.image}
                 alt={selectedItem.title}
-                width={800}
-                height={500}
-                className="w-full h-64 md:h-80 object-cover"
+                width={1200}
+                height={675}
+                className="w-full h-full object-contain bg-gray-100"
                 priority={true}
                 onError={(e) => {
                   const target = e.target as HTMLImageElement;
@@ -350,7 +350,7 @@ const Portfolio = () => {
                 }}
               />
               <button
-                className="absolute top-4 right-4 bg-black/50 text-white w-10 h-10 rounded-full flex items-center justify-center"
+                className="absolute top-4 right-4 bg-black/50 text-white w-10 h-10 rounded-full flex items-center justify-center hover:bg-black/70 transition-colors"
                 onClick={() => setSelectedItem(null)}
               >
                 ✕

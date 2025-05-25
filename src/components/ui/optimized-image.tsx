@@ -32,15 +32,15 @@ export const OptimizedImage = ({
   const optimizedSrc = optimizeImage(src, width);
 
   return (
-    <div className={`relative overflow-hidden ${className}`}>
+    <div className="relative w-full h-full overflow-hidden">
       <img
         src={optimizedSrc}
         alt={alt}
         width={width}
         height={height}
-        className={`transition-opacity duration-300 ${
+        className={`absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-300 ${
           isLoading ? "opacity-0" : "opacity-100"
-        }`}
+        } ${className}`}
         onLoad={() => setIsLoading(false)}
         loading={priority ? "eager" : "lazy"}
         {...props}
