@@ -9,6 +9,7 @@ import Layout from "./components/Layout";
 import Home from "./pages/Index";
 import Company from "./pages/Company";
 import Service from "./pages/Service";
+import ServiceDetail from "./pages/ServiceDetail";
 import Portfolio from "./pages/Portfolio";
 import Contact from "./pages/Contact";
 import Chat from "./pages/Chat";
@@ -18,6 +19,7 @@ import NotFound from "./pages/NotFound";
 const HomePage = lazy(() => import("./pages/Index"));
 const CompanyPage = lazy(() => import("./pages/Company"));
 const ServicePage = lazy(() => import("./pages/Service"));
+const ServiceDetailPage = lazy(() => import("./pages/ServiceDetail"));
 const PortfolioPage = lazy(() => import("./pages/Portfolio"));
 const ContactPage = lazy(() => import("./pages/Contact"));
 const ChatPage = lazy(() => import("./pages/Chat"));
@@ -139,6 +141,7 @@ const App = () => {
                   <Route path="/" element={<Home />} />
                   <Route path="/company" element={<Company />} />
                   <Route path="/service" element={<Service />} />
+                  <Route path="/service-detail" element={<ServiceDetail />} />
                   <Route path="/portfolio" element={<Portfolio />} />
                   <Route path="/contact" element={<Contact />} />
                   <Route path="/chat" element={<Chat />} />

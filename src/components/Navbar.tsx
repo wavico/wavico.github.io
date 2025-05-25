@@ -39,9 +39,10 @@ const Navbar = ({ isScrolled }: NavbarProps) => {
         <div className="hidden md:flex items-center space-x-8">
           {[
             { name: "린 개발", path: "/service" },
+            { name: "서비스 소개", path: "/service-detail" },
             { name: "팀 소개", path: "/company" },
             { name: "포트폴리오", path: "/portfolio" },
-            { name: "문의", path: "/contact" },
+            // { name: "문의", path: "/contact" },
           ].map((item, index) => (
             <Link
               key={item.path}
@@ -61,7 +62,7 @@ const Navbar = ({ isScrolled }: NavbarProps) => {
             style={{ transitionDelay: "700ms" }}
             asChild
           >
-            <Link to="/contact">상담 신청</Link>
+            <Link to="/contact">문의하기</Link>
           </Button>
         </div>
 
@@ -80,9 +81,10 @@ const Navbar = ({ isScrolled }: NavbarProps) => {
           <div className="flex flex-col space-y-4 px-6">
             {[
               { name: "린 개발", path: "/service" },
+              { name: "서비스 소개", path: "/service-detail" },
               { name: "팀 소개", path: "/company" },
               { name: "포트폴리오", path: "/portfolio" },
-              { name: "문의", path: "/contact" },
+              // { name: "문의", path: "/contact" },
             ].map((item) => (
               <Link
                 key={item.path}
