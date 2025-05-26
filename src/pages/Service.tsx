@@ -75,7 +75,7 @@ const Service = () => {
         />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://wavico.co.kr/service" />
-        <meta property="og:image" content="https://wavico.co.kr/og-image.jpg" />
+        <meta property="og:image" content="/og-image.png" />
         <link rel="canonical" href="https://wavico.co.kr/service" />
       </Helmet>
 
