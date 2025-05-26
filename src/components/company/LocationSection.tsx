@@ -34,13 +34,12 @@ const LocationSection = ({ isVisible, addRef }: LocationSectionProps) => {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <OptimizedImage
-                  src="/map.png"
+                <img
+                  src="/images/company/map.png"
                   alt="Wavico 위치 지도 미리보기"
-                  className="w-full h-full object-cover"
                   width={600}
                   height={400}
-                  priority
+                  className="w-full object-contain"
                 />
               </a>
             </div>
@@ -59,7 +58,9 @@ const LocationSection = ({ isVisible, addRef }: LocationSectionProps) => {
                 <div>
                   <h4 className="text-lg font-semibold mb-2">연락처</h4>
                   <p className="text-gray-600">전화: 010-5549-9020</p>
-                  <p className="text-gray-600">이메일: seonmin8284@gmail.com</p>
+                  <p className="text-gray-600">
+                    이메일: wavicomanager@gmail.com
+                  </p>
                 </div>
 
                 <div>

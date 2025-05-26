@@ -6,6 +6,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import Layout from "./components/Layout";
+import ScrollToTop from "./components/ScrollToTop";
 
 // Lazy load pages
 const HomePage = lazy(() => import("./pages/Index"));
@@ -20,24 +21,6 @@ const NotFoundPage = lazy(() => import("./pages/NotFound"));
 const queryClient = new QueryClient();
 
 const App = () => {
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    // sessionStorage를 사용하여 스플래시 화면이 이미 표시되었는지 확인
-    const hasShownSplash = sessionStorage.getItem("hasShownSplash");
-
-    if (!hasShownSplash) {
-      const timer = setTimeout(() => {
-        setLoading(false);
-        sessionStorage.setItem("hasShownSplash", "true");
-      }, 2000);
-
-      return () => clearTimeout(timer);
-    } else {
-      setLoading(false);
-    }
-  }, []);
-
   // 커서 효과 초기화
   useEffect(() => {
     // 터치 디바이스 체크
@@ -86,26 +69,12 @@ const App = () => {
     };
   }, []);
 
-  if (loading) {
-    return (
-      <div className="fixed inset-0 bg-wavico-blue flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-24 h-24 rounded-lg bg-white flex items-center justify-center mb-4 mx-auto animate-bounce">
-            <span className="text-wavico-blue text-4xl font-bold">W</span>
-          </div>
-          <h1 className="text-white text-2xl font-bold animate-pulse">
-            Wavico
-          </h1>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <BrowserRouter>
       <HelmetProvider>
         <QueryClientProvider client={queryClient}>
           <TooltipProvider>
+            <ScrollToTop />
             <Helmet defaultTitle="Wavico - 음성·이미지·언어를 아우르는 인공지능 기술 전문 기업">
               <html lang="ko" />
               <meta
@@ -123,8 +92,8 @@ const App = () => {
               <Suspense
                 fallback={
                   <div className="flex items-center justify-center min-h-screen">
-                    <div className="w-16 h-16 rounded-lg bg-wavico-blue flex items-center justify-center animate-spin-slow">
-                      <span className="text-white text-2xl font-bold">W</span>
+                    <div className="animate-pulse">
+                      <div className="h-4 w-24 bg-gray-200 rounded"></div>
                     </div>
                   </div>
                 }

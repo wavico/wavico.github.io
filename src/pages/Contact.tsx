@@ -335,52 +335,6 @@ const Contact = () => {
                   />
                 </div>
 
-                <div>
-                  <Label>파일 첨부</Label>
-                  <div className="mt-2">
-                    <Button
-                      type="button"
-                      variant="outline"
-                      className="w-full"
-                      onClick={() => fileInputRef.current?.click()}
-                    >
-                      <Upload className="w-4 h-4 mr-2" />
-                      파일 선택
-                    </Button>
-                    <input
-                      ref={fileInputRef}
-                      type="file"
-                      name="attachment"
-                      multiple={false}
-                      onChange={handleFileChange}
-                      className="hidden"
-                    />
-                  </div>
-
-                  {files.length > 0 && (
-                    <div className="mt-4 space-y-2">
-                      {files.map((file, index) => (
-                        <div
-                          key={index}
-                          className="flex items-center justify-between bg-gray-50 p-2 rounded"
-                        >
-                          <span className="text-sm text-gray-600 truncate">
-                            {file.name}
-                          </span>
-                          <Button
-                            type="button"
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => removeFile(index)}
-                          >
-                            <X className="w-4 h-4" />
-                          </Button>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
                 <div className="pt-4">
                   <Button
                     type="submit"
@@ -479,12 +433,12 @@ const Contact = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    <OptimizedImage
-                      src="/map.png"
+                    <img
+                      src="/images/company/map.png"
                       alt="Wavico 위치 지도 미리보기"
                       width={600}
                       height={300}
-                      priority
+                      className="w-full object-cover"
                     />
                   </a>
                 </div>

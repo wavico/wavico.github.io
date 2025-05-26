@@ -1,6 +1,17 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Footer = () => {
+  const navigate = useNavigate();
+
+  const handleServiceClick = (link: string) => (e: React.MouseEvent) => {
+    e.preventDefault();
+    navigate("/service-detail", {
+      state: {
+        scrollTo: link,
+      },
+    });
+  };
+
   return (
     <footer className="bg-gray-900 text-white py-16">
       <div className="max-w-7xl mx-auto px-6 md:px-12">
@@ -25,36 +36,40 @@ const Footer = () => {
             <h3 className="text-lg font-semibold mb-4">서비스</h3>
             <ul className="space-y-2">
               <li>
-                <Link
-                  to="/service"
+                <a
+                  href="#"
+                  onClick={handleServiceClick("#web-mobile-detail")}
                   className="text-gray-400 hover:text-white transition-colors"
                 >
                   웹/앱 개발
-                </Link>
+                </a>
               </li>
               <li>
-                <Link
-                  to="/service"
+                <a
+                  href="#"
+                  onClick={handleServiceClick("#ai-solution-detail")}
                   className="text-gray-400 hover:text-white transition-colors"
                 >
                   AI 솔루션
-                </Link>
+                </a>
               </li>
               <li>
-                <Link
-                  to="/service"
+                <a
+                  href="#"
+                  onClick={handleServiceClick("#dashboard-detail")}
                   className="text-gray-400 hover:text-white transition-colors"
                 >
                   시각화 대시보드
-                </Link>
+                </a>
               </li>
               <li>
-                <Link
-                  to="/service"
+                <a
+                  href="#"
+                  onClick={handleServiceClick("#mobile-detail")}
                   className="text-gray-400 hover:text-white transition-colors"
                 >
-                  시스템 통합
-                </Link>
+                  모바일 앱
+                </a>
               </li>
             </ul>
           </div>
@@ -100,9 +115,13 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-semibold mb-4">문의</h3>
             <ul className="space-y-2">
-              <li className="text-gray-400">서울시 동대문구 회기로 4길</li>
+              <li className="text-gray-400">대표자 : 김선민</li>
+              <li className="text-gray-400">
+                주소 : 서울시 동대문구 회기로 4길
+              </li>
               <li className="text-gray-400">이메일: wavicomanager@gmail.com</li>
               <li className="text-gray-400">전화: 010-5549-9020</li>
+              <li className="text-gray-400">사업자 등록번호: 871-77-00573</li>
               <li>
                 <Link
                   to="/contact"

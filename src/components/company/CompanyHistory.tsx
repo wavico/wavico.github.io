@@ -50,7 +50,7 @@ const CompanyHistory = ({ isVisible, addRef }: CompanyHistoryProps) => {
 
         <div className="relative">
           {/* 중앙 타임라인 선 */}
-          <div className="absolute left-1/2 transform -translate-x-1/2 w-0.5 h-full bg-purple-200" />
+          <div className="absolute left-4 md:left-1/2 top-0 bottom-0 transform md:-translate-x-1/2 w-0.5 h-full bg-purple-200" />
 
           {/* 연혁 아이템들 */}
           {history.map((item, index) => {
@@ -60,39 +60,46 @@ const CompanyHistory = ({ isVisible, addRef }: CompanyHistoryProps) => {
                 key={item.year}
                 id={`history-${item.year}`}
                 ref={addRef(`history-${item.year}`)}
-                className={`relative flex items-center mb-24 ${
-                  isLeft ? "justify-start" : "justify-end"
+                className={`relative flex items-center mb-12 md:mb-24 ${
+                  isLeft ? "md:justify-start" : "md:justify-end"
                 } ${
                   isVisible
                     ? "opacity-100 translate-x-0"
                     : `opacity-0 ${
                         isLeft ? "-translate-x-12" : "translate-x-12"
                       }`
-                } transition-all duration-1000 ease-out`}
+                } transition-all duration-1000 ease-out min-h-[12rem]`}
               >
                 {/* 연도 마커 */}
-                <div className="absolute left-1/2 transform -translate-x-1/2 w-8 h-8 bg-purple-600 rounded-full border-4 border-white z-10" />
+                <div className="absolute left-4 top-1/2 md:left-1/2 transform -translate-y-1/2 -translate-x-1/2 w-8 h-8 bg-purple-600 rounded-full border-4 border-white z-10" />
 
                 {/* 컨텐츠 박스 */}
-                <div className={`w-[45%] ${isLeft ? "pr-8" : "pl-8"}`}>
-                  <div className="bg-white p-6 rounded-lg shadow-lg relative">
-                    {/* 연결선 */}
+                <div
+                  className={`w-[calc(100%-3rem)] md:w-[45%] ml-16 md:ml-0 ${
+                    isLeft ? "md:pr-8" : "md:pl-8"
+                  }`}
+                >
+                  <div className="bg-white p-4 md:p-6 rounded-lg shadow-lg relative">
+                    {/* 연결선 - 모바일에서는 숨김 */}
+
                     <div
-                      className={`absolute top-1/2 ${
+                      className={`hidden md:block absolute top-1/2 ${
                         isLeft
                           ? "right-0 translate-x-full"
                           : "left-0 -translate-x-full"
-                      } w-8 h-[2px] bg-purple-200`}
+                      } w-8 h-[2px] bg-purple-200 -translate-y-1/2`}
                     />
-                    <div className="flex items-center mb-4">
-                      <span className="text-3xl font-bold text-purple-600">
+                    <div className="flex flex-col md:flex-row md:items-center mb-4">
+                      <span className="text-2xl md:text-3xl font-bold text-purple-600">
                         {item.year}
                       </span>
-                      <h3 className="text-xl font-semibold ml-4">
+                      <h3 className="text-lg md:text-xl font-semibold mt-2 md:mt-0 md:ml-4">
                         {item.title}
                       </h3>
                     </div>
-                    <p className="text-gray-600 mb-4">{item.description}</p>
+                    <p className="text-gray-600 mb-4 text-sm md:text-base">
+                      {item.description}
+                    </p>
                     <ul className="space-y-2">
                       {item.achievements.map((achievement, i) => (
                         <li key={i} className="flex items-center text-gray-700">
