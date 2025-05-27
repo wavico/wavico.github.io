@@ -491,11 +491,18 @@ const Home = () => {
       title: "웹/모바일 앱 개발",
       description:
         "사용자 경험을 최우선으로 고려한 최신 기술 기반의 웹사이트와 모바일 앱을 개발합니다.",
-      icon: <Code className="w-12 h-12 text-wavico-blue" />,
+      icon: <Smartphone className="w-12 h-12 text-wavico-blue" />,
       link: "#web-mobile-detail",
     },
     {
-      title: "AI 솔루션",
+      title: "데이터 엔지니어링",
+      description:
+        "데이터 수집 및 저장, 처리까지의 과정을 통해 데이터 엔지니어링 효율을 높입니다.",
+      icon: <Code className="w-12 h-12 text-wavico-blue" />,
+      link: "#mobile-detail",
+    },
+    {
+      title: "AI 모델링",
       description:
         "음성, 이미지, 언어를 아우르는 인공지능 기술을 활용한 맞춤형 AI 솔루션을 제공합니다.",
       icon: <Image className="w-12 h-12 text-wavico-blue" />,
@@ -507,13 +514,6 @@ const Home = () => {
         "복잡한 데이터를 직관적으로 이해할 수 있는 대시보드와 시각화 솔루션을 제공합니다.",
       icon: <BarChart2 className="w-12 h-12 text-wavico-blue" />,
       link: "#dashboard-detail",
-    },
-    {
-      title: "모바일 앱",
-      description:
-        "iOS와 Android에서 모두 사용 가능한 네이티브 및 크로스 플랫폼 앱을 개발합니다.",
-      icon: <Smartphone className="w-12 h-12 text-wavico-blue" />,
-      link: "#mobile-detail",
     },
   ];
 

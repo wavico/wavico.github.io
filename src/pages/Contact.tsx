@@ -285,7 +285,7 @@ const Contact = () => {
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="ai" id="ai" />
                       <Label htmlFor="ai" className="font-normal">
-                        AI 솔루션
+                        AI 모델링링
                       </Label>
                     </div>
                     <div className="flex items-center space-x-2">
@@ -294,23 +294,20 @@ const Contact = () => {
                         시각화 대시보드
                       </Label>
                     </div>
-                    <div className="flex items-center space-x-2 opacity-50 cursor-not-allowed">
+                    <div className="flex items-center space-x-2">
                       <RadioGroupItem
                         value="integration"
                         id="integration"
                         disabled
                       />
                       <Label htmlFor="integration" className="font-normal">
-                        시스템 통합
-                        <span className="ml-2 text-xs text-gray-500">
-                          (서비스 준비중)
-                        </span>
+                        AI 파이프라인 운영
                       </Label>
                     </div>
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="mobile" id="mobile" />
                       <Label htmlFor="mobile" className="font-normal">
-                        모바일 앱
+                        웹/모바일 앱
                       </Label>
                     </div>
                     <div className="flex items-center space-x-2">
@@ -496,7 +493,7 @@ const Contact = () => {
               {
                 question: "이미 개발된 시스템을 업그레이드할 수 있나요?",
                 answer:
-                  "네, 기존 시스템 분석 후 최적의 업그레이드 방안을 제안해 드립니다. 레거시 시스템 통합 및 마이그레이션 서비스도 제공하고 있습니다.",
+                  "네, 기존 시스템 분석 후 최적의 업그레이드 방안을 제안해 드립니다. AI 파이프라인 운영 및 마이그레이션 서비스도 제공하고 있습니다.",
               },
               {
                 question: "개발 후 지원 서비스는 어떻게 되나요?",

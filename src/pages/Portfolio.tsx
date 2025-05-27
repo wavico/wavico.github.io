@@ -66,11 +66,11 @@ const Portfolio = () => {
 
   const categories = [
     "All",
-    "AI 솔루션",
+    "AI 모델링",
     "시각화 대시보드",
-    "웹 개발",
-    "모바일 앱",
-    "시스템 통합",
+    "웹/모바일 앱 개발",
+    "AI 챗봇",
+    "AI 파이프라인 운영",
   ];
 
   const portfolioItems: PortfolioItem[] = [
@@ -88,24 +88,24 @@ const Portfolio = () => {
         "Isolation Forest 및 Rule 기반 로직을 통합한 하이브리드 탐지 시스템 구현",
       result: "탐지 정확도 92% 이상 달성, 운영 리스크 사전 대응율 30% 개선",
     },
-    {
-      id: 2,
-      title: "AI 음성 뉴스 및 맞춤형 콘텐츠 서비스",
-      category: "AI 솔루션",
-      image: "/images/portfolio/voice-news.jpg",
-      description:
-        "GPT와 TTS를 통합한 음성 뉴스 요약 챗봇. 사용자 맞춤형 뉴스 추천 및 스트리밍 제공.",
-      client: "모바일 콘텐츠 플랫폼 스타트업",
-      technology: ["Python", "GPT", "Whisper", "AWS Polly", "React Native"],
-      challenge: "사용자 관심 기반 뉴스 요약과 음성 스트리밍을 자연스럽게 연결",
-      solution:
-        "멀티모달 구조로 GPT 요약 결과를 TTS로 전환하고, 개인화 키워드 필터링 도입",
-      result: "일평균 청취율 60% 이상, 사용자 피드백 기반 추천 정확도 25% 향상",
-    },
+    // {
+    //   id: 2,
+    //   title: "AI 음성 뉴스 및 맞춤형 콘텐츠 서비스",
+    //   category: "AI 솔루션",
+    //   image: "/images/portfolio/voice-news.jpg",
+    //   description:
+    //     "GPT와 TTS를 통합한 음성 뉴스 요약 챗봇. 사용자 맞춤형 뉴스 추천 및 스트리밍 제공.",
+    //   client: "모바일 콘텐츠 플랫폼 스타트업",
+    //   technology: ["Python", "GPT", "Whisper", "AWS Polly", "React Native"],
+    //   challenge: "사용자 관심 기반 뉴스 요약과 음성 스트리밍을 자연스럽게 연결",
+    //   solution:
+    //     "멀티모달 구조로 GPT 요약 결과를 TTS로 전환하고, 개인화 키워드 필터링 도입",
+    //   result: "일평균 청취율 60% 이상, 사용자 피드백 기반 추천 정확도 25% 향상",
+    // },
     {
       id: 3,
       title: "LOCAT: 위치 기반 로컬 플랫폼",
-      category: "모바일 앱",
+      category: "웹/모바일 앱",
       image: "/images/portfolio/locat.png",
       description:
         "Flutter 기반 지도 연동 앱. 소셜 로그인, 실시간 위치 기반 탐색 및 사용자 인증 기능 구현.",
@@ -118,7 +118,7 @@ const Portfolio = () => {
     {
       id: 4,
       title: "테니스장 예약 플랫폼 '테니버스'",
-      category: "모바일 앱",
+      category: "웹/모바일 앱",
       image: "/images/portfolio/tennis.png",
       description:
         "소규모 테니스 동호인을 위한 위치 기반 모바일 예약 플랫폼. 직관적인 UI/UX와 실시간 예약 기능 제공.",

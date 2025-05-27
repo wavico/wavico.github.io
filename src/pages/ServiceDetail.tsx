@@ -50,7 +50,7 @@ const ServiceDetail = () => {
   const services = [
     {
       title: "웹/모바일 앱 개발",
-      icon: <Code className="w-12 h-12 text-wavico-blue" />,
+      icon: <Smartphone className="w-12 h-12 text-wavico-blue" />,
       description:
         "사용자 경험을 최우선으로 고려한 최신 기술 기반의 웹사이트와 모바일 앱을 개발합니다.",
       features: [
@@ -64,7 +64,36 @@ const ServiceDetail = () => {
       link: "#web-mobile-detail",
     },
     {
-      title: "AI 솔루션",
+      title: "데이터 엔지니어링",
+      icon: <Code className="w-12 h-12 text-wavico-blue" />,
+      description:
+        "데이터 수집 및 저장, 처리까지의 과정을 통해 데이터 엔지니어링 효율을 높입니다.",
+      features: [
+        "데이터 수집 모듈 개발",
+        "데이터 처리 및 정제",
+        "저장 및 적재 자동화",
+      ],
+      image: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c",
+      link: "#mobile-detail",
+    },
+
+    {
+      title: "AI 챗봇",
+      icon: <MessageSquare className="w-12 h-12 text-wavico-blue" />,
+      description:
+        "자연어 처리 기술을 활용한 지능형 챗봇으로 고객 서비스를 혁신합니다.",
+      features: [
+        "24/7 고객 지원",
+        "자연어 이해 및 대화 기능",
+        "다국어 지원",
+        "기존 시스템 연동",
+        "지속적인 학습 및 개선",
+      ],
+      image: "https://images.unsplash.com/photo-1531482615713-2afd69097998",
+      link: "#chatbot-detail",
+    },
+    {
+      title: "AI 모델링",
       icon: <ImageIcon className="w-12 h-12 text-wavico-blue" />,
       description:
         "음성, 이미지, 언어를 아우르는 인공지능 기술을 활용한 맞춤형 AI 솔루션을 제공합니다.",
@@ -94,50 +123,18 @@ const ServiceDetail = () => {
       link: "#dashboard-detail",
     },
     {
-      title: "시스템 통합",
-      icon: <Server className="w-12 h-12 text-gray-400" />,
-      description:
-        "기존 시스템과 새로운 시스템을 효율적으로 통합하여 업무 효율을 극대화합니다.",
+      title: "AI 파이프라인 운영",
+      icon: <Server className="w-12 h-12 text-wavico-blue" />,
+      description: "AI 파이프라인 운영 자동화를 통해 업무 효율을 극대화합니다.",
       features: [
-        "ERP/CRM 시스템 통합",
-        "레거시 시스템 마이그레이션",
-        "클라우드 환경 구축 및 마이그레이션",
+        "AI 생애주기 모델 기반 파이프라인 설계",
         "데이터 연동 및 동기화",
+        "클라우드 환경 구축 및 마이그레이션",
         "시스템 최적화 및 성능 향상",
       ],
       image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31",
       disabled: true,
       link: "#system-integration-detail",
-    },
-    {
-      title: "모바일 앱",
-      icon: <Smartphone className="w-12 h-12 text-wavico-blue" />,
-      description:
-        "iOS와 Android에서 모두 사용 가능한 네이티브 및 크로스 플랫폼 앱을 개발합니다.",
-      features: [
-        "iOS 및 Android 네이티브 앱",
-        "Flutter, Flutter 등 크로스 플랫폼 개발",
-        "푸시 알림 시스템 구현",
-        "오프라인 기능 지원",
-        "앱스토어 최적화 및 출시 지원",
-      ],
-      image: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c",
-      link: "#mobile-detail",
-    },
-    {
-      title: "AI 챗봇",
-      icon: <MessageSquare className="w-12 h-12 text-wavico-blue" />,
-      description:
-        "자연어 처리 기술을 활용한 지능형 챗봇으로 고객 서비스를 혁신합니다.",
-      features: [
-        "24/7 고객 지원",
-        "자연어 이해 및 대화 기능",
-        "다국어 지원",
-        "기존 시스템 연동",
-        "지속적인 학습 및 개선",
-      ],
-      image: "https://images.unsplash.com/photo-1531482615713-2afd69097998",
-      link: "#chatbot-detail",
     },
   ];
   const addRef = (id: string) => (el: HTMLDivElement) => {
@@ -172,7 +169,7 @@ const ServiceDetail = () => {
         <title>서비스 소개 | Wavico - AI·웹·앱 개발 전문 기업</title>
         <meta
           name="description"
-          content="Wavico의 주요 서비스인 웹/모바일 앱 개발, AI 솔루션, 시각화 대시보드, 모바일 앱, AI 챗봇 등의 상세 소개와 기술 스택을 확인하세요."
+          content="Wavico의 주요 서비스인 웹/모바일 앱 개발, AI 솔루션, 시각화 대시보드, 데이터 엔지니어링, AI 챗봇 등의 상세 소개와 기술 스택을 확인하세요."
         />
         <meta
           name="keywords"
@@ -184,7 +181,7 @@ const ServiceDetail = () => {
         />
         <meta
           property="og:description"
-          content="Wavico의 주요 서비스인 웹/모바일 앱 개발, AI 솔루션, 시각화 대시보드, 모바일 앱, AI 챗봇 등의 상세 소개와 기술 스택을 확인하세요."
+          content="Wavico의 주요 서비스인 웹/모바일 앱 개발, AI 솔루션, 시각화 대시보드, 데이터 엔지니어링, AI 챗봇 등의 상세 소개와 기술 스택을 확인하세요."
         />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://wavico.co.kr/service-detail" />
@@ -407,7 +404,7 @@ const ServiceDetail = () => {
             >
               <div className="w-full">
                 <h3 className="text-2xl font-bold mb-6 text-wavico-blue">
-                  AI 솔루션
+                  AI 모델링
                 </h3>
                 <div className="space-y-4">
                   <p className="text-gray-600">
@@ -503,30 +500,25 @@ const ServiceDetail = () => {
             >
               <div className="w-full">
                 <h3 className="text-2xl font-bold mb-6 text-wavico-blue">
-                  모바일 앱
+                  데이터 엔지니어링
                 </h3>
                 <div className="space-y-4">
                   <p className="text-gray-600">
-                    iOS와 Android 플랫폼에 최적화된 네이티브 앱을 개발합니다.
-                    WebRTC 기술을 활용한 실시간 영상 처리, 푸시 알림 등 다양한
-                    모바일 기능을 구현합니다.
+                    데이터 수집 모듈 개발, 데이터 처리 및 정제, 저장 및 적재
+                    자동화를 통해 데이터 엔지니어링 효율을 높입니다.
                   </p>
                   <ul className="space-y-3">
                     <li className="flex items-start">
                       <Check className="w-5 h-5 text-green-500 mt-0.5 mr-2 flex-shrink-0" />
-                      <span>iOS 및 Android 네이티브 앱 개발</span>
+                      <span> 데이터 수집 모듈 개발</span>
                     </li>
                     <li className="flex items-start">
                       <Check className="w-5 h-5 text-green-500 mt-0.5 mr-2 flex-shrink-0" />
-                      <span>WebRTC 기반 실시간 영상 처리</span>
+                      <span>데이터 처리 및 정제</span>
                     </li>
                     <li className="flex items-start">
                       <Check className="w-5 h-5 text-green-500 mt-0.5 mr-2 flex-shrink-0" />
-                      <span>푸시 알림 및 실시간 메시징</span>
-                    </li>
-                    <li className="flex items-start">
-                      <Check className="w-5 h-5 text-green-500 mt-0.5 mr-2 flex-shrink-0" />
-                      <span>앱스토어 최적화 및 배포 지원</span>
+                      <span>저장 및 적재 자동화</span>
                     </li>
                   </ul>
                 </div>

@@ -50,7 +50,7 @@ const Footer = () => {
                   onClick={handleServiceClick("#ai-solution-detail")}
                   className="text-gray-400 hover:text-white transition-colors"
                 >
-                  AI 솔루션
+                  AI 모델링
                 </a>
               </li>
               <li>
@@ -68,7 +68,7 @@ const Footer = () => {
                   onClick={handleServiceClick("#mobile-detail")}
                   className="text-gray-400 hover:text-white transition-colors"
                 >
-                  모바일 앱
+                  웹/모바일 앱
                 </a>
               </li>
             </ul>

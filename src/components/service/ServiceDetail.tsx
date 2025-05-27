@@ -33,7 +33,7 @@ const ServiceDetail = () => {
       ],
     },
     {
-      category: "시스템 통합",
+      category: "AI 파이프라인 운영",
       items: [
         "실시간 채팅/음성 통화 시스템 구축",
         "결제 시스템 연동",
