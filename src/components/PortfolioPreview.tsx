@@ -32,7 +32,7 @@ const portfolioItems: PortfolioItem[] = [
     id: 3,
     title: "LOCAT: 위치 기반 로컬 플랫폼",
     category: "웹/모바일 앱",
-    image: "/images/portfolio/locat.png",
+    image: "/images/portfolio/locat2.png",
     description:
       "Flutter 기반 지도 연동 앱. 소셜 로그인, 실시간 위치 기반 탐색 및 사용자 인증 기능 구현.",
   },
@@ -40,7 +40,7 @@ const portfolioItems: PortfolioItem[] = [
     id: 4,
     title: "테니스장 예약 플랫폼 '테니버스'",
     category: "웹/모바일 앱",
-    image: "/images/portfolio/tennis.png",
+    image: "/images/portfolio/tennis2.png",
     description:
       "소규모 테니스 동호인을 위한 위치 기반 모바일 예약 플랫폼. 직관적인 UI/UX와 실시간 예약 기능 제공.",
   },

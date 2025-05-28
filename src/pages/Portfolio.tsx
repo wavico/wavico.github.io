@@ -4,6 +4,7 @@ import { ArrowRight, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Helmet } from "react-helmet-async";
 import { OptimizedImage } from "@/components/ui/optimized-image";
+import styles from "./Portfolio.module.css";
 
 interface PortfolioItem {
   id: number;
@@ -16,7 +17,164 @@ interface PortfolioItem {
   challenge?: string;
   solution?: string;
   result?: string;
+  background?: {
+    problems?: string[];
+    goals?: string[];
+    keyPoints?: string[];
+  };
+  achievements?: string[];
+  keyFeatures?: string[];
+  timeline?: {
+    phase: string;
+    date: string;
+    details: string[];
+  }[];
+  details?: {
+    introduction?: string;
+    target?: string;
+    developmentScope?: {
+      areas?: string[];
+      environment?: string[];
+    };
+    mainTasks?: string[];
+    focusPoints?: string[];
+  };
+  carouselImages?: string[];
 }
+
+const locatImages = [
+  "/images/portfolio/locat/1.png",
+  "/images/portfolio/locat/2.png",
+  "/images/portfolio/locat/3.png",
+  "/images/portfolio/locat/4.png",
+];
+
+const tenniverseImages = [
+  "/images/portfolio/tennis/1.png",
+  "/images/portfolio/tennis/2.png",
+  "/images/portfolio/tennis/3.png",
+  "/images/portfolio/tennis/4.png",
+];
+
+const CenteredCarousel: React.FC<{ images: string[] }> = ({ images }) => {
+  const [centerIndex, setCenterIndex] = useState(0);
+  const [imageRatio, setImageRatio] = useState(0.75); // 기본 비율 설정
+
+  const prev = () => {
+    setCenterIndex(
+      (prevIndex) => (prevIndex - 1 + images.length) % images.length
+    );
+  };
+
+  const next = () => {
+    setCenterIndex((prevIndex) => (prevIndex + 1) % images.length);
+  };
+
+  // const getVisibleItems = () => {
+  //   const visible = [];
+  //   for (let i = -2; i <= 2; i++) {
+  //     visible.push(images[(centerIndex + i + images.length) % images.length]);
+  //   }
+  //   return visible;
+  // };
+
+  const getVisibleItems = () => {
+    const maxItems = window.innerWidth < 768 ? 1 : 5; // 모바일은 1장
+    const range = Math.floor(maxItems / 2);
+    const visible = [];
+
+    for (let i = -range; i <= range; i++) {
+      const index = (centerIndex + i + images.length) % images.length;
+      visible.push({ index, src: images[index], position: i });
+    }
+    return visible;
+  };
+
+  const handleImageLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    const img = e.target as HTMLImageElement;
+    const ratio = img.naturalWidth / img.naturalHeight;
+    setImageRatio(ratio);
+  };
+
+  const cardHeight = 550;
+  const cardWidth = Math.round(cardHeight * imageRatio);
+
+  return (
+    <div className={styles["carousel-container"]}>
+      <button onClick={prev} className={styles["nav-button"]}>
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M15 18l-6-6 6-6" />
+        </svg>
+      </button>
+      <div className={styles.carousel}>
+        {getVisibleItems().map(({ index, src, position }) => {
+          const scale = 1 - Math.abs(position) * 0.2;
+          const zIndex = 5 - Math.abs(position);
+          const translateX = position * 80;
+
+          return (
+            <div
+              key={`${src}-${centerIndex}`}
+              className={styles["carousel-item"]}
+              style={{
+                transform: `translateX(${translateX}%) scale(${scale})`,
+                zIndex,
+                opacity: scale,
+                width: `${cardWidth}px`,
+                height: `${cardHeight}px`,
+                left: "50%",
+                marginLeft: `-${cardWidth / 2}px`,
+                transformOrigin: "center center",
+                position: "absolute", // 꼭 필요
+              }}
+            >
+              <OptimizedImage
+                src={src}
+                alt={`Carousel image ${index + 1}`}
+                width={cardWidth}
+                height={cardHeight}
+                className="block h-full w-auto object-contain"
+                priority={true}
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  target.src = "/images/portfolio/default-portfolio.jpg";
+                }}
+                onLoad={handleImageLoad}
+                style={{
+                  margin: 0,
+                  display: "block",
+                }}
+              />
+            </div>
+          );
+        })}
+      </div>
+      <button onClick={next} className={styles["nav-button"]}>
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M9 18l6-6-6-6" />
+        </svg>
+      </button>
+    </div>
+  );
+};
 
 const Portfolio = () => {
   const location = useLocation();
@@ -80,13 +238,46 @@ const Portfolio = () => {
       category: "시각화 대시보드",
       image: "/images/portfolio/fraud-web.png",
       description:
-        "Rule 기반과 ML 기반을 결합한 실시간 FDS 시스템. 거래 로그를 분석하여 이상 패턴을 탐지하고, 시각화 대시보드로 대응 지원.",
-      client: "국내 금융 보안팀",
-      technology: ["Python", "PyTorch", "LightGBM", "Azure", "Power BI"],
-      challenge: "정상 거래와 유사한 이상 거래 탐지 및 실시간 대응 체계 구축",
-      solution:
-        "Isolation Forest 및 Rule 기반 로직을 통합한 하이브리드 탐지 시스템 구현",
-      result: "탐지 정확도 92% 이상 달성, 운영 리스크 사전 대응율 30% 개선",
+        "송금 서비스 사용자들을 대상으로, 실시간 거래 데이터를 분석하여 이상 거래를 조기에 탐지하는 AI 기반 FDS(Fraud Detection System).",
+      client: "금융사 보안팀, 핀테크 서비스 운영사",
+      technology: [
+        "Python",
+        "PyTorch",
+        "LightGBM",
+        "Scikit-learn",
+        "Power BI",
+        "Databricks",
+        "Azure Cloud",
+      ],
+      details: {
+        introduction:
+          "AI 기반 금융 보안 서비스는 송금 서비스 사용자들을 대상으로, 실시간 거래 데이터를 분석하여 이상 거래를 조기에 탐지하는 AI 기반 FDS 시스템입니다.",
+        target:
+          "금융사 보안팀, 핀테크 서비스 운영사 등 B2B 금융 보안 솔루션 수요 기업",
+        developmentScope: {
+          areas: [
+            "백엔드 데이터 파이프라인 및 이상 탐지 모델링",
+            "Rule-based + 머신러닝 모델 개발 및 통합",
+            "이상 거래 시각화 대시보드 구성",
+          ],
+          environment: [
+            "Python, PyTorch, LightGBM, Scikit-learn",
+            "Power BI (리스크 분석용 대시보드 시각화)",
+            "Databricks, Azure Cloud (데이터 파이프라인 및 ML 운영환경)",
+          ],
+        },
+        mainTasks: [
+          "실시간 이상 거래 탐지 시스템 구축",
+          "Rule-based 탐지 로직 구성 및 시각화",
+          "ML 기반 이상거래 확률 예측 모델 개발",
+          "이상거래 모니터링 대시보드 개발",
+        ],
+        focusPoints: [
+          "Rule 기반과 머신러닝 기반의 하이브리드 접근 방식 구현",
+          "실시간 대응이 가능한 데이터 처리 및 시각화 구조 설계",
+          "정상거래와 유사한 비정상 패턴 탐지에 집중",
+        ],
+      },
     },
     // {
     //   id: 2,
@@ -103,30 +294,120 @@ const Portfolio = () => {
     //   result: "일평균 청취율 60% 이상, 사용자 피드백 기반 추천 정확도 25% 향상",
     // },
     {
-      id: 3,
-      title: "LOCAT: 위치 기반 로컬 플랫폼",
-      category: "웹/모바일 앱",
-      image: "/images/portfolio/locat.png",
-      description:
-        "Flutter 기반 지도 연동 앱. 소셜 로그인, 실시간 위치 기반 탐색 및 사용자 인증 기능 구현.",
-      client: "지역 상권 기반 플랫폼 기업",
-      technology: ["Flutter", "Firebase", "Kakao Login", "Naver Maps API"],
-      challenge: "안드로이드와 iOS 간 UI 통일성과 지도 기능 최적화",
-      solution: "Flutter 기반 통합 개발 및 Naver Maps 커스텀 마커 기능 구현",
-      result: "플랫폼 누적 사용자 1만 명 확보, 월간 사용자 재방문율 40% 기록",
-    },
-    {
       id: 4,
       title: "테니스장 예약 플랫폼 '테니버스'",
       category: "웹/모바일 앱",
-      image: "/images/portfolio/tennis.png",
+      image: "/images/portfolio/tennis2.png",
       description:
         "소규모 테니스 동호인을 위한 위치 기반 모바일 예약 플랫폼. 직관적인 UI/UX와 실시간 예약 기능 제공.",
       client: "스포츠 소모임 운영사",
       technology: ["Flutter", "Firebase", "Kakao Login", "예약 관리 API"],
-      challenge: "비 IT 사용자도 쉽게 접근할 수 있는 UX와 예약 시스템 구성",
-      solution: "최소 클릭 구조의 UX 설계 및 시간대 기반 실시간 예약 로직 구현",
-      result: "출시 1개월 내 사용자 3천 명 유입, 예약 성공률 95% 이상 유지",
+      background: {
+        problems: [
+          "소규모 테니스 동호회는 공공/사설 테니스장 예약 시스템이 제각각이라 일정 조율과 예약 과정이 불편",
+          "테니스장 가용 정보를 한눈에 보기 어려워, 중복된 시간대 예약 시도나 시간 낭비 발생",
+          "단체 카톡방 또는 수기로 예약 현황을 관리하는 경우가 많아, 구성원 간 커뮤니케이션 누락 및 혼선 발생",
+          "모바일 앱 기반 간편 서비스가 부족하여, 비IT 사용자들이 접근하기 어려움",
+        ],
+        goals: [
+          "테니스장 예약을 손쉽게 할 수 있는 모바일 중심 예약 플랫폼 구축",
+          "동호회 구성원이 함께 사용할 수 있는 공동 예약 및 알림 기능 제공",
+          "소셜 로그인, 캘린더 기반 UI, 실시간 예약 현황 확인 등 사용자 친화적 기능 구현",
+          "Flutter 기반 크로스플랫폼 앱으로 Android/iOS 동시 지원",
+        ],
+        keyPoints: [
+          "UI/UX의 직관성 강화: 연령대가 다양한 사용자를 위한 쉽고 빠른 인터페이스",
+          "예약 기능의 실시간성 확보: Firestore를 기반으로 한 실시간 데이터 반영",
+          "알림 기능 및 일정 공유: 푸시 알림 및 카카오톡/네이버 기반 소셜 연동",
+          "데이터의 일관성 유지: 예약 정보가 중복되거나 누락되지 않도록 백엔드와 프론트간 동기화 철저",
+        ],
+      },
+      achievements: [
+        "기존 수기 예약 방식 대비 일정 조율 시간 50% 감소 (1시간 → 30분)",
+        "서울 및 수도권 테니스장 50여 곳 DB 연동 테스트 완료",
+        "사용자 만족도 4.6점 / 5.0점 (피드백 설문 80건 기준)",
+      ],
+      keyFeatures: [
+        "실시간 테니스장 예약: 원하는 날짜·시간대에 가용한 테니스장을 조회하고, 실시간으로 예약 가능 여부 확인 및 신청",
+        "예약 충돌 방지: 이미 예약된 시간대는 자동 비활성화되어 중복 신청 방지, 실시간 Firestore 연동",
+        "푸시 알림 및 예약 알림: 예약 완료, 변경, 취소 시 사용자에게 즉시 알림 전송",
+        "마이 페이지 내 일정 관리: 동호회 일정을 시각화하여 한눈에 확인하고, 구성원 간 일정 조율 가능",
+      ],
+      timeline: [
+        {
+          phase: "기획 및 요구사항 정의",
+          date: "2023.03",
+          details: [
+            "사용자 페르소나 설정",
+            "동호회 운영 패턴 분석",
+            "핵심 기능 정의 및 로드맵 수립",
+          ],
+        },
+        {
+          phase: "UI/UX 디자인",
+          date: "2023.03",
+          details: [
+            "모바일 중심의 직관적인 인터페이스 설계",
+            "캘린더 및 예약 흐름 와이어프레임 제작",
+          ],
+        },
+        {
+          phase: "프론트엔드/서버리스 백엔드 개발",
+          date: "2023.04",
+          details: [
+            "Flutter 기반 모바일 UI 구현",
+            "기본 네비게이션 구조 및 페이지 개발",
+            "Firebase 기반 예약/유저 정보 저장 구조 구축",
+            "실시간 동기화 로직 개발",
+          ],
+        },
+        {
+          phase: "기능 통합 및 테스트",
+          date: "2023.04",
+          details: [
+            "전체 기능 통합 후 QA 테스트 진행",
+            "예약 충돌 검증",
+            "사용자 피드백 수렴 및 수정",
+          ],
+        },
+        {
+          phase: "MVP 런칭",
+          date: "2023.06",
+          details: [
+            "Android/iOS 스토어 비공개 배포",
+            "초기 사용자 대상 베타 테스트 및 개선사항 반영",
+          ],
+        },
+      ],
+      details: {
+        introduction:
+          "테니버스는 테니스를 즐기는 개인 또는 소규모 동호회 사용자를 위해, 간편한 로그인과 직관적인 UI로 근처 테니스장 예약을 손쉽게 할 수 있는 모바일 예약 서비스입니다.",
+        target: "테니스 초보자 및 동호회 사용자, 100인 이하 소모임 사용자",
+        developmentScope: {
+          areas: [
+            "모바일 앱 전체 UI/UX 및 예약 기능 개발",
+            "소셜 로그인(Kakao, Naver 등) 연동",
+            "예약 정보 저장 및 사용자 인증 백엔드 연동",
+          ],
+          environment: [
+            "Framework: Flutter (Android, iOS 동시 지원)",
+            "Backend: Firebase Authentication, Firestore",
+            "API: 소셜 로그인 API, 예약 시간대 관리 모듈",
+          ],
+        },
+        mainTasks: [
+          "간편 회원가입 및 로그인: 카카오/네이버 기반 소셜 로그인 및 사용자 정보 저장",
+          "테니스장 리스트 및 예약 페이지 구성: 위치 기반 테니스장 리스트 노출",
+          "원하는 시간 선택 후 즉시 예약 가능",
+          "예약 내역 및 알림 기능: 사용자별 예약 내역 확인",
+          "예약 시간 임박 시 푸시 알림 제공",
+        ],
+        focusPoints: [
+          "간단하고 직관적인 사용자 경험(UX): 스포츠에 익숙하지 않은 사용자도 손쉽게 접근할 수 있도록 예약 프로세스를 최소화",
+          "소셜 로그인 연동의 매끄러운 경험 제공: 다양한 로그인 옵션 제공으로 진입 장벽 완화",
+          "실제 예약 서비스와 연계 가능한 구조 설계: 예약 시간대, 이용 가능 여부 등을 실시간으로 관리할 수 있는 확장성 고려한 구조",
+        ],
+      },
     },
     // {
     //   id: 5,
@@ -141,6 +422,99 @@ const Portfolio = () => {
     //   solution: "sLLM 기반 감정 분류기 개발 및 페이지 단위 감정 흐름 분석 구현",
     //   result: "콘텐츠 감정 곡선 분석 활용으로 기획 회의 활용도 3배 증가",
     // },
+    {
+      id: 2,
+      title: "LOCAT: 위치 기반 로컬 플랫폼",
+      category: "웹/모바일 앱",
+      image: "/images/portfolio/locat2.png",
+      description: "영상 제작자와 장소 제공자를 연결하는 촬영 장소 매칭 플랫폼",
+      client: "지역 상권 기반 플랫폼 기업",
+      technology: [
+        "Flutter",
+        "Firebase",
+        "Kakao Login",
+        "Naver Maps API",
+        "Supabase",
+      ],
+      background: {
+        problems: [
+          "로케이션 장소 정보가 SNS/카페/개인 연락망 등 여러 채널에 분산되어 있어 확인이 불편함",
+          "장소 정보(면적, 소음, 주차 등)가 표준화되지 않아 정확한 비교·선택이 어려움",
+          "촬영 가능 여부, 예약 일정, 주차 가능 여부 등 현장 확인 필수",
+          "제작사/감독/PD 간 장소 공유 및 피드백 체계 부재",
+        ],
+        goals: [
+          "촬영 장소 통합 관리 플랫폼 구축",
+          "촬영 조건 기반 검색 기능",
+          "리얼 후기 및 의견 공유 기능",
+          "지도 기반 탐색",
+        ],
+        keyPoints: [
+          "촬영 적합성 중심 정보 설계",
+          "사용자 피드백 중심 인터페이스",
+          "모바일 기반의 빠른 예약 의사결정 유도",
+          "위치 기반 확장 가능성 확보",
+        ],
+      },
+      achievements: [
+        "로케이션 탐색 시간 60% 단축",
+        "장소 등록 수 300건 이상 확보",
+        "작품 기반 장소 검색 기능 도입",
+      ],
+      keyFeatures: [
+        "촬영 장소 조건 기반 검색",
+        "지도 기반 로케이션 탐색",
+        "장소 상세 정보 표준화 제공",
+        "사용자 후기 및 피드백 작성",
+        "장소 찜 및 비교 기능",
+      ],
+      timeline: [
+        {
+          phase: "시장조사 및 사용자 인터뷰",
+          date: "2024.02",
+          details: ["방송국 PD, 유튜브 촬영팀, 스튜디오 운영자 등 12명 인터뷰"],
+        },
+        {
+          phase: "UX 기획 및 화면 설계",
+          date: "2024.02",
+          details: [
+            "장소 정보 구조 표준화",
+            "사용자 시나리오 기반 화면 흐름 설계",
+          ],
+        },
+        {
+          phase: "기술 개발",
+          date: "2024.03",
+          details: [
+            "Flutter 기반 하이브리드 앱 개발",
+            "Google Maps API 연동",
+            "Firebase + Supabase 구축",
+          ],
+        },
+        {
+          phase: "베타 테스트",
+          date: "2024.04",
+          details: ["영상 촬영팀 5개 팀 대상 2주간 사전 사용"],
+        },
+      ],
+      details: {
+        introduction:
+          "LOCAT은 영상 제작자와 장소 제공자를 연결하는 촬영 장소 매칭 플랫폼입니다.",
+        developmentScope: {
+          areas: [
+            "전체 모바일 앱 UI/UX 설계 및 개발",
+            "카카오, 네이버, 구글 소셜 로그인 연동",
+            "Naver Maps API를 활용한 지도 기반 기능 구현",
+            "Firebase 기반 사용자 인증, 데이터 저장, 실시간 동기화",
+          ],
+          environment: [
+            "Framework: Flutter (Android & iOS 동시 지원)",
+            "API/SDK: Kakao, Naver, Google Login API / Naver Maps API",
+            "Backend: Firebase Authentication, Firestore",
+          ],
+        },
+      },
+    },
   ];
 
   const filteredItems =
@@ -161,7 +535,6 @@ const Portfolio = () => {
           content="포트폴리오,프로젝트,레퍼런스,AI개발사례,웹개발사례,앱개발사례"
         />
       </Helmet>
-
       {/* Page Header */}
       <section className="pt-40 pb-20 bg-gradient-to-r from-blue-600 to-indigo-700 text-white">
         <div className="max-w-7xl mx-auto px-6 md:px-12">
@@ -334,21 +707,36 @@ const Portfolio = () => {
 
       {/* Portfolio Detail Modal */}
       {selectedItem && (
-        <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4 overflow-y-auto">
-          <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto animate-scale-in">
-            <div className="relative aspect-video">
-              <OptimizedImage
-                src={selectedItem.image}
-                alt={selectedItem.title}
-                width={1200}
-                height={675}
-                className="w-full h-full object-contain bg-gray-100"
-                priority={true}
-                onError={(e) => {
-                  const target = e.target as HTMLImageElement;
-                  target.src = "/images/portfolio/default-portfolio.jpg";
-                }}
-              />
+        <div
+          className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4 overflow-y-auto"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              setSelectedItem(null);
+            }
+          }}
+        >
+          <div
+            className={`bg-white rounded-lg w-full max-w-4xl max-h-[90vh] overflow-y-auto overflow-x-hidden animate-scale-in ${styles["modal-content"]}`}
+          >
+            <div className="relative w-full">
+              {selectedItem.id === 2 || selectedItem.id === 4 ? (
+                <CenteredCarousel
+                  images={
+                    selectedItem.id === 2 ? locatImages : tenniverseImages
+                  }
+                />
+              ) : (
+                <div className="relative aspect-video overflow-hidden">
+                  <OptimizedImage
+                    src={selectedItem.image}
+                    alt={selectedItem.title}
+                    width={1200}
+                    height={675}
+                    className="w-full h-full object-cover"
+                    priority={true}
+                  />
+                </div>
+              )}
               <button
                 className="absolute top-4 right-4 bg-black/50 text-white w-10 h-10 rounded-full flex items-center justify-center hover:bg-black/70 transition-colors"
                 onClick={() => setSelectedItem(null)}
@@ -364,15 +752,27 @@ const Portfolio = () => {
               <h2 className="text-2xl md:text-3xl font-bold mb-4">
                 {selectedItem.title}
               </h2>
-              <p className="text-gray-600 text-lg mb-8">
-                {selectedItem.description}
-              </p>
+
+              {selectedItem.details?.introduction && (
+                <p className="text-gray-600 text-lg mb-8">
+                  {selectedItem.details.introduction}
+                </p>
+              )}
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
                 {selectedItem.client && (
                   <div>
                     <h3 className="text-lg font-bold mb-2">고객사</h3>
                     <p className="text-gray-600">{selectedItem.client}</p>
+                  </div>
+                )}
+
+                {selectedItem.details?.target && (
+                  <div>
+                    <h3 className="text-lg font-bold mb-2">타겟</h3>
+                    <p className="text-gray-600">
+                      {selectedItem.details.target}
+                    </p>
                   </div>
                 )}
 
@@ -393,28 +793,150 @@ const Portfolio = () => {
                 )}
               </div>
 
-              <div className="space-y-6 mb-8">
-                {selectedItem.challenge && (
-                  <div>
-                    <h3 className="text-lg font-bold mb-2">과제</h3>
-                    <p className="text-gray-600">{selectedItem.challenge}</p>
-                  </div>
-                )}
+              {selectedItem.background && (
+                <div className="mb-8">
+                  <h3 className="text-xl font-bold mb-4">프로젝트 배경</h3>
 
-                {selectedItem.solution && (
-                  <div>
-                    <h3 className="text-lg font-bold mb-2">솔루션</h3>
-                    <p className="text-gray-600">{selectedItem.solution}</p>
-                  </div>
-                )}
+                  {selectedItem.background.problems && (
+                    <div className="mb-4">
+                      <h4 className="text-lg font-semibold mb-2">문제점</h4>
+                      <ul className="list-disc pl-5 space-y-2 text-gray-600">
+                        {selectedItem.background.problems.map(
+                          (problem, idx) => (
+                            <li key={idx}>{problem}</li>
+                          )
+                        )}
+                      </ul>
+                    </div>
+                  )}
 
-                {selectedItem.result && (
-                  <div>
-                    <h3 className="text-lg font-bold mb-2">결과</h3>
-                    <p className="text-gray-600">{selectedItem.result}</p>
+                  {selectedItem.background.goals && (
+                    <div className="mb-4">
+                      <h4 className="text-lg font-semibold mb-2">
+                        프로젝트 목표
+                      </h4>
+                      <ul className="list-disc pl-5 space-y-2 text-gray-600">
+                        {selectedItem.background.goals.map((goal, idx) => (
+                          <li key={idx}>{goal}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {selectedItem.background.keyPoints && (
+                    <div className="mb-4">
+                      <h4 className="text-lg font-semibold mb-2">주안점</h4>
+                      <ul className="list-disc pl-5 space-y-2 text-gray-600">
+                        {selectedItem.background.keyPoints.map((point, idx) => (
+                          <li key={idx}>{point}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {selectedItem.achievements && (
+                <div className="mb-8">
+                  <h3 className="text-xl font-bold mb-4">프로젝트 성과</h3>
+                  <ul className="list-disc pl-5 space-y-2 text-gray-600">
+                    {selectedItem.achievements.map((achievement, idx) => (
+                      <li key={idx}>{achievement}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {selectedItem.keyFeatures && (
+                <div className="mb-8">
+                  <h3 className="text-xl font-bold mb-4">핵심 기능</h3>
+                  <ul className="list-disc pl-5 space-y-2 text-gray-600">
+                    {selectedItem.keyFeatures.map((feature, idx) => (
+                      <li key={idx}>{feature}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {selectedItem.timeline && (
+                <div className="mb-8">
+                  <h3 className="text-xl font-bold mb-4">진행 단계</h3>
+                  <div className="space-y-4">
+                    {selectedItem.timeline.map((phase, idx) => (
+                      <div
+                        key={idx}
+                        className="border-l-2 border-wavico-blue pl-4"
+                      >
+                        <h4 className="text-lg font-semibold">{phase.phase}</h4>
+                        <p className="text-sm text-gray-500 mb-2">
+                          {phase.date}
+                        </p>
+                        <ul className="list-disc pl-5 space-y-1 text-gray-600">
+                          {phase.details.map((detail, detailIdx) => (
+                            <li key={detailIdx}>{detail}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
                   </div>
-                )}
-              </div>
+                </div>
+              )}
+
+              {selectedItem.details?.developmentScope && (
+                <div className="mb-8">
+                  <h3 className="text-xl font-bold mb-4">작업 범위</h3>
+
+                  {selectedItem.details.developmentScope.areas && (
+                    <div className="mb-4">
+                      <h4 className="text-lg font-semibold mb-2">
+                        개발 참여 영역
+                      </h4>
+                      <ul className="list-disc pl-5 space-y-2 text-gray-600">
+                        {selectedItem.details.developmentScope.areas.map(
+                          (area, idx) => (
+                            <li key={idx}>{area}</li>
+                          )
+                        )}
+                      </ul>
+                    </div>
+                  )}
+
+                  {selectedItem.details.developmentScope.environment && (
+                    <div>
+                      <h4 className="text-lg font-semibold mb-2">지원 환경</h4>
+                      <ul className="list-disc pl-5 space-y-2 text-gray-600">
+                        {selectedItem.details.developmentScope.environment.map(
+                          (env, idx) => (
+                            <li key={idx}>{env}</li>
+                          )
+                        )}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {selectedItem.details?.mainTasks && (
+                <div className="mb-8">
+                  <h3 className="text-xl font-bold mb-4">주요 업무</h3>
+                  <ul className="list-disc pl-5 space-y-2 text-gray-600">
+                    {selectedItem.details.mainTasks.map((task, idx) => (
+                      <li key={idx}>{task}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {selectedItem.details?.focusPoints && (
+                <div className="mb-8">
+                  <h3 className="text-xl font-bold mb-4">주안점</h3>
+                  <ul className="list-disc pl-5 space-y-2 text-gray-600">
+                    {selectedItem.details.focusPoints.map((point, idx) => (
+                      <li key={idx}>{point}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
 
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button
