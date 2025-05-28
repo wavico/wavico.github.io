@@ -128,19 +128,19 @@ const Portfolio = () => {
       solution: "최소 클릭 구조의 UX 설계 및 시간대 기반 실시간 예약 로직 구현",
       result: "출시 1개월 내 사용자 3천 명 유입, 예약 성공률 95% 이상 유지",
     },
-    {
-      id: 5,
-      title: "책 감성 분석 대시보드",
-      category: "AI 솔루션",
-      image: "/images/portfolio/book-sentiment.png",
-      description:
-        "책 문장 단위 감성 분류 모델과 대시보드를 통해 작품 감정 흐름을 시각화하고 인사이트 제공.",
-      client: "콘텐츠 기획 및 출판 기업",
-      technology: ["PyTorch", "Transformers", "React", "Chart.js"],
-      challenge: "긴 문단의 감정을 문장 단위로 정확히 분해 및 시각화하는 문제",
-      solution: "sLLM 기반 감정 분류기 개발 및 페이지 단위 감정 흐름 분석 구현",
-      result: "콘텐츠 감정 곡선 분석 활용으로 기획 회의 활용도 3배 증가",
-    },
+    // {
+    //   id: 5,
+    //   title: "책 감성 분석 대시보드",
+    //   category: "AI 솔루션",
+    //   image: "/images/portfolio/book-sentiment.png",
+    //   description:
+    //     "책 문장 단위 감성 분류 모델과 대시보드를 통해 작품 감정 흐름을 시각화하고 인사이트 제공.",
+    //   client: "콘텐츠 기획 및 출판 기업",
+    //   technology: ["PyTorch", "Transformers", "React", "Chart.js"],
+    //   challenge: "긴 문단의 감정을 문장 단위로 정확히 분해 및 시각화하는 문제",
+    //   solution: "sLLM 기반 감정 분류기 개발 및 페이지 단위 감정 흐름 분석 구현",
+    //   result: "콘텐츠 감정 곡선 분석 활용으로 기획 회의 활용도 3배 증가",
+    // },
   ];
 
   const filteredItems =

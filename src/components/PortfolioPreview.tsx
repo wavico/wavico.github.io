@@ -44,14 +44,14 @@ const portfolioItems: PortfolioItem[] = [
     description:
       "소규모 테니스 동호인을 위한 위치 기반 모바일 예약 플랫폼. 직관적인 UI/UX와 실시간 예약 기능 제공.",
   },
-  {
-    id: 5,
-    title: "책 감성 분석 대시보드",
-    category: "AI 모델링",
-    image: "/images/portfolio/book-sentiment.png",
-    description:
-      "책 문장 단위 감성 분류 모델과 대시보드를 통해 작품 감정 흐름을 시각화하고 인사이트 제공.",
-  },
+  // {
+  //   id: 5,
+  //   title: "책 감성 분석 대시보드",
+  //   category: "AI 모델링",
+  //   image: "/images/portfolio/book-sentiment.png",
+  //   description:
+  //     "책 문장 단위 감성 분류 모델과 대시보드를 통해 작품 감정 흐름을 시각화하고 인사이트 제공.",
+  // },
 ];
 
 const PortfolioPreview = () => {
