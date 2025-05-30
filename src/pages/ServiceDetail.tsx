@@ -169,7 +169,7 @@ const ServiceDetail = () => {
         <title>서비스 소개 | Wavico - AI·웹·앱 개발 전문 기업</title>
         <meta
           name="description"
-          content="Wavico의 주요 서비스인 웹/모바일 앱 개발, AI 솔루션, 시각화 대시보드, 데이터 엔지니어링, AI 챗봇 등의 상세 소개와 기술 스택을 확인하세요."
+          content="Wavico의 주요 서비스: 웹/모바일 앱 개발, AI 솔루션, 시각화 대시보드, 데이터 엔지니어링, AI 챗봇. 각 서비스의 상세 내용과 기술 스택을 확인하세요."
         />
         <meta
           name="keywords"
@@ -181,12 +181,18 @@ const ServiceDetail = () => {
         />
         <meta
           property="og:description"
-          content="Wavico의 주요 서비스인 웹/모바일 앱 개발, AI 솔루션, 시각화 대시보드, 데이터 엔지니어링, AI 챗봇 등의 상세 소개와 기술 스택을 확인하세요."
+          content="Wavico의 주요 서비스: 웹/모바일 앱 개발, AI 솔루션, 시각화 대시보드, 데이터 엔지니어링, AI 챗봇. 각 서비스의 상세 내용과 기술 스택을 확인하세요."
         />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://wavico.co.kr/service-detail" />
+        <meta property="og:url" content="https://wavico.co.kr/services" />
         <meta property="og:image" content="/og-image.png" />
-        <link rel="canonical" href="https://wavico.co.kr/service-detail" />
+        <link rel="canonical" href="https://wavico.co.kr/services" />
+        <meta name="robots" content="index, follow" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="language" content="Korean" />
+        <meta name="revisit-after" content="7 days" />
+        <meta name="author" content="Wavico" />
       </Helmet>
 
       {/* Page Header */}

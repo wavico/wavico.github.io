@@ -607,12 +607,30 @@ const Portfolio = () => {
         <title>포트폴리오 | Wavico - AI·웹·앱 개발 전문 기업</title>
         <meta
           name="description"
-          content="Wavico가 성공적으로 완료한 프로젝트들을 소개합니다. AI, 웹, 앱 개발 분야의 다양한 레퍼런스를 확인하세요."
+          content="Wavico의 주요 프로젝트: 이상거래탐지 시스템, 책 감성 분석 대시보드, 테니스장 예약 플랫폼 등 다양한 AI 솔루션과 웹/앱 개발 포트폴리오를 소개합니다."
         />
         <meta
           name="keywords"
-          content="포트폴리오,프로젝트,레퍼런스,AI개발사례,웹개발사례,앱개발사례"
+          content="포트폴리오,AI프로젝트,웹개발,앱개발,이상거래탐지,감성분석,테니스장예약,AI솔루션"
         />
+        <meta
+          property="og:title"
+          content="포트폴리오 | Wavico - AI·웹·앱 개발 전문 기업"
+        />
+        <meta
+          property="og:description"
+          content="Wavico의 주요 프로젝트: 이상거래탐지 시스템, 책 감성 분석 대시보드, 테니스장 예약 플랫폼 등 다양한 AI 솔루션과 웹/앱 개발 포트폴리오를 소개합니다."
+        />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://wavico.co.kr/portfolio" />
+        <meta property="og:image" content="/og-image.png" />
+        <link rel="canonical" href="https://wavico.co.kr/portfolio" />
+        <meta name="robots" content="index, follow" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="language" content="Korean" />
+        <meta name="revisit-after" content="7 days" />
+        <meta name="author" content="Wavico" />
       </Helmet>
       {/* Page Header */}
       <section className="pt-40 pb-20 bg-gradient-to-r from-blue-600 to-indigo-700 text-white">

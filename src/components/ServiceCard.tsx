@@ -44,7 +44,7 @@ const ServiceCard = ({
         });
       }
     } else {
-      navigate("/service-detail", {
+      navigate("/services", {
         state: {
           scrollTo: service.link,
         },

@@ -5,7 +5,7 @@ const Footer = () => {
 
   const handleServiceClick = (link: string) => (e: React.MouseEvent) => {
     e.preventDefault();
-    navigate("/service-detail", {
+    navigate("/services", {
       state: {
         scrollTo: link,
       },
@@ -68,7 +68,7 @@ const Footer = () => {
                   onClick={handleServiceClick("#mobile-detail")}
                   className="text-gray-400 hover:text-white transition-colors"
                 >
-                  웹/모바일 앱
+                  모바일 앱
                 </a>
               </li>
             </ul>
