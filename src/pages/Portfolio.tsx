@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { ArrowRight, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Helmet } from "react-helmet-async";
 import { OptimizedImage } from "@/components/ui/optimized-image";
 import styles from "./Portfolio.module.css";
@@ -409,19 +410,97 @@ const Portfolio = () => {
         ],
       },
     },
-    // {
-    //   id: 5,
-    //   title: "책 감성 분석 대시보드",
-    //   category: "AI 솔루션",
-    //   image: "/images/portfolio/book-sentiment.png",
-    //   description:
-    //     "책 문장 단위 감성 분류 모델과 대시보드를 통해 작품 감정 흐름을 시각화하고 인사이트 제공.",
-    //   client: "콘텐츠 기획 및 출판 기업",
-    //   technology: ["PyTorch", "Transformers", "React", "Chart.js"],
-    //   challenge: "긴 문단의 감정을 문장 단위로 정확히 분해 및 시각화하는 문제",
-    //   solution: "sLLM 기반 감정 분류기 개발 및 페이지 단위 감정 흐름 분석 구현",
-    //   result: "콘텐츠 감정 곡선 분석 활용으로 기획 회의 활용도 3배 증가",
-    // },
+    {
+      id: 5,
+      title: "책 감성 분석 대시보드",
+      category: "AI 솔루션",
+      image: "/images/portfolio/book/book.png",
+      description:
+        "책 문장 단위 감성 분류 모델과 대시보드를 통해 작품 감정 흐름을 시각화하고 인사이트 제공.",
+      client: "콘텐츠 기획 및 출판 기업",
+      technology: ["PyTorch", "Transformers", "React", "Chart.js"],
+      challenge: "긴 문단의 감정을 문장 단위로 정확히 분해 및 시각화하는 문제",
+      solution: "sLLM 기반 감정 분류기 개발 및 페이지 단위 감정 흐름 분석 구현",
+      result: "콘텐츠 감정 곡선 분석 활용으로 기획 회의 활용도 3배 증가",
+      background: {
+        problems: [
+          "책 전체의 감정 흐름을 체계적으로 분석할 수단 부재",
+          "긴 문단 내 복합 감정이 혼재되어 있어 단일 점수로 분석하기 어려움",
+          "감정 기반 추천 및 큐레이션 인사이트 부족",
+        ],
+        goals: [
+          "문장 단위 감정 분석 자동화 파이프라인 구축",
+          "시각적 감정 곡선 및 키워드 클라우드 구현",
+          "사용자 업로드 기반 실시간 분석 제공",
+        ],
+        keyPoints: [
+          "경량 모델(distilBERT)과 대형 모델(Gemma) 성능 비교 분석",
+          "감정 흐름 기반 인사이트 제공 (페이지별 감정 변화)",
+          "웹 기반 시각화 인터페이스로 사용자 접근성 확보",
+        ],
+      },
+      achievements: [
+        "감정 추정 정확도 향상 (Gemma 기준 기존 대비 +8%)",
+        "시각적 감정 곡선 시연 후 기획자 활용도 3배 증가",
+        "프로토타입 공개 이후 GitHub 300+ 다운로드 달성",
+      ],
+      keyFeatures: [
+        "문단 → 문장 분해 및 감정 자동 라벨링",
+        "Gemma / DistilBERT 기반 감정 분류 비교",
+        "작품 전체 감정 곡선 및 흐름 시각화",
+        "감정 키워드 클라우드 및 통계 제공",
+        "책 업로드 후 실시간 분석 및 결과 확인",
+      ],
+      timeline: [
+        {
+          phase: "기획 및 데이터 수집",
+          date: "2024.01",
+          details: ["문장 감정 분석 니즈 조사 및 모델 후보 선정"],
+        },
+        {
+          phase: "모델 개발 및 파인튜닝",
+          date: "2024.02",
+          details: [
+            "Gemma-2B-IT 및 DistilBERT 기반 감정 분석 모델 개발",
+            "Huggingface 기반 fine-tuning 및 라벨링 자동화",
+          ],
+        },
+        {
+          phase: "대시보드 및 시각화 구현",
+          date: "2024.03",
+          details: [
+            "React 기반 감정 흐름 차트, 키워드 클라우드 구현",
+            "Chart.js 및 Plotly 연동",
+          ],
+        },
+        {
+          phase: "테스트 및 배포",
+          date: "2024.04",
+          details: [
+            "GitHub Pages 배포",
+            "출판사 및 콘텐츠 기획자 대상 시연 및 피드백 반영",
+          ],
+        },
+      ],
+      details: {
+        introduction:
+          "책 감성 분석 대시보드는 문장을 문단 단위로 분해한 뒤, 대형 언어 모델(Gemma)을 활용해 감정을 자동 분류하고 이를 시각적으로 분석할 수 있는 도구입니다.",
+        developmentScope: {
+          areas: [
+            "sLLM 기반 감정 분류 모델 설계 및 성능 비교",
+            "책 문장 전처리 및 감정 자동 라벨링 파이프라인 구현",
+            "Frontend 대시보드 개발 및 감정 시각화 인터페이스 설계",
+          ],
+          environment: [
+            "Model: Gemma-2B-IT, DistilBERT",
+            "Framework: PyTorch, Huggingface Transformers",
+            "Frontend: React + Chart.js",
+            "Deployment: GitHub Pages",
+          ],
+        },
+      },
+    },
+
     {
       id: 2,
       title: "LOCAT: 위치 기반 로컬 플랫폼",
@@ -735,6 +814,17 @@ const Portfolio = () => {
                     className="w-full h-full object-cover"
                     priority={true}
                   />
+                  {selectedItem.id === 5 && (
+                    <a
+                      href="https://paper-prism.github.io/paper-prism/#"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-wavico-blue hover:bg-wavico-darkblue text-white px-6 py-3 rounded-lg font-semibold transition-colors shadow-lg flex items-center"
+                    >
+                      데모 체험하기
+                      <ArrowRight className="ml-2 h-5 w-5" />
+                    </a>
+                  )}
                 </div>
               )}
               <button

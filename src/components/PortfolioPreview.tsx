@@ -13,12 +13,12 @@ interface PortfolioItem {
 
 const portfolioItems: PortfolioItem[] = [
   {
-    id: 1,
-    title: "이상거래탐지 모니터링 시스템",
-    category: "시각화 대시보드",
-    image: "/images/portfolio/fraud-detection.png",
+    id: 5,
+    title: "책 감성 분석 대시보드",
+    category: "AI 모델링",
+    image: "/images/portfolio/book/book.png",
     description:
-      "Rule 기반과 ML 기반을 결합한 실시간 FDS 시스템. 거래 로그를 분석하여 이상 패턴을 탐지하고, 시각화 대시보드로 대응 지원.",
+      "책 문장 단위 감성 분류 모델과 대시보드를 통해 작품 감정 흐름을 시각화하고 인사이트 제공.",
   },
   // {
   //   id: 2,
@@ -44,14 +44,15 @@ const portfolioItems: PortfolioItem[] = [
     description:
       "소규모 테니스 동호인을 위한 위치 기반 모바일 예약 플랫폼. 직관적인 UI/UX와 실시간 예약 기능 제공.",
   },
-  // {
-  //   id: 5,
-  //   title: "책 감성 분석 대시보드",
-  //   category: "AI 모델링",
-  //   image: "/images/portfolio/book-sentiment.png",
-  //   description:
-  //     "책 문장 단위 감성 분류 모델과 대시보드를 통해 작품 감정 흐름을 시각화하고 인사이트 제공.",
-  // },
+
+  {
+    id: 1,
+    title: "이상거래탐지 모니터링 시스템",
+    category: "시각화 대시보드",
+    image: "/images/portfolio/fraud-detection.png",
+    description:
+      "Rule 기반과 ML 기반을 결합한 실시간 FDS 시스템. 거래 로그를 분석하여 이상 패턴을 탐지하고, 시각화 대시보드로 대응 지원.",
+  },
 ];
 
 const PortfolioPreview = () => {
@@ -67,7 +68,7 @@ const PortfolioPreview = () => {
 
   const filteredItems =
     activeCategory === "All"
-      ? portfolioItems
+      ? portfolioItems.filter((item) => [5, 4, 3].includes(item.id)).slice(0, 3) // 책 감성분석, 테니버스, FDS 시스템만 표시
       : portfolioItems.filter((item) => item.category === activeCategory);
 
   return (
