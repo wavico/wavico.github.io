@@ -535,13 +535,20 @@ const Home = () => {
 
       {/* Hero Banner with Chat Section */}
       <div className="relative">
-        <section className="relative h-[120vh]">
+        <section
+          className="relative h-[120vh]"
+          style={{
+            backgroundImage: 'url("/images/company/back5.png")',
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        >
           {bannerSlides.map((slide, idx) => (
             <div
               key={idx}
               className={`absolute inset-0 transition-opacity duration-1000 ease-in-out flex items-start pt-32 ${
                 activeSlide === idx ? "opacity-100 z-10" : "opacity-0 z-0"
-              } ${slide.bgClass}`}
+              }`}
             >
               <div className="max-w-7xl mx-auto px-6 md:px-12 w-full">
                 <div className=" text-white animate-fade-in">
@@ -573,21 +580,21 @@ const Home = () => {
                   </div>
                 </div>
               </div>
-
-              {/* Banner pagination */}
-              <div className="absolute top-[85vh] left-1/2 transform -translate-x-1/2 flex space-x-2">
-                {[0, 1, 2].map((i) => (
-                  <button
-                    key={i}
-                    className={`w-3 h-3 rounded-full transition-all ${
-                      activeSlide === i ? "bg-white w-8" : "bg-white/50"
-                    }`}
-                    onClick={() => setActiveSlide(i)}
-                  />
-                ))}
-              </div>
             </div>
           ))}
+
+          {/* Banner pagination */}
+          <div className="absolute top-[85vh] left-1/2 transform -translate-x-1/2 flex space-x-2">
+            {[0, 1, 2].map((i) => (
+              <button
+                key={i}
+                className={`w-3 h-3 rounded-full transition-all ${
+                  activeSlide === i ? "bg-white w-8" : "bg-white/50"
+                }`}
+                onClick={() => setActiveSlide(i)}
+              />
+            ))}
+          </div>
         </section>
 
         {/* Chat Section */}
