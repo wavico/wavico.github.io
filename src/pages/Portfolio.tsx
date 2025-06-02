@@ -843,6 +843,17 @@ const Portfolio = () => {
                       <ArrowRight className="ml-2 h-5 w-5" />
                     </a>
                   )}
+                  {selectedItem.id === 1 && (
+                    <a
+                      href="https://www.wavico.kr/voice-monitor/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-wavico-blue hover:bg-wavico-darkblue text-white px-6 py-3 rounded-lg font-semibold transition-colors shadow-lg flex items-center"
+                    >
+                      데모 체험하기
+                      <ArrowRight className="ml-2 h-5 w-5" />
+                    </a>
+                  )}
                 </div>
               )}
               <button
